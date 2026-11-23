@@ -70,13 +70,15 @@ export const GUEST_REVIEWS: GuestReview[] = [
     category: 'safety-cancellation',
     title: 'Honest Weather Safety Call Before a Family Hike',
     contextNote:
-      'Heavy mountain rain forecast ahead of a family hike with children — our guide put trail safety first and honestly advised cancelling.',
+      'Heavy mountain rain forecast ahead of a 4-person family hike with children — our guide put trail safety first and honestly advised cancelling.',
     quote:
       "Okay, unfortunately we'll have to cancel. It's really disappointing, but thank you for your honesty and professionalism. Thank you very much. I really appreciate all your effort — it was very responsible of you.",
-    authorLabel: 'Family Hiking Guest',
+    authorLabel: 'Family Hiking Group (4 guests)',
     platform: 'WhatsApp',
     dateLabel: 'Jul 2026',
     datePublished: '2026-07',
+    country: 'Israel',
+    countryFlag: '🇮🇱',
     tourSlug: 'machakhela-guided-hiking',
     tourTitle: 'Machakhela Guided Hiking',
   },
