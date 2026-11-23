@@ -1028,25 +1028,65 @@ dialog.lightbox-dialog img {
   margin-top: auto;
 }
 
-.footer-grid {
+.footer-brand-bar {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding-bottom: 2rem;
+  margin-bottom: 2.25rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+}
+
+@media (min-width: 56rem) {
+  .footer-brand-bar {
+    flex-direction: row;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 2.5rem;
+  }
+}
+
+.footer-brand-copy {
+  max-width: 36rem;
+}
+
+.footer-directory-grid {
   display: grid;
-  gap: 2.25rem;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 14.5rem), 1fr));
+  gap: 2rem 1.75rem;
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 30rem) {
+  .footer-directory-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 50rem) {
+  .footer-directory-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 68rem) {
+  .footer-directory-grid {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
 }
 
 .site-footer h3 {
   color: #ffffff;
   font-family: var(--font-sans);
-  font-size: 0.88rem;
+  font-size: 0.94rem;
   font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.01em;
   margin-bottom: 0.95rem;
 }
 
 .site-footer p,
 .site-footer li {
-  font-size: 0.92rem;
+  font-size: 0.9rem;
+  line-height: 1.5;
   color: rgba(246, 249, 247, 0.78);
 }
 
@@ -1055,7 +1095,7 @@ dialog.lightbox-dialog img {
   margin: 0;
   padding: 0;
   display: grid;
-  gap: 0.5rem;
+  gap: 0.55rem;
 }
 
 .footer-links a {
@@ -1072,7 +1112,13 @@ dialog.lightbox-dialog img {
   display: flex;
   flex-wrap: wrap;
   gap: 0.45rem;
-  margin-top: 1.15rem;
+}
+
+@media (min-width: 56rem) {
+  .footer-socials {
+    justify-content: flex-end;
+    max-width: 30rem;
+  }
 }
 
 .footer-social-link {
@@ -1115,6 +1161,23 @@ dialog.lightbox-dialog img {
   gap: 1rem;
   font-size: 0.85rem;
   color: rgba(246, 249, 247, 0.7);
+}
+
+.footer-bottom-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.55rem;
+}
+
+.footer-bottom a {
+  color: rgba(246, 249, 247, 0.88);
+  text-decoration: none;
+}
+
+.footer-bottom a:hover {
+  color: #f4b69f;
+  text-decoration: underline;
 }
 
 .floating-whatsapp {

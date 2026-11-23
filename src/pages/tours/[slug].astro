@@ -74,6 +74,16 @@ const faqJsonLd = tour.faqs.length
       },
     ]
   : [];
+
+const videoJsonLd = (tour.videos || []).map((v) => ({
+  '@type': 'VideoObject',
+  name: v.title,
+  description: v.caption,
+  thumbnailUrl: `https://i.ytimg.com/vi/${v.youtubeId}/maxresdefault.jpg`,
+  ...(v.uploadDate ? { uploadDate: v.uploadDate } : {}),
+  embedUrl: `https://www.youtube-nocookie.com/embed/${v.youtubeId}`,
+  contentUrl: `https://www.youtube.com/watch?v=${v.youtubeId}`,
+}));
 ---
 
 <BaseLayout
@@ -82,7 +92,7 @@ const faqJsonLd = tour.faqs.length
   canonicalPath={`/tours/${tour.slug}/`}
   ogImage={tour.heroImage}
   keywords={tour.keywords}
-  jsonLd={[tourJsonLd, breadcrumbJsonLd, ...faqJsonLd]}
+  jsonLd={[tourJsonLd, breadcrumbJsonLd, ...faqJsonLd, ...videoJsonLd]}
 >
   <!-- Hero Media Header -->
   <section class="tour-hero">
@@ -173,6 +183,87 @@ const faqJsonLd = tour.faqs.length
             <dd>24h Free Cancel</dd>
           </div>
         </dl>
+
+        {
+          tour.videos && tour.videos.length > 0 && (
+            <section class="detail-block tour-video-block" aria-labelledby="tour-video-heading">
+              <div class="video-head">
+                <h2 id="tour-video-heading">Watch the Trail Preview</h2>
+                <a
+                  class="video-channel-link"
+                  href={SITE.youtubeUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  More on YouTube ↗
+                </a>
+              </div>
+
+              <div class="video-stack">
+                {tour.videos.map((v) => (
+                  <figure class="video-card">
+                    <div
+                      class="video-facade"
+                      data-youtube-id={v.youtubeId}
+                      data-video-title={v.title}
+                    >
+                      <button
+                        type="button"
+                        class="video-facade-trigger"
+                        aria-label={`Play video: ${v.title}`}
+                      >
+                        <img
+                          src={`https://i.ytimg.com/vi/${v.youtubeId}/maxresdefault.jpg`}
+                          alt={v.title}
+                          width="1280"
+                          height="720"
+                          loading="lazy"
+                          decoding="async"
+                        />
+                        <span class="video-facade-scrim" aria-hidden="true" />
+                        <span class="video-facade-overlay">
+                          <span class="video-play-btn" aria-hidden="true">
+                            <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor">
+                              <path d="M8 5.14v14l11-7-11-7Z" />
+                            </svg>
+                          </span>
+                          <span class="video-play-meta">
+                            <span class="video-play-label">Play Trail Video</span>
+                            {v.durationLabel && (
+                              <span class="video-duration-pill">{v.durationLabel}</span>
+                            )}
+                          </span>
+                        </span>
+                      </button>
+                      <noscript>
+                        <iframe
+                          src={`https://www.youtube-nocookie.com/embed/${v.youtubeId}?rel=0`}
+                          title={v.title}
+                          width="1280"
+                          height="720"
+                          loading="lazy"
+                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                          referrerpolicy="strict-origin-when-cross-origin"
+                          allowfullscreen
+                        />
+                      </noscript>
+                    </div>
+                    <figcaption class="video-caption">
+                      <span>{v.caption}</span>
+                      <a
+                        href={`https://www.youtube.com/watch?v=${v.youtubeId}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        Watch on YouTube ↗
+                      </a>
+                    </figcaption>
+                  </figure>
+                ))}
+              </div>
+            </section>
+          )
+        }
 
         <!-- Highlights -->
         <section class="detail-block">
@@ -523,6 +614,26 @@ const faqJsonLd = tour.faqs.length
       });
     });
 
+    // 1b) Click-to-Play YouTube Video Facade
+    document.querySelectorAll<HTMLButtonElement>('.video-facade-trigger').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const facade = btn.closest<HTMLElement>('.video-facade');
+        const youtubeId = facade?.dataset.youtubeId;
+        if (!facade || !youtubeId) return;
+        const videoTitle = facade.dataset.videoTitle || 'Tour video preview';
+        const iframe = document.createElement('iframe');
+        iframe.src = `https://www.youtube-nocookie.com/embed/${encodeURIComponent(youtubeId)}?autoplay=1&rel=0`;
+        iframe.title = videoTitle;
+        iframe.width = '1280';
+        iframe.height = '720';
+        iframe.allow =
+          'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
+        iframe.referrerPolicy = 'strict-origin-when-cross-origin';
+        iframe.allowFullscreen = true;
+        facade.replaceChildren(iframe);
+      });
+    });
+
     // 2) Sidebar Calculator + Dynamic WhatsApp / Email Links
     const payloadNode = document.getElementById('tour-detail-payload');
     if (payloadNode?.textContent) {
@@ -728,6 +839,163 @@ const faqJsonLd = tour.faqs.length
   .detail-block h2 {
     font-size: 1.6rem;
     margin-bottom: 1rem;
+  }
+
+  .video-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+  }
+
+  .video-head h2 {
+    margin-bottom: 0;
+  }
+
+  .video-channel-link {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--forest-800);
+    text-decoration: none;
+  }
+
+  .video-channel-link:hover {
+    color: var(--coral-600);
+    text-decoration: underline;
+  }
+
+  .video-stack {
+    display: grid;
+    gap: 1.25rem;
+  }
+
+  .video-card {
+    margin: 0;
+  }
+
+  .video-facade {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    border: 1px solid var(--border-subtle);
+    box-shadow: var(--shadow-md);
+    background-color: #101915;
+  }
+
+  .video-facade iframe {
+    width: 100%;
+    height: 100%;
+    border: 0;
+    display: block;
+  }
+
+  .video-facade-trigger {
+    position: relative;
+    display: block;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+    text-align: left;
+  }
+
+  .video-facade-trigger img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.35s ease;
+  }
+
+  .video-facade-trigger:hover img {
+    transform: scale(1.03);
+  }
+
+  .video-facade-scrim {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to top,
+      rgba(16, 25, 21, 0.72) 0%,
+      rgba(16, 25, 21, 0.22) 55%,
+      rgba(16, 25, 21, 0.12) 100%
+    );
+  }
+
+  .video-facade-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    padding: 1rem;
+  }
+
+  .video-play-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 4rem;
+    height: 4rem;
+    border-radius: 50%;
+    background-color: var(--coral-600);
+    color: #ffffff;
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.38);
+    transition: background-color 0.18s ease, transform 0.18s ease;
+  }
+
+  .video-facade-trigger:hover .video-play-btn {
+    background-color: var(--forest-800);
+    transform: scale(1.07);
+  }
+
+  .video-play-meta {
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+  }
+
+  .video-play-label {
+    font-size: 0.92rem;
+    font-weight: 700;
+    color: #ffffff;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.55);
+  }
+
+  .video-duration-pill {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    padding: 0.2rem 0.6rem;
+    border-radius: var(--radius-pill);
+    background-color: rgba(255, 255, 255, 0.18);
+    color: #ffffff;
+    backdrop-filter: blur(6px);
+  }
+
+  .video-caption {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem 1rem;
+    margin-top: 0.65rem;
+    font-size: 0.88rem;
+    color: var(--ink-600);
+  }
+
+  .video-caption a {
+    font-weight: 600;
+    white-space: nowrap;
   }
 
   .highlight-list {

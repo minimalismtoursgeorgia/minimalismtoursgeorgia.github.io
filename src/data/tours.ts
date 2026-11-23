@@ -18,6 +18,14 @@ export interface TourFaq {
   answer: string;
 }
 
+export interface TourVideo {
+  youtubeId: string;
+  title: string;
+  caption: string;
+  durationLabel?: string;
+  uploadDate?: string;
+}
+
 export interface Tour {
   slug: string;
   title: string;
@@ -42,6 +50,7 @@ export interface Tour {
   heroImage: string;
   heroAlt: string;
   gallery: { src: string; alt: string }[];
+  videos?: TourVideo[];
   summary: string;
   highlights: string[];
   itinerary: ItineraryStop[];
@@ -97,6 +106,15 @@ export const TOURS: Tour[] = [
       {
         src: '/images/mtirala-canopy.webp',
         alt: 'Hikers walking through sunlit Colchic beech and chestnut canopy in Mtirala National Park',
+      },
+    ],
+    videos: [
+      {
+        youtubeId: 'URVIUGoEYf8',
+        title: 'Mtirala National Park Lake & Waterfall Hike — Trail Preview',
+        caption: 'Real Colchic rainforest trail footage from Minimalism Tours Georgia.',
+        durationLabel: '4K Trail Preview',
+        uploadDate: '2026-11-01',
       },
     ],
     summary:

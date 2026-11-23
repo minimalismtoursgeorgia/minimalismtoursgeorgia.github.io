@@ -2,7 +2,7 @@
 import '../styles/global.css';
 import SeoHead, { type Props as SeoProps } from '../components/SeoHead.astro';
 import SocialIcon from '../components/SocialIcon.astro';
-import { SITE, PICKUP_POINTS, SOCIAL_LINKS } from '../data/site';
+import { SITE, SOCIAL_LINKS } from '../data/site';
 import { TOURS } from '../data/tours';
 import { withBase } from '../lib/urls';
 
@@ -104,9 +104,9 @@ const navLinks = [
 
     <footer class="site-footer">
       <div class="container">
-        <div class="footer-grid">
-          <div>
-            <a class="brand-link" href={withBase('/')} style="margin-bottom: 1rem; color: #ffffff;">
+        <div class="footer-brand-bar">
+          <div class="footer-brand-copy">
+            <a class="brand-link" href={withBase('/')} style="margin-bottom: 0.85rem; color: #ffffff;">
               <span class="brand-logo-wrap">
                 <img
                   src={withBase(SITE.logoPath)}
@@ -127,82 +127,104 @@ const navLinks = [
             <p style="margin-bottom: 0;">
               <strong>Operations &amp; Safety:</strong> GMGA/FMGA, UNESCO Heritage &amp; Red Cross First Aid Certified Team
             </p>
-            <nav class="footer-socials" aria-label="Minimalism Tours Georgia social media">
-              {
-                SOCIAL_LINKS.map((social) => (
-                  <a
-                    class="footer-social-link"
-                    href={social.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label={`Minimalism Tours Georgia on ${social.name}`}
-                  >
-                    <SocialIcon id={social.id} size={15} />
-                    <span>{social.name}</span>
-                  </a>
-                ))
-              }
-            </nav>
+          </div>
+
+          <nav class="footer-socials" aria-label="Minimalism Tours Georgia social media">
+            {
+              SOCIAL_LINKS.map((social) => (
+                <a
+                  class="footer-social-link"
+                  href={social.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={`Minimalism Tours Georgia on ${social.name}`}
+                >
+                  <SocialIcon id={social.id} size={15} />
+                  <span>{social.name}</span>
+                </a>
+              ))
+            }
+          </nav>
+        </div>
+
+        <nav class="footer-directory-grid" aria-label="Footer site directory">
+          <div>
+            <h3>Georgia Attractions</h3>
+            <ul class="footer-links">
+              <li><a href={withBase('/destinations/#mtirala')}>Mtirala National Park (UNESCO)</a></li>
+              <li><a href={withBase('/destinations/#batumi')}>Batumi &amp; Botanical Garden</a></li>
+              <li><a href={withBase('/destinations/#machakhela')}>Machakhela National Park</a></li>
+              <li><a href={withBase('/destinations/#green-lake')}>Green Lake (Goderdzi Pass)</a></li>
+              <li><a href={withBase('/destinations/#kolkheti')}>Kolkheti Wetlands (UNESCO)</a></li>
+              <li><a href={withBase('/destinations/#kazbegi-svaneti')}>Kazbegi &amp; Upper Svaneti</a></li>
+            </ul>
+          </div>
+
+          <div>
+            <h3>Useful Links</h3>
+            <ul class="footer-links">
+              <li><a href={withBase('/contact/')}>Request a Tour</a></li>
+              <li><a href={withBase('/tours/')}>View All 7 Tours</a></li>
+              <li><a href={withBase('/#price-estimator')}>Group Price Estimator</a></li>
+              <li><a href={withBase('/#seasons')}>Seasonal Calendar (Jan–Dec)</a></li>
+              <li><a href={withBase('/#pickups')}>Batumi Pickup Points</a></li>
+              <li><a href={withBase('/#home-faq')}>Travel &amp; Tour FAQs</a></li>
+            </ul>
           </div>
 
           <div>
             <h3>Signature Tours</h3>
             <ul class="footer-links">
               {
-                TOURS.slice(0, 5).map((tour) => (
+                TOURS.map((tour) => (
                   <li>
                     <a href={withBase(`/tours/${tour.slug}/`)}>{tour.shortTitle}</a>
                   </li>
                 ))
               }
-              <li><a href={withBase('/tours/')}>View All 7 Tours →</a></li>
             </ul>
           </div>
 
           <div>
-            <h3>Batumi Pickups</h3>
+            <h3>Services &amp; B2B</h3>
             <ul class="footer-links">
-              {
-                PICKUP_POINTS.map((p) => (
-                  <li>
-                    <a href={p.mapsUrl} target="_blank" rel="noopener noreferrer">
-                      {p.name} — {p.district}
-                    </a>
-                  </li>
-                ))
-              }
-            </ul>
-          </div>
-
-          <div>
-            <h3>Direct Contact</h3>
-            <ul class="footer-links">
+              <li><a href={withBase('/partners/')}>B2B &amp; Adjara DMC Handling</a></li>
+              <li><a href={withBase('/partners/#partner-types')}>Hotel &amp; Cruise Excursions</a></li>
+              <li><a href={withBase('/partners/#b2b-inquiry')}>Corporate &amp; Team Retreats</a></li>
+              <li><a href={withBase('/about/#fleet')}>Tour Vehicles &amp; 4x4 Fleet</a></li>
               <li>
                 <a href={SITE.whatsappUrl} target="_blank" rel="noopener noreferrer">
                   WhatsApp: {SITE.phoneDisplay}
                 </a>
               </li>
               <li>
-                <a href={`tel:${SITE.phoneRaw}`}>Call: {SITE.phoneDisplay}</a>
-              </li>
-              <li>
                 <a href={SITE.telegramUrl} target="_blank" rel="noopener noreferrer">
                   Telegram: @MinimalismToursGeorgia
                 </a>
               </li>
+            </ul>
+          </div>
+
+          <div>
+            <h3>About Us</h3>
+            <ul class="footer-links">
+              <li><a href={withBase('/about/')}>Company Profile</a></li>
+              <li><a href={withBase('/about/#certifications')}>GMGA &amp; UNESCO Certifications</a></li>
+              <li><a href={withBase('/partners/#guarantees')}>Safety &amp; Weather Policy</a></li>
+              <li><a href={withBase('/about/#standards')}>Responsible Guiding Standards</a></li>
               <li>
                 <a href={SITE.getYourGuideSupplierUrl} target="_blank" rel="noopener noreferrer">
-                  All Tours on GetYourGuide
-                </a>
-              </li>
-              <li>
-                <a href={SITE.googleReviewUrl} target="_blank" rel="noopener noreferrer">
-                  Leave a Google Review ↗
+                  All Tours on GetYourGuide ↗
                 </a>
               </li>
               <li>
                 <a href={SITE.tripadvisorReviewUrl} target="_blank" rel="noopener noreferrer">
                   Tripadvisor Reviews ↗
+                </a>
+              </li>
+              <li>
+                <a href={SITE.googleReviewUrl} target="_blank" rel="noopener noreferrer">
+                  Google Reviews ↗
                 </a>
               </li>
               <li>
@@ -212,11 +234,17 @@ const navLinks = [
               </li>
             </ul>
           </div>
-        </div>
+        </nav>
 
         <div class="footer-bottom">
           <span>© 2026 {SITE.brandName}. Batumi, Adjara, Georgia.</span>
-          <span>24-hour free cancellation · English &amp; ქართული guiding · Transparent pricing</span>
+          <div class="footer-bottom-meta">
+            <a href={`tel:${SITE.phoneRaw}`}>Call: {SITE.phoneDisplay}</a>
+            <span aria-hidden="true">·</span>
+            <a href={withBase('/ka/')} hreflang="ka">ქართული ვერსია</a>
+            <span aria-hidden="true">·</span>
+            <span>24-hour free cancellation · Transparent pricing</span>
+          </div>
         </div>
       </div>
     </footer>
