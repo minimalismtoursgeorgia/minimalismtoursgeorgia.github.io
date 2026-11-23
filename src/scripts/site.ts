@@ -290,7 +290,7 @@ function initQuickInquiryModal() {
   if (!form) return;
 
   const waAnchor = document.getElementById('quick-wa-send') as HTMLAnchorElement | null;
-  const emailAnchor = document.getElementById('quick-email-send') as HTMLAnchorElement | null;
+  const tgAnchor = document.getElementById('quick-tg-send') as HTMLAnchorElement | null;
 
   const buildMessage = () => {
     const data = new FormData(form);
@@ -318,10 +318,8 @@ function initQuickInquiryModal() {
     if (waAnchor) {
       waAnchor.href = `https://wa.me/995592043080?text=${encodeURIComponent(msg)}`;
     }
-    if (emailAnchor) {
-      emailAnchor.href = `mailto:beqa.gelashvili.2@gmail.com?subject=${encodeURIComponent(
-        'Tour Inquiry — Minimalism Tours Georgia'
-      )}&body=${encodeURIComponent(msg)}`;
+    if (tgAnchor) {
+      tgAnchor.href = `https://t.me/MinimalismToursGeorgia?text=${encodeURIComponent(msg)}`;
     }
   };
 

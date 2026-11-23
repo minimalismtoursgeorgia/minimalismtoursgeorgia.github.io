@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import SocialIcon from '../../components/SocialIcon.astro';
 import { SITE, PICKUP_POINTS, SOCIAL_LINKS } from '../../data/site';
 import { TOURS } from '../../data/tours';
 import { withBase, absoluteUrl } from '../../lib/urls';
@@ -15,7 +16,7 @@ const breadcrumbJsonLd = {
 
 <BaseLayout
   title={`Contact & Custom Tour Request | ${SITE.brandName}`}
-  description="Contact Minimalism Tours Georgia via WhatsApp, phone, or email to book Batumi day hikes, private Adjara trips, B2B group tours, or summer Mount Kazbek expeditions."
+  description="Contact Minimalism Tours Georgia via WhatsApp, Telegram, or phone to book Batumi day hikes, private Adjara trips, B2B group tours, or summer Mount Kazbek expeditions."
   canonicalPath="/contact/"
   jsonLd={[breadcrumbJsonLd]}
 >
@@ -40,7 +41,7 @@ const breadcrumbJsonLd = {
       <div class="contact-form-card">
         <h2>Direct Booking &amp; Custom Route Builder</h2>
         <p style="font-size: 0.94rem; margin-bottom: 1.5rem;">
-          Fill out the details below and choose how you want to send: instant pre-filled <strong>WhatsApp</strong>, pre-filled <strong>Email</strong>, or copy the formatted request to clipboard.
+          Fill out the details below and choose how you want to send: instant pre-filled <strong>WhatsApp</strong>, pre-filled <strong>Telegram</strong>, or copy the formatted request to clipboard.
         </p>
 
         <form id="full-contact-form" class="form-grid" data-enhanced-validation novalidate>
@@ -161,8 +162,8 @@ const breadcrumbJsonLd = {
             <button type="submit" class="btn btn-coral">
               Send via WhatsApp →
             </button>
-            <button id="c-email-btn" type="button" class="btn btn-forest">
-              Send via Email
+            <button id="c-tg-btn" type="button" class="btn btn-forest">
+              Send via Telegram →
             </button>
             <button id="c-copy-btn" type="button" class="btn btn-outline">
               Copy Summary
@@ -191,10 +192,6 @@ const breadcrumbJsonLd = {
               <a href={SITE.telegramUrl} target="_blank" rel="noopener noreferrer">
                 @MinimalismToursGeorgia ↗
               </a>
-            </li>
-            <li>
-              <strong>Email</strong>
-              <a href={`mailto:${SITE.email}`}>{SITE.email}</a>
             </li>
             <li>
               <strong>Office Address</strong>
@@ -229,8 +226,13 @@ const breadcrumbJsonLd = {
               SOCIAL_LINKS.map((s) => (
                 <li>
                   <a class="social-card-link" href={s.url} target="_blank" rel="noopener noreferrer">
-                    <strong>{s.name}</strong>
-                    <span>{s.handle} ↗</span>
+                    <span class="social-icon-badge" aria-hidden="true">
+                      <SocialIcon id={s.id} size={18} />
+                    </span>
+                    <span class="social-card-meta">
+                      <strong>{s.name}</strong>
+                      <span>{s.handle} ↗</span>
+                    </span>
                   </a>
                 </li>
               ))
@@ -263,7 +265,7 @@ const breadcrumbJsonLd = {
   type="application/json"
   set:html={JSON.stringify({
     whatsappUrl: SITE.whatsappUrl,
-    email: SITE.email,
+    telegramUrl: SITE.telegramUrl,
     formspreeEndpoint: SITE.formspreeEndpoint,
   })}
 />
@@ -273,7 +275,7 @@ const breadcrumbJsonLd = {
   const cfg = cfgNode?.textContent ? JSON.parse(cfgNode.textContent) : null;
 
   const form = document.getElementById('full-contact-form') as HTMLFormElement | null;
-  const emailBtn = document.getElementById('c-email-btn');
+  const tgBtn = document.getElementById('c-tg-btn');
   const copyBtn = document.getElementById('c-copy-btn');
   const feedbackEl = document.getElementById('c-feedback');
 
@@ -318,14 +320,13 @@ const breadcrumbJsonLd = {
     }
   });
 
-  emailBtn?.addEventListener('click', () => {
+  tgBtn?.addEventListener('click', () => {
     if (!form || !form.reportValidity() || !cfg) return;
     const summary = getSummary();
-    window.location.href = `mailto:${cfg.email}?subject=${encodeURIComponent(
-      'Tour Request — Minimalism Tours Georgia'
-    )}&body=${encodeURIComponent(summary)}`;
+    const tgUrl = `${cfg.telegramUrl}?text=${encodeURIComponent(summary)}`;
+    window.open(tgUrl, '_blank', 'noopener,noreferrer');
     if (feedbackEl) {
-      feedbackEl.textContent = 'Opening your email app with your formatted tour request.';
+      feedbackEl.textContent = 'Opening Telegram with your pre-filled tour details.';
     }
   });
 
@@ -338,7 +339,7 @@ const breadcrumbJsonLd = {
       }
     } catch {
       if (feedbackEl) {
-        feedbackEl.textContent = 'Please use Send via WhatsApp or Email above.';
+        feedbackEl.textContent = 'Please use Send via WhatsApp or Telegram above.';
       }
     }
   });
@@ -433,8 +434,9 @@ const breadcrumbJsonLd = {
 
   .social-card-link {
     display: flex;
-    flex-direction: column;
-    gap: 0.2rem;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.7rem;
     padding: 0.75rem 0.9rem;
     border-radius: var(--radius-md);
     border: 1px solid var(--border-subtle);
@@ -442,6 +444,25 @@ const breadcrumbJsonLd = {
     color: var(--ink-900);
     text-decoration: none;
     transition: border-color 160ms ease, background-color 160ms ease, transform 160ms ease;
+  }
+
+  .social-icon-badge {
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: 0.65rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    background-color: var(--forest-100);
+    color: var(--forest-800);
+    transition: background-color 160ms ease, color 160ms ease;
+  }
+
+  .social-card-meta {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
   }
 
   .social-card-link strong {
@@ -460,6 +481,12 @@ const breadcrumbJsonLd = {
     border-color: var(--forest-800);
     background-color: var(--forest-100);
     transform: translateY(-1px);
+  }
+
+  .social-card-link:hover .social-icon-badge,
+  .social-card-link:focus-visible .social-icon-badge {
+    background-color: var(--forest-800);
+    color: #ffffff;
   }
 
   .contact-submit-row {

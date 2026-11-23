@@ -1078,6 +1078,7 @@ dialog.lightbox-dialog img {
 .footer-social-link {
   display: inline-flex;
   align-items: center;
+  gap: 0.42rem;
   min-height: 2.25rem;
   padding: 0.35rem 0.72rem;
   border-radius: 999px;
@@ -1088,6 +1089,11 @@ dialog.lightbox-dialog img {
   font-weight: 600;
   text-decoration: none;
   transition: background-color 160ms ease, border-color 160ms ease, color 160ms ease;
+}
+
+.social-icon {
+  flex-shrink: 0;
+  display: block;
 }
 
 .footer-social-link:hover,

@@ -53,7 +53,6 @@ export const SITE = {
   whatsappNumber: '995592043080',
   whatsappUrl: 'https://wa.me/995592043080',
   telegramUrl: 'https://t.me/MinimalismToursGeorgia',
-  email: 'beqa.gelashvili.2@gmail.com',
   streetAddress: 'Selim Khimshiashvili St',
   postalCode: '6010',
   officeAddressDisplay: 'Selim Khimshiashvili St, Batumi 6010, Georgia',
@@ -66,7 +65,7 @@ export const SITE = {
   getYourGuideTourUrl: 'https://www.getyourguide.com/-t1525407/',
   /**
    * Optional free form backend (e.g. Formspree or Web3Forms endpoint).
-   * Leave empty to route direct inquiries seamlessly through WhatsApp, Email, and instant clipboard quote copy.
+   * Leave empty to route direct inquiries seamlessly through WhatsApp, Telegram, and instant clipboard quote copy.
    */
   formspreeEndpoint: '',
   defaultStartTime: '10:00',
@@ -292,6 +291,6 @@ export const GENERAL_FAQS = [
   {
     question: 'How do I reserve a tour without paying an upfront website fee?',
     answer:
-      'Choose your group size and date in any tour’s calculator and click Book via WhatsApp or Email to message Beka directly — or book the live Mtirala Lake & Waterfall Hike directly on GetYourGuide. No middleman booking fees apply on direct reservations.',
+      'Choose your group size and date in any tour’s calculator and click Book via WhatsApp or Telegram directly — or book on GetYourGuide. No middleman booking fees apply on direct reservations.',
   },
 ];

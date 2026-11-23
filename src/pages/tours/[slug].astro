@@ -396,11 +396,13 @@ const faqJsonLd = tour.faqs.length
             }
 
             <a
-              id="sb-email-book"
+              id="sb-tg-book"
               class="btn btn-outline"
-              href={`mailto:${SITE.email}?subject=${encodeURIComponent(`Tour Inquiry: ${tour.shortTitle}`)}`}
+              href={`${SITE.telegramUrl}?text=${encodeURIComponent(`Hello Minimalism Tours Georgia! I'm interested in "${tour.title}".`)}`}
+              target="_blank"
+              rel="noopener noreferrer"
             >
-              Send Email Inquiry
+              Message on Telegram
             </a>
           </div>
 
@@ -461,7 +463,7 @@ const faqJsonLd = tour.faqs.length
       pricingTiers: tour.pricingTiers,
       currencyRates: SITE.currencyRates,
       whatsappUrl: SITE.whatsappUrl,
-      email: SITE.email,
+      telegramUrl: SITE.telegramUrl,
     })}
   />
 
@@ -498,7 +500,7 @@ const faqJsonLd = tour.faqs.length
       const childRateEl = document.getElementById('sb-child-rate');
       const totalRateEl = document.getElementById('sb-total-rate');
       const waBtn = document.getElementById('sb-wa-book') as HTMLAnchorElement | null;
-      const emailBtn = document.getElementById('sb-email-book') as HTMLAnchorElement | null;
+      const tgBtn = document.getElementById('sb-tg-book') as HTMLAnchorElement | null;
       const currBtns = document.querySelectorAll<HTMLButtonElement>('.sb-curr-btn');
 
       let currency: 'EUR' | 'USD' | 'GEL' = 'EUR';
@@ -539,11 +541,7 @@ const faqJsonLd = tour.faqs.length
         ].join('\n');
 
         if (waBtn) waBtn.href = `${data.whatsappUrl}?text=${encodeURIComponent(msg)}`;
-        if (emailBtn) {
-          emailBtn.href = `mailto:${data.email}?subject=${encodeURIComponent(
-            `Booking Inquiry: ${data.shortTitle}`
-          )}&body=${encodeURIComponent(msg)}`;
-        }
+        if (tgBtn) tgBtn.href = `${data.telegramUrl}?text=${encodeURIComponent(msg)}`;
       };
 
       currBtns.forEach((btn) => {
