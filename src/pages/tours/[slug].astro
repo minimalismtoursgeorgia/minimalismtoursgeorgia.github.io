@@ -1,8 +1,10 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import TourCard from '../../components/TourCard.astro';
+import ReviewsSection from '../../components/ReviewsSection.astro';
 import { SITE, PICKUP_POINTS } from '../../data/site';
 import { TOURS, type Tour } from '../../data/tours';
+import { getReviewsByTourSlug } from '../../data/reviews';
 import { withBase, absoluteUrl } from '../../lib/urls';
 
 export function getStaticPaths() {
@@ -18,6 +20,7 @@ interface Props {
 
 const { tour } = Astro.props;
 const relatedTours = TOURS.filter((t) => t.slug !== tour.slug).slice(0, 3);
+const tourReviews = getReviewsByTourSlug(tour.slug);
 
 const tourJsonLd = {
   '@type': 'TouristTrip',
@@ -247,6 +250,19 @@ const faqJsonLd = tour.faqs.length
                 ))}
               </div>
             </section>
+          )
+        }
+
+        <!-- Verified Tour Reviews -->
+        {
+          tourReviews.length > 0 && (
+            <ReviewsSection
+              reviews={tourReviews}
+              variant="inline"
+              heading="Verified Guest Reviews"
+              intro="Real feedback from travelers who experienced this route."
+              showTourLink={false}
+            />
           )
         }
 

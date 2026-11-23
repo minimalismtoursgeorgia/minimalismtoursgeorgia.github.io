@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import TourCard from '../components/TourCard.astro';
+import ReviewsSection from '../components/ReviewsSection.astro';
 import {
   SITE,
   CONTENT_PILLARS,
@@ -9,6 +10,7 @@ import {
   PICKUP_POINTS,
 } from '../data/site';
 import { TOURS } from '../data/tours';
+import { GUEST_REVIEWS } from '../data/reviews';
 import { DESTINATIONS } from '../data/destinations';
 import { withBase, absoluteUrl } from '../lib/urls';
 
@@ -181,6 +183,15 @@ const destinationsClientData = DESTINATIONS.map((d) => ({
       </div>
     </div>
   </section>
+
+  <!-- Verified Guest Reviews -->
+  <ReviewsSection
+    reviews={GUEST_REVIEWS}
+    variant="band"
+    eyebrow="Verified Traveler Feedback"
+    heading="What Guests Say About Our Tours"
+    intro="Authentic feedback from independent travelers who explored Batumi and Mtirala National Park with our guiding team."
+  />
 
   <!-- Interactive Group Price Estimator -->
   <section id="price-estimator" class="section section-surface">

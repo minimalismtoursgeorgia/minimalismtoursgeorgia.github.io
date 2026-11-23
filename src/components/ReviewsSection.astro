@@ -1,0 +1,298 @@
+---
+import { SITE } from '../data/site';
+import { type GuestReview } from '../data/reviews';
+import { withBase } from '../lib/urls';
+
+export interface Props {
+  reviews: GuestReview[];
+  variant?: 'band' | 'inline';
+  eyebrow?: string;
+  heading?: string;
+  intro?: string;
+  showTourLink?: boolean;
+  showPlatformBar?: boolean;
+}
+
+const {
+  reviews,
+  variant = 'band',
+  eyebrow = 'Verified Traveler Feedback',
+  heading = 'What Guests Say About Our Tours',
+  intro = 'Real words from travelers who explored Batumi and Adjara with our guiding team.',
+  showTourLink = true,
+  showPlatformBar = true,
+} = Astro.props;
+---
+
+<section
+  id={variant === 'band' ? 'reviews' : undefined}
+  class={variant === 'band' ? 'section reviews-band' : 'detail-block reviews-inline'}
+>
+  <div class={variant === 'band' ? 'container' : undefined}>
+    {
+      variant === 'band' ? (
+        <div class="section-header">
+          <div>
+            {eyebrow && <span class="eyebrow">{eyebrow}</span>}
+            <h2>{heading}</h2>
+          </div>
+          {intro && <p>{intro}</p>}
+        </div>
+      ) : (
+        <div class="reviews-inline-head">
+          <h2>{heading}</h2>
+          {intro && <p>{intro}</p>}
+        </div>
+      )
+    }
+
+    <ul class="reviews-grid" role="list">
+      {
+        reviews.map((review) => (
+          <li>
+            <article class="review-card reveal-on-scroll">
+              <header class="review-head">
+                <div class="review-badge-row">
+                  <svg
+                    class="review-quote-mark"
+                    width="22"
+                    height="22"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                    aria-hidden="true"
+                  >
+                    <path d="M9.983 3v7.391c0 5.704-3.731 9.57-8.983 10.609l-.995-2.151c2.432-.917 3.995-3.638 3.995-5.849h-4v-10h9.983zm14.017 0v7.391c0 5.704-3.748 9.571-9 10.609l-.996-2.151c2.433-.917 3.996-3.638 3.996-5.849h-3.983v-10h9.983z" />
+                  </svg>
+                  <span class="badge badge-forest">Verified {review.platform} Review</span>
+                </div>
+                <h3>{review.title}</h3>
+              </header>
+
+              <blockquote class="review-quote">
+                <p>“{review.quote}”</p>
+              </blockquote>
+
+              <footer class="review-foot">
+                <span class="review-meta">
+                  {review.authorLabel} · <time datetime={review.datePublished}>{review.dateLabel}</time>
+                </span>
+                {showTourLink && review.tourSlug && review.tourTitle && (
+                  <a class="review-tour-link" href={withBase(`/tours/${review.tourSlug}/`)}>
+                    {review.tourTitle} →
+                  </a>
+                )}
+              </footer>
+            </article>
+          </li>
+        ))
+      }
+    </ul>
+
+    {
+      showPlatformBar && (
+        <div class="reviews-cta-bar">
+          <span class="reviews-cta-label">Explore &amp; leave verified reviews on:</span>
+          <div class="reviews-cta-actions">
+            <a
+              class="btn btn-outline btn-sm"
+              href={SITE.googleReviewUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Google Reviews ↗
+            </a>
+            <a
+              class="btn btn-outline btn-sm"
+              href={SITE.trustpilotUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Trustpilot Reviews ↗
+            </a>
+            <a
+              class="btn btn-sea btn-sm"
+              href={SITE.getYourGuideSupplierUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              GetYourGuide Tours ↗
+            </a>
+          </div>
+        </div>
+      )
+    }
+  </div>
+</section>
+
+<style>
+  .reviews-band {
+    background-color: var(--bg-subtle);
+    border-block: 1px solid var(--border-subtle);
+  }
+
+  .reviews-inline-head {
+    margin-bottom: 1.15rem;
+  }
+
+  .reviews-inline-head h2 {
+    font-size: 1.6rem;
+    margin-bottom: 0.35rem;
+  }
+
+  .reviews-inline-head p {
+    margin-bottom: 0;
+  }
+
+  .reviews-grid {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 1.5rem;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 21rem), 1fr));
+  }
+
+  .reviews-grid > li {
+    display: flex;
+  }
+
+  .review-card {
+    width: 100%;
+    container-type: inline-size;
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-xl);
+    padding: 1.35rem;
+    box-shadow: var(--shadow-xs);
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    gap: 1rem;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  }
+
+  @supports (grid-template-rows: subgrid) {
+    .reviews-grid {
+      row-gap: 1rem;
+      column-gap: 1.5rem;
+    }
+
+    .reviews-grid > li {
+      display: grid;
+      grid-row: span 3;
+      grid-template-rows: subgrid;
+    }
+
+    .review-card {
+      grid-row: 1 / -1;
+      grid-template-rows: subgrid;
+      align-content: start;
+    }
+  }
+
+  .review-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-sm);
+    border-color: var(--border-strong);
+  }
+
+  .review-head {
+    display: grid;
+    gap: 0.75rem;
+  }
+
+  .review-badge-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.65rem;
+  }
+
+  .review-quote-mark {
+    color: var(--coral-600);
+    opacity: 0.85;
+    flex-shrink: 0;
+  }
+
+  .review-head h3 {
+    margin: 0;
+    font-size: 1.25rem;
+    color: var(--ink-900);
+  }
+
+  .review-quote {
+    margin: 0;
+  }
+
+  .review-quote p {
+    margin: 0;
+    color: var(--ink-700);
+    font-size: 0.96rem;
+    line-height: 1.7;
+  }
+
+  .review-foot {
+    padding-top: 0.9rem;
+    border-top: 1px solid var(--border-subtle);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.45rem;
+  }
+
+  .review-meta {
+    font-size: 0.84rem;
+    font-weight: 600;
+    color: var(--ink-600);
+  }
+
+  .review-tour-link {
+    font-size: 0.86rem;
+    font-weight: 700;
+    color: var(--forest-800);
+    text-decoration: none;
+  }
+
+  .review-tour-link:hover {
+    color: var(--coral-600);
+    text-decoration: underline;
+  }
+
+  @container (min-width: 26rem) {
+    .review-card {
+      padding: 1.65rem;
+    }
+
+    .review-foot {
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+    }
+  }
+
+  .reviews-cta-bar {
+    margin-top: 1.75rem;
+    padding: 1rem 1.25rem;
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.85rem 1.25rem;
+  }
+
+  .reviews-cta-label {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--ink-700);
+  }
+
+  .reviews-cta-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+  }
+</style>
