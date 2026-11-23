@@ -74,18 +74,18 @@ const destinationsClientData = DESTINATIONS.map((d) => ({
       <span class="hero-eyebrow">Batumi · Adjara · Greater Caucasus</span>
       <h1>{SITE.campaignTagline}</h1>
       <p class="hero-motto">
-        <strong>{SITE.motto}.</strong> Guided rainforest hikes, Adjarian village hospitality, Batumi Old Town architecture walks, and summer Caucasus expeditions led by certified local guide {SITE.founderName}.
+        <strong>{SITE.motto}.</strong> Guided rainforest hikes, Adjarian village hospitality, Batumi Old Town architecture walks, and summer Caucasus expeditions operated by a Batumi-based licensed tour operator with {SITE.experienceYears}+ years of regional experience.
       </p>
       <div class="hero-actions">
         <a class="btn btn-coral" href={withBase('/tours/')}>Explore All 7 Tours</a>
         <a class="btn btn-outline-light" href="#price-estimator">Estimate Group Price</a>
         <a
           class="btn btn-outline-light"
-          href={`${SITE.whatsappUrl}?text=${encodeURIComponent('Hello Beka! I would like advice choosing a tour in Georgia.')}`}
+          href={`${SITE.whatsappUrl}?text=${encodeURIComponent('Hello Minimalism Tours Georgia! I would like advice choosing a tour or B2B itinerary in Georgia.')}`}
           target="_blank"
           rel="noopener noreferrer"
         >
-          Ask Beka on WhatsApp
+          WhatsApp Reservations
         </a>
       </div>
 
@@ -129,24 +129,24 @@ const destinationsClientData = DESTINATIONS.map((d) => ({
   </section>
 
   <!-- Verified Credentials Strip (Strictly Authentic — Zero Fabricated Numbers) -->
-  <section class="section-surface section-tight" aria-label="Verified guide credentials">
+  <section class="section-surface section-tight" aria-label="Company guiding and operational standards">
     <div class="container">
       <ul class="trust-strip">
         <li>
-          <strong>UNESCO Heritage Guide</strong>
-          <span>Adjara Tourism Administration</span>
+          <strong>GMGA / FMGA &amp; UNESCO</strong>
+          <span>Certified mountain &amp; heritage team</span>
         </li>
         <li>
-          <strong>Certified Trekking Guide</strong>
-          <span>Adventure Tourism School</span>
+          <strong>Red Cross First Aid</strong>
+          <span>Safety-first field operations</span>
         </li>
         <li>
-          <strong>Red Cross &amp; Adjara First Aid</strong>
-          <span>Trained outdoor guest safety</span>
+          <strong>{SITE.experienceYears}+ Years in Georgia</strong>
+          <span>Batumi DMC · 4 central pickups</span>
         </li>
         <li>
-          <strong>8+ Years Guiding · 4 Batumi Pickups</strong>
-          <span>Zero hidden gate fees · 24h free cancel</span>
+          <strong>B2B &amp; Direct Ready</strong>
+          <span>Zero hidden fees · 24h free cancel</span>
         </li>
       </ul>
     </div>
@@ -410,24 +410,24 @@ const destinationsClientData = DESTINATIONS.map((d) => ({
     </div>
   </section>
 
-  <!-- Meet Guide Beka + Brand Pillars -->
+  <!-- Company Operations + Brand Pillars -->
   <section class="section section-forest">
     <div class="container">
       <div class="guide-feature reveal-on-scroll">
         <div class="guide-photo-frame">
           <img
-            src={withBase('/images/guide-beka.webp')}
-            alt="Beka Gelashvili, founder and certified local guide of Minimalism Tours Georgia, on a mountain trail"
-            width="800"
-            height="1200"
+            src={withBase('/images/mestia-svaneti.webp')}
+            alt="Alpine Caucasus valley and snow-dusted mountain ridges across Georgia operated by Minimalism Tours Georgia"
+            width="1200"
+            height="800"
             loading="lazy"
           />
         </div>
         <div class="guide-copy">
-          <span class="eyebrow">Led by {SITE.founderName} · {SITE.experienceYears}+ Years Experience</span>
-          <h2>Small Groups. Honest Pacing. Real Local Context.</h2>
+          <span class="eyebrow">Batumi Tour Operator &amp; Adjara DMC · {SITE.experienceYears}+ Years Experience</span>
+          <h2>Reliable Local Operations. Honest Pacing. B2B &amp; Private Ready.</h2>
           <p>
-            Minimalism Tours Georgia was built around a simple principle: connecting travelers with Georgia’s landscapes and living village traditions feels effortless when schedules aren’t rushed and pricing has zero hidden catches.
+            Minimalism Tours Georgia was built around a clear operational standard: connecting direct travelers and travel-trade partners with Georgia’s landscapes and living village traditions through reliable logistics, certified guiding, and transparent inclusions with zero hidden catches.
           </p>
 
           <div class="pillars-grid">
@@ -442,8 +442,8 @@ const destinationsClientData = DESTINATIONS.map((d) => ({
           </div>
 
           <div style="display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1.75rem;">
-            <a class="btn btn-coral" href={withBase('/about/')}>Credentials &amp; Vehicles</a>
-            <a class="btn btn-outline-light" href={withBase('/contact/')}>Request Custom Itinerary</a>
+            <a class="btn btn-coral" href={withBase('/partners/')}>B2B &amp; Travel Agencies</a>
+            <a class="btn btn-outline-light" href={withBase('/about/')}>Standards &amp; Fleet</a>
           </div>
         </div>
       </div>
@@ -662,7 +662,7 @@ const destinationsClientData = DESTINATIONS.map((d) => ({
             } else {
               const a = document.createElement('a');
               a.className = 'btn btn-coral btn-sm';
-              a.href = `${data.whatsappUrl}?text=${encodeURIComponent(`Hello Beka! I'd love to plan a custom trip to ${dest.name}.`)}`;
+              a.href = `${data.whatsappUrl}?text=${encodeURIComponent(`Hello Minimalism Tours Georgia! I'd like to plan a custom trip to ${dest.name}.`)}`;
               a.target = '_blank';
               a.rel = 'noopener noreferrer';
               a.textContent = `Plan Custom Trip to ${dest.name} ↗`;
@@ -1115,9 +1115,9 @@ const destinationsClientData = DESTINATIONS.map((d) => ({
 
   .guide-photo-frame img {
     width: 100%;
-    aspect-ratio: 4 / 5;
+    aspect-ratio: 4 / 3;
     object-fit: cover;
-    object-position: center top;
+    object-position: center;
   }
 
   .pillars-grid {

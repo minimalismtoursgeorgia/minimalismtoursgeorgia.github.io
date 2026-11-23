@@ -29,7 +29,8 @@ const {
     'Batumi day tours',
     'Mtirala National Park hike',
     'Machakhela hiking tour',
-    'Georgia private local guide',
+    'Adjara DMC tour operator',
+    'Batumi B2B ground handling',
   ],
   jsonLd = [],
 } = Astro.props;
@@ -52,11 +53,6 @@ const defaultOrgSchema = {
   logo: absoluteUrl(SITE.logoPath, Astro.site),
   image: ogImageUrl,
   telephone: SITE.phoneRaw,
-  founder: {
-    '@type': 'Person',
-    name: SITE.founderName,
-    jobTitle: SITE.founderRole,
-  },
   address: {
     '@type': 'PostalAddress',
     streetAddress: SITE.streetAddress,
@@ -80,6 +76,7 @@ const defaultOrgSchema = {
     ...SOCIAL_LINKS.map((s) => s.url),
     SITE.getYourGuideSupplierUrl,
     SITE.getYourGuideTourUrl,
+    SITE.trustpilotUrl,
   ],
   priceRange: '€€',
 };
@@ -95,7 +92,7 @@ const schemaGraph = {
 <title>{title}</title>
 <meta name="description" content={description} />
 <meta name="keywords" content={keywords.join(', ')} />
-<meta name="author" content={`${SITE.brandName} (${SITE.founderName})`} />
+<meta name="author" content={SITE.brandName} />
 <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
 <meta name="theme-color" content="#1B4332" />
 

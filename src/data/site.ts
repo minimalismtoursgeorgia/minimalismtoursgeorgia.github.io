@@ -35,16 +35,26 @@ export interface SocialChannel {
   url: string;
 }
 
+export interface B2BPartnerType {
+  tag: string;
+  title: string;
+  summary: string;
+  points: string[];
+}
+
+export interface B2BGuarantee {
+  title: string;
+  detail: string;
+}
+
 export const SITE = {
   brandName: 'Minimalism Tours Georgia',
   shortBrand: 'Minimalism Tours',
   motto: 'Break Your Routine',
   campaignTagline: 'Georgia, Beyond the Postcard',
   description:
-    'Guided small-group and private nature hikes, rainforest trails, village hospitality, and cultural walks from Batumi across Adjara and Georgia. Led by certified UNESCO heritage and Red Cross First Aid local guide Beka Gelashvili.',
-  founderName: 'Beka Gelashvili',
-  founderRole: 'Founder & Lead Local Guide',
-  experienceYears: 8,
+    'Batumi-based licensed tour operator and Adjara DMC offering small-group, private, and B2B guided nature hikes, UNESCO Colchic rainforest trails, cultural walks, and Caucasus expeditions across Georgia.',
+  experienceYears: 10,
   baseCity: 'Batumi',
   baseRegion: 'Adjara',
   country: 'Georgia',
@@ -60,6 +70,7 @@ export const SITE = {
   googleBusinessUrl:
     'https://www.google.com/maps/search/?api=1&query=Minimalism+Tours+Georgia+Batumi',
   googleReviewUrl: 'https://g.page/r/CVoYIo0JHrCdEBI/review',
+  trustpilotUrl: 'https://www.trustpilot.com/review/minimalismtoursgeorgia.github.io',
   youtubeUrl: 'https://www.youtube.com/@MinimalismToursGeorgia',
   getYourGuideSupplierUrl: 'https://www.getyourguide.com/minimalism-tours-georgia-s433573/',
   getYourGuideTourUrl: 'https://www.getyourguide.com/-t1525407/',
@@ -180,28 +191,34 @@ export const VEHICLES: VehicleOption[] = [
     idealFor: 'Mtirala forest approaches, mountain passes, and Adjarian valleys',
     amenities: ['4x4 traction', 'Air-conditioning', 'Onboard Wi-Fi', 'Heating'],
   },
+  {
+    name: 'Touring Minibus / Sprinter',
+    capacity: '8–16+ guests (coaches on request)',
+    idealFor: 'Travel agency groups, corporate retreats, and university delegations',
+    amenities: ['Air-conditioning', 'Dedicated luggage space', 'Onboard Wi-Fi', 'Direct hotel or port pickup'],
+  },
 ];
 
 export const CERTIFICATIONS: Certification[] = [
   {
-    title: 'UNESCO World Natural Heritage Site Guide',
+    title: 'GMGA & FMGA Certified Mountain & Trekking Standards',
+    issuer: 'Georgian & Federation Mountain Guides',
+    scope: 'Mountain safety protocols, high-altitude route leadership, and UNESCO-protected trail management',
+  },
+  {
+    title: 'UNESCO World Natural Heritage Site Guiding',
     issuer: 'Adjara Tourism Administration',
     scope: 'Colchic rainforest ecology, conservation rules, and Mtirala/Kolkheti heritage interpretation',
   },
   {
-    title: 'Certified Trekking Guide',
+    title: 'Certified Trekking & Field Guiding',
     issuer: 'Adventure Tourism School (Georgia)',
-    scope: 'Mountain route navigation, trail pacing, weather contingencies, and group management',
+    scope: 'Mountain route navigation, trail pacing, weather contingencies, and group coordination',
   },
   {
-    title: 'First Aid Certified Guide',
-    issuer: 'Adjara Tourism Administration',
-    scope: 'Trail-ready first response, altitude and terrain risk awareness',
-  },
-  {
-    title: 'Red Cross First Aid Certified Guide',
-    issuer: 'Georgia Red Cross Society',
-    scope: 'Emergency stabilization and outdoor guest care protocols',
+    title: 'Red Cross & Adjara First Aid Operations',
+    issuer: 'Georgia Red Cross Society & Adjara Tourism Administration',
+    scope: 'Trail-ready emergency stabilization and outdoor guest care protocols',
   },
 ];
 
@@ -292,5 +309,79 @@ export const GENERAL_FAQS = [
     question: 'How do I reserve a tour without paying an upfront website fee?',
     answer:
       'Choose your group size and date in any tour’s calculator and click Book via WhatsApp or Telegram directly — or book on GetYourGuide. No middleman booking fees apply on direct reservations.',
+  },
+];
+
+export const B2B_PARTNER_TYPES: B2BPartnerType[] = [
+  {
+    tag: 'DMC & Trade',
+    title: 'Travel Agencies & DMCs',
+    summary:
+      'Reliable ground handling across Batumi, Adjara, Kolkheti, Svaneti, and Kazbegi with flexible B2B partner structures.',
+    points: [
+      'Net and commissionable partner tariffs across 1-day to 5-day routes',
+      'White-label or co-branded guiding teams in English and Georgian',
+      'Custom multi-day Western Georgia & Caucasus itinerary modules',
+    ],
+  },
+  {
+    tag: 'Hospitality',
+    title: 'Batumi Hotels & Concierges',
+    summary:
+      'Turnkey daily excursions with direct lobby pickups, instant confirmation, and clear pricing for hotel guests.',
+    points: [
+      'Direct hotel pickup in Batumi alongside 4 central pickup hubs',
+      'Fast WhatsApp and Telegram confirmation for same-day and next-day requests',
+      'Zero hidden park or gate fees and structured rain-day backup routes',
+    ],
+  },
+  {
+    tag: 'Corporate',
+    title: 'Corporate & Team Retreats',
+    summary:
+      'Private Colchic rainforest hikes, village culinary tables, Batumi architectural walks, and multi-vehicle logistics for teams up to 16+ guests.',
+    points: [
+      'Dedicated Sedans, 4x4 SUVs, Touring Vans, and Sprinter minibuses',
+      'Curated village lunches with vegetarian and dietary accommodations',
+      'Moderate coastal-to-mountain pacing tailored to mixed fitness levels',
+    ],
+  },
+  {
+    tag: 'Special Groups',
+    title: 'Academic, Cruise & Special-Interest Groups',
+    summary:
+      'Content-rich ecological and heritage guiding aligned to port call windows and university field schedules.',
+    points: [
+      'UNESCO Colchic rainforest & Kolkheti wetlands field interpretation',
+      'Shore-excursion timing synchronized to Batumi port arrivals',
+      'GMGA/FMGA and Red Cross First Aid safety standards on every departure',
+    ],
+  },
+];
+
+export const B2B_GUARANTEES: B2BGuarantee[] = [
+  {
+    title: 'Certified Guiding Standards',
+    detail: 'GMGA/FMGA, UNESCO World Natural Heritage, Adventure Tourism School, and Red Cross First Aid credentials.',
+  },
+  {
+    title: 'Multi-Vehicle Fleet',
+    detail: 'Comfort Sedans (1–4), Touring Vans (1–6), 4x4 SUVs (1–7), and Sprinter Minibuses (8–16+ guests).',
+  },
+  {
+    title: 'Zero Hidden Gate Fees',
+    detail: 'Every B2B and guest quote states exact inclusions upfront—such as Botanical Garden tickets or village meals.',
+  },
+  {
+    title: 'Active Weather Contingencies',
+    detail: 'Rainforest-ready routing, dry standby vehicles, and alternative Adjarian cultural stops when mountain weather shifts.',
+  },
+  {
+    title: 'Flexible 24h Terms',
+    detail: 'Standard 24-hour free cancellation window on day departures with clear multi-day expedition terms.',
+  },
+  {
+    title: '24/7 Operations Desk',
+    detail: 'Direct response via WhatsApp (+995 592 04 30 80) and Telegram (@MinimalismToursGeorgia) for live dispatching.',
   },
 ];

@@ -18,8 +18,8 @@ const breadcrumbJsonLd = {
 ---
 
 <BaseLayout
-  title={`About Guide Beka Gelashvili & Credentials | ${SITE.brandName}`}
-  description="Meet Beka Gelashvili, founder of Minimalism Tours Georgia. UNESCO World Natural Heritage Guide, Adventure Tourism School Certified Trekking Guide, Red Cross First Aid Certified."
+  title={`About ${SITE.brandName} | Batumi Tour Operator & Adjara DMC`}
+  description="Minimalism Tours Georgia is a Batumi-based licensed tour operator and Adjara DMC with over 10 years of experience operating under GMGA/FMGA, UNESCO Heritage, and Red Cross First Aid standards."
   canonicalPath="/about/"
   jsonLd={[breadcrumbJsonLd]}
 >
@@ -30,40 +30,41 @@ const breadcrumbJsonLd = {
         <span aria-hidden="true">/</span>
         <span aria-current="page">About</span>
       </nav>
-      <span class="eyebrow">Independent Local Operator · Batumi</span>
+      <span class="eyebrow">Licensed Local Tour Operator &amp; DMC · Batumi</span>
       <h1>About Minimalism Tours Georgia</h1>
       <p style="max-width: 46rem; font-size: 1.05rem;">
-        “{SITE.motto}” — unhurried nature &amp; culture experiences across Adjara and Georgia, led with verified guiding qualifications and transparent guest care.
+        “{SITE.motto}” — unhurried nature, cultural, and B2B excursions across Adjara and Georgia, backed by certified guiding teams and transparent ground logistics.
       </p>
     </div>
   </section>
 
-  <!-- Founder & Philosophy -->
+  <!-- Company Operations & Philosophy -->
   <section class="section">
     <div class="container founder-grid">
       <div class="founder-photo">
         <img
-          src={withBase('/images/guide-beka.webp')}
-          alt="Beka Gelashvili guiding on a mountain trail in Georgia"
+          src={withBase('/images/mtirala-canopy.webp')}
+          alt="UNESCO Colchic temperate rainforest canopy in Mtirala National Park near Batumi, Georgia"
           fetchpriority="high"
-          width="800"
-          height="1200"
+          width="1200"
+          height="800"
           decoding="async"
         />
       </div>
 
       <div>
-        <span class="eyebrow">{SITE.founderRole}</span>
-        <h2>Beka Gelashvili · {SITE.experienceYears}+ Years Guiding in Georgia</h2>
+        <span class="eyebrow">Batumi Tour Operator &amp; Adjara DMC</span>
+        <h2>Minimalism Tours Georgia · {SITE.experienceYears}+ Years Operating Across Georgia</h2>
         <p>
-          Based in Batumi on the Black Sea coast, I founded Minimalism Tours Georgia for travelers who want more than rapid photo stops from a bus window. Whether walking beneath ancient Colchic chestnut trees in Mtirala, sharing a family kitchen meal in Adjara, or preparing for high-mountain passes in Kazbegi and Svaneti, every itinerary prioritizes ecological understanding, genuine human connection, and real pacing.
+          Based in Batumi on the Black Sea coast, Minimalism Tours Georgia operates small-group, private, and B2B ground handling programs for travelers and trade partners who want deeper local quality than rushed coach stops. From UNESCO-listed Colchic rainforests in Mtirala and Machakhela to high-mountain expeditions in Kazbegi and Svaneti, our team prioritizes ecological understanding, vetted village hospitality, and dependable pacing.
         </p>
         <p>
-          Every tour lists honest walking difficulty, active rain plans, exact meeting points, and complete price transparency — no surprise entry tickets at park gates, and no fabricated claims.
+          Every itinerary lists honest walking difficulty, active weather contingency plans, exact pickup points, and complete price transparency — no surprise entry tickets at park gates, and clear net or direct rates.
         </p>
 
         <div style="display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1.5rem;">
           <a class="btn btn-coral" href={withBase('/tours/')}>Explore Our Tours</a>
+          <a class="btn btn-forest" href={withBase('/partners/')}>B2B &amp; Agency Partnerships</a>
           <a class="btn btn-outline" href={SITE.youtubeUrl} target="_blank" rel="noopener noreferrer">
             Watch Routes on YouTube ↗
           </a>
@@ -153,7 +154,7 @@ const breadcrumbJsonLd = {
             Need reliable small-group or private Batumi departures for your guests? Contact us directly for a current one-page experience brief, seasonal capacity availability, and clear written referral terms.
           </p>
         </div>
-        <a class="btn btn-coral" href={withBase('/contact/')}>Request Partner Brief</a>
+        <a class="btn btn-coral" href={withBase('/partners/#b2b-inquiry')}>Request Partner Brief</a>
       </div>
     </div>
   </section>
@@ -202,9 +203,9 @@ const breadcrumbJsonLd = {
 
   .founder-photo img {
     width: 100%;
-    aspect-ratio: 4 / 5;
+    aspect-ratio: 4 / 3;
     object-fit: cover;
-    object-position: center top;
+    object-position: center;
   }
 
   .cert-grid,

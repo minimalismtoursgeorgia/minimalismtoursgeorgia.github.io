@@ -482,7 +482,7 @@ export const TOURS: Tour[] = [
       },
     ],
     seoDescription:
-      'Guided hiking tour in Machakhela National Park from Batumi. Real forest trails, stone bridges, waterfalls, and local history with certified guide Beka Gelashvili.',
+      'Guided hiking tour in Machakhela National Park from Batumi. Real forest trails, stone bridges, waterfalls, and local history with certified local guides from Minimalism Tours Georgia.',
     keywords: [
       'Machakhela National Park hiking tour',
       'Batumi Machakhela guided hike',

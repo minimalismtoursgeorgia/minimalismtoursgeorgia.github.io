@@ -35,6 +35,7 @@ export const GET: APIRoute = ({ site }) => {
     },
     { path: '/tours/', priority: '0.9', changefreq: 'weekly' },
     { path: '/destinations/', priority: '0.8', changefreq: 'monthly' },
+    { path: '/partners/', priority: '0.85', changefreq: 'monthly' },
     { path: '/about/', priority: '0.7', changefreq: 'monthly' },
     { path: '/contact/', priority: '0.8', changefreq: 'monthly' },
     ...TOURS.map((tour) => ({
