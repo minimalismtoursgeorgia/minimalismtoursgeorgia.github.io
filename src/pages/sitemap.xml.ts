@@ -55,6 +55,26 @@ export const GET: APIRoute = ({ site }) => {
       ],
     },
     { path: '/destinations/', priority: '0.8', changefreq: 'monthly' },
+    {
+      path: '/guest-registration/',
+      priority: '0.75',
+      changefreq: 'monthly',
+      hreflangPairs: [
+        { lang: 'en', path: '/guest-registration/' },
+        { lang: 'ka', path: '/ka/guest-registration/' },
+        { lang: 'x-default', path: '/guest-registration/' },
+      ],
+    },
+    {
+      path: '/ka/guest-registration/',
+      priority: '0.7',
+      changefreq: 'monthly',
+      hreflangPairs: [
+        { lang: 'en', path: '/guest-registration/' },
+        { lang: 'ka', path: '/ka/guest-registration/' },
+        { lang: 'x-default', path: '/guest-registration/' },
+      ],
+    },
     { path: '/partners/', priority: '0.85', changefreq: 'monthly' },
     { path: '/about/', priority: '0.7', changefreq: 'monthly' },
     { path: '/contact/', priority: '0.8', changefreq: 'monthly' },

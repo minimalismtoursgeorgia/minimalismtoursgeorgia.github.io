@@ -26,6 +26,13 @@ export interface TourVideo {
   uploadDate?: string;
 }
 
+export interface OptionalExtra {
+  id: 'zipline' | 'atv' | 'honey' | 'lunch';
+  label: string;
+  shortLabel: string;
+  detail: string;
+}
+
 export interface Tour {
   slug: string;
   title: string;
@@ -56,12 +63,40 @@ export interface Tour {
   itinerary: ItineraryStop[];
   included: string[];
   excluded: string[];
+  optionalExtras?: OptionalExtra[];
   weatherPlan: string;
   packingList: string[];
   faqs: TourFaq[];
   seoDescription: string;
   keywords: string[];
 }
+
+const MTIRALA_OPTIONAL_EXTRAS: Record<OptionalExtra['id'], OptionalExtra> = {
+  zipline: {
+    id: 'zipline',
+    label: 'Zipline',
+    shortLabel: 'Zipline',
+    detail: 'Optional rainforest zipline across the Mtirala canyon (seasonal, paid on site only if desired).',
+  },
+  atv: {
+    id: 'atv',
+    label: 'ATV Quad Ride',
+    shortLabel: 'ATV Ride',
+    detail: 'Optional ATV mountain ride along designated valley tracks arranged on guest request.',
+  },
+  honey: {
+    id: 'honey',
+    label: 'Local Mountain Honey',
+    shortLabel: 'Local Honey',
+    detail: 'Optional stop to taste and purchase authentic Adjarian chestnut and mountain honey from local beekeepers.',
+  },
+  lunch: {
+    id: 'lunch',
+    label: 'Georgian Lunch',
+    shortLabel: 'Lunch',
+    detail: 'Optional homemade Adjarian village lunch or riverside café stop tailored to your group’s preferences.',
+  },
+};
 
 export const TOURS: Tour[] = [
   {
@@ -168,9 +203,15 @@ export const TOURS: Tour[] = [
       'Trekking poles available on request',
     ],
     excluded: [
-      'Lunch, snacks, and drinks (available at local riverside café/picnic stop)',
-      'Optional zip-line or rope park activities if operating on site',
+      'Optional Georgian lunch, snacks, and drinks (available at local village kitchen or riverside café on request)',
+      'Optional zipline, ATV quad ride, or local mountain honey tasting (only if desired, paid separately)',
       'Personal travel insurance',
+    ],
+    optionalExtras: [
+      MTIRALA_OPTIONAL_EXTRAS.zipline,
+      MTIRALA_OPTIONAL_EXTRAS.atv,
+      MTIRALA_OPTIONAL_EXTRAS.honey,
+      MTIRALA_OPTIONAL_EXTRAS.lunch,
     ],
     weatherPlan:
       'Light rainforest drizzle enhances the forest atmosphere; we carry spare dry layers, adjust trail pace over wet roots, and shift to lower canopy viewpoints during heavy storms.',
@@ -284,8 +325,15 @@ export const TOURS: Tour[] = [
       'Pickup and drop-off at 4 Batumi points',
     ],
     excluded: [
-      'Meals and personal drinks',
+      'Optional Georgian lunch and personal drinks (arranged on guest request)',
+      'Optional zipline, ATV quad ride, or local mountain honey tasting (only if desired)',
       'Optional electric shuttle inside the Botanical Garden if desired instead of walking',
+    ],
+    optionalExtras: [
+      MTIRALA_OPTIONAL_EXTRAS.zipline,
+      MTIRALA_OPTIONAL_EXTRAS.atv,
+      MTIRALA_OPTIONAL_EXTRAS.honey,
+      MTIRALA_OPTIONAL_EXTRAS.lunch,
     ],
     weatherPlan:
       'Paved pathways in the Botanical Garden ensure comfortable walking even after rain; umbrellas or poncho guidance provided on damp days.',
@@ -389,7 +437,13 @@ export const TOURS: Tour[] = [
     ],
     excluded: [
       'Extra bottled drinks or wine beyond the family meal spread',
+      'Optional zipline, ATV quad ride, or extra honey purchases (only if desired)',
       'Gratuities (optional)',
+    ],
+    optionalExtras: [
+      MTIRALA_OPTIONAL_EXTRAS.zipline,
+      MTIRALA_OPTIONAL_EXTRAS.atv,
+      MTIRALA_OPTIONAL_EXTRAS.honey,
     ],
     weatherPlan:
       'Covered wooden veranda dining ensures the homemade culinary stop runs smoothly in all weather conditions.',
@@ -660,7 +714,14 @@ export const TOURS: Tour[] = [
     ],
     excluded: [
       'Personal sleeping bag (rental options available on request)',
-      'Trail food & snacks (or confirm camp meal add-on in advance)',
+      'Trail food & snacks (or confirm optional Georgian lunch / camp meal add-on in advance)',
+      'Optional zipline, ATV quad ride, or local mountain honey tasting (only if desired)',
+    ],
+    optionalExtras: [
+      MTIRALA_OPTIONAL_EXTRAS.zipline,
+      MTIRALA_OPTIONAL_EXTRAS.atv,
+      MTIRALA_OPTIONAL_EXTRAS.honey,
+      MTIRALA_OPTIONAL_EXTRAS.lunch,
     ],
     weatherPlan:
       'Confirmed 48 hours ahead based on ridge forecast; lower forest loop or safe postponement offered during severe thunderstorms.',

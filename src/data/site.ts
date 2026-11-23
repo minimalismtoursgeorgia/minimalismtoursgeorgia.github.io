@@ -302,7 +302,7 @@ export const GENERAL_FAQS = [
   {
     question: 'Are attraction tickets or park fees hidden on site?',
     answer:
-      'No hidden gate surprises. Each tour page explicitly lists what is included (such as Botanical Garden entry on the combined tour or homemade Adjarian lunch on the culinary hike) versus personal extras before you confirm.',
+      'No hidden gate surprises. Each tour page explicitly lists what is included (such as Botanical Garden entry on the combined tour or homemade Adjarian lunch on the culinary hike) versus personal extras before you confirm. Optional Mtirala experiences — such as zipline, ATV ride, local mountain honey tasting, and lunch — are arranged purely on guest request and are never mandatory.',
   },
   {
     question: 'How does group pricing and child discounting work?',

@@ -1,0 +1,857 @@
+---
+import { SITE } from '../data/site';
+import { TOURS } from '../data/tours';
+import { withBase } from '../lib/urls';
+
+export interface Props {
+  lang?: 'en' | 'ka';
+}
+
+const { lang = 'en' } = Astro.props;
+const isKa = lang === 'ka';
+
+const copy = isKa
+  ? {
+      badge: 'მკაცრად კონფიდენციალური · STRICTLY CONFIDENTIAL',
+      heading: 'სტუმრის რეგისტრაციისა და გადაუდებელი სამედიცინო ფორმა',
+      intro:
+        'შეავსეთ ტურის დაწყებამდე. ყველა მონაცემი რჩება მხოლოდ თქვენს ბრაუზერში (სერვერზე არ ინახება) — შეგიძლიათ შეინახოთ PDF-ად, ამობეჭდოთ ან გაგზავნოთ პირდაპირ WhatsApp / Telegram-ით.',
+      tripLegend: '1. ტურის დეტალები და სურვილისამებრ აქტივობები',
+      tripNameLabel: 'ტურის დასახელება',
+      tripDateLabel: 'ტურის თარიღი',
+      customTourOption: 'ინდივიდუალური მარშრუტი საქართველოში',
+      addonsLegend: 'მტირალას დამატებითი აქტივობები (მხოლოდ სურვილისამებრ)',
+      addonsHint: 'არცერთი არ არის სავალდებულო — მონიშნეთ მხოლოდ იმ შემთხვევაში, თუ გსურთ:',
+      addons: [
+        { value: 'Zipline', label: 'ზიპლაინი (Zipline)' },
+        { value: 'ATV Quad Ride', label: 'ATV კვადროციკლი' },
+        { value: 'Local Mountain Honey Tasting', label: 'ადგილობრივი თაფლის დეგუსტაცია' },
+        { value: 'Georgian Lunch', label: 'ლანჩი / აჭარული სადილი' },
+      ],
+      personalLegend: '2. სტუმრის პირადი მონაცემები',
+      fullNameLabel: 'სახელი და გვარი',
+      fullNameHint: 'როგორც პასპორტში ან პირადობაშია მითითებული',
+      fullNameError: 'გთხოვთ შეიყვანოთ სრული სახელი და გვარი (მინ. 2 სიმბოლო).',
+      dobLabel: 'დაბადების თარიღი',
+      dobError: 'გთხოვთ მიუთითოთ დაბადების თარიღი.',
+      addressLabel: 'საცხოვრებელი მისამართი',
+      addressHint: 'ქვეყანა, ქალაქი და ქუჩის მისამართი',
+      addressError: 'გთხოვთ მიუთითოთ მისამართი.',
+      mobileLabel: 'მობილურის ნომერი (ქვეყნის კოდით)',
+      mobileHint: 'მაგ. +995 5XX XX XX XX ან +44 ...',
+      mobileError: 'გთხოვთ მიუთითოთ მოქმედი მობილურის ნომერი.',
+      medicalLegend: '3. სამედიცინო ინფორმაცია და საგანგებო კონტაქტი',
+      doctorLabel: 'ექიმის სახელი და კლინიკა (არასავალდებულო)',
+      medicalLabel: 'ჯანმრთელობის მდგომარეობა, მედიკამენტები და ალერგიები',
+      medicalHint: 'საკვები, მედიკამენტები, მწერების ნაკბენი და სხვ. თუ არ გაქვთ, ჩაწერეთ „არ მაქვს“ (None).',
+      medicalError: 'გთხოვთ შეავსოთ სამედიცინო ველი (თუ არ გაქვთ, ჩაწერეთ „არ მაქვს“).',
+      kinNameLabel: 'საგანგებო საკონტაქტო პირის (Next of Kin) სახელი',
+      kinNameError: 'გთხოვთ მიუთითოთ საგანგებო საკონტაქტო პირის სახელი.',
+      kinPhoneLabel: 'საგანგებო საკონტაქტო პირის ტელეფონი',
+      kinPhoneError: 'გთხოვთ მიუთითოთ საგანგებო საკონტაქტო ნომერი.',
+      insuranceLegend: '4. სამოგზაურო დაზღვევა',
+      insCompLabel: 'სადაზღვევო კომპანია',
+      insCompError: 'გთხოვთ მიუთითოთ სადაზღვევო კომპანიის დასახელება.',
+      insPolicyLabel: 'პოლისის ნომერი',
+      insPolicyError: 'გთხოვთ მიუთითოთ სადაზღვევო პოლისის ნომერი.',
+      insPhoneLabel: 'დაზღვევის საგანგებო დახმარების ნომერი (24/7)',
+      insPhoneError: 'გთხოვთ მიუთითოთ სადაზღვევო დახმარების ნომერი.',
+      heliLegend: 'ფარავს თუ არა პოლისი ვერტმფრენით სამაშველო ევაკუაციას?',
+      heliOptions: [
+        { value: 'Yes', label: 'დიახ (Yes)' },
+        { value: 'No', label: 'არა (No)' },
+        { value: 'Not sure', label: 'დაზუსტებული არ მაქვს' },
+      ],
+      heliError: 'გთხოვთ აირჩიოთ ვერტმფრენით სამაშველო დაფარვის სტატუსი.',
+      declLegend: '5. დადასტურება და ხელმოწერა',
+      agreePrefix: 'ვეთანხმები ',
+      agreeLinkText: 'Minimalism Tours Georgia-ს უსაფრთხოებისა და პირობების დებულებას',
+      agreeSuffix: '. დაბეჭდილი ასლი ასევე ხელმისაწვდომია ტურის დროს გასაცნობად.',
+      agreeError: 'გთხოვთ მონიშნოთ თანხმობის ველი.',
+      signedLabel: 'ხელმოწერა (ჩაწერეთ სრული სახელი)',
+      signedError: 'გთხოვთ ჩაწეროთ სრული სახელი ხელმოწერისთვის.',
+      signedDateLabel: 'თარიღი',
+      signedDateError: 'გთხოვთ მიუთითოთ ხელმოწერის თარიღი.',
+      btnPrint: 'PDF-ად შენახვა / ამობეჭდვა',
+      btnWa: 'გაგზავნა WhatsApp-ით',
+      btnTg: 'გაგზავნა Telegram-ით',
+      btnCopy: 'ტექსტის კოპირება',
+      btnReset: 'გასუფთავება',
+      statusInvalid: 'გთხოვთ შეავსოთ მონიშნული სავალდებულო ველები.',
+      statusCopied: 'შევსებული ფორმა დაკოპირდა ბუფერში.',
+      statusOpenedWa: 'გაიხსნა WhatsApp შევსებული მონაცემებით.',
+      statusOpenedTg: 'გაიხსნა Telegram შევსებული მონაცემებით.',
+      printNote: 'ამობეჭდილი ან PDF ვერსია · Minimalism Tours Georgia · მკაცრად კონფიდენციალური',
+    }
+  : {
+      badge: 'STRICTLY CONFIDENTIAL',
+      heading: 'Guest Registration & Emergency Medical Form',
+      intro:
+        'Complete before departure. All details stay strictly inside your browser (never stored on a website server) — save as PDF / print, or send directly via WhatsApp or Telegram.',
+      tripLegend: '1. Trip Details & Optional Activities',
+      tripNameLabel: 'Trip Name',
+      tripDateLabel: 'Trip Date',
+      customTourOption: 'Custom Private Route in Georgia',
+      addonsLegend: 'Optional Mtirala Activities (Only If Desired)',
+      addonsHint: 'None of these are mandatory — tick only if you would like to add them on request:',
+      addons: [
+        { value: 'Zipline', label: 'Zipline' },
+        { value: 'ATV Quad Ride', label: 'ATV Quad Ride' },
+        { value: 'Local Mountain Honey Tasting', label: 'Local Mountain Honey Tasting' },
+        { value: 'Georgian Lunch', label: 'Georgian Lunch' },
+      ],
+      personalLegend: '2. Guest Personal Information',
+      fullNameLabel: 'Full Name',
+      fullNameHint: 'As shown on your passport or ID',
+      fullNameError: 'Please enter your full name (at least 2 characters).',
+      dobLabel: 'Date of Birth',
+      dobError: 'Please select your date of birth.',
+      addressLabel: 'Home Address',
+      addressHint: 'Street, city, postal code, and country',
+      addressError: 'Please enter your home address.',
+      mobileLabel: 'Mobile Number (with country code)',
+      mobileHint: 'Include international country code (e.g. +995, +44, +1)',
+      mobileError: 'Please enter a reachable mobile phone number.',
+      medicalLegend: '3. Medical Information & Next of Kin',
+      doctorLabel: 'Doctor’s Name & Surgery / Clinic (Optional)',
+      medicalLabel: 'Medical Conditions, Medication & Allergies (food, medication, bites, etc.)',
+      medicalHint: 'Write "None" if no medical conditions, medications, or allergies apply.',
+      medicalError: 'Please enter medical/allergy notes (or write "None").',
+      kinNameLabel: 'Next of Kin Full Name',
+      kinNameError: 'Please enter an emergency contact (next of kin) name.',
+      kinPhoneLabel: 'Next of Kin Phone Number',
+      kinPhoneError: 'Please enter an emergency contact phone number.',
+      insuranceLegend: '4. Travel Insurance Details',
+      insCompLabel: 'Insurance Company Name',
+      insCompError: 'Please enter your insurance company name.',
+      insPolicyLabel: 'Insurance Policy Number',
+      insPolicyError: 'Please enter your insurance policy number.',
+      insPhoneLabel: 'Insurance 24/7 Emergency Assistance Phone',
+      insPhoneError: 'Please enter your insurer’s emergency assistance phone number.',
+      heliLegend: 'Does your policy state that it covers helicopter rescue?',
+      heliOptions: [
+        { value: 'Yes', label: 'Yes' },
+        { value: 'No', label: 'No' },
+        { value: 'Not sure', label: 'Not sure' },
+      ],
+      heliError: 'Please choose whether your policy covers helicopter rescue.',
+      declLegend: '5. Declaration & Signature',
+      agreePrefix: 'I confirm this information is accurate and agree to ',
+      agreeLinkText: 'Minimalism Tours Georgia Safety, Weather & Operational Terms',
+      agreeSuffix: '. A printed copy is also available on the trip for me to view.',
+      agreeError: 'Please confirm the declaration checkbox before continuing.',
+      signedLabel: 'Signed (Type Full Name)',
+      signedError: 'Please type your full name as your signature.',
+      signedDateLabel: 'Date',
+      signedDateError: 'Please enter today’s signature date.',
+      btnPrint: 'Save as PDF / Print Form',
+      btnWa: 'Send via WhatsApp',
+      btnTg: 'Send via Telegram',
+      btnCopy: 'Copy Filled Form',
+      btnReset: 'Clear Form',
+      statusInvalid: 'Please complete the highlighted required fields.',
+      statusCopied: 'Completed registration details copied to your clipboard.',
+      statusOpenedWa: 'Opened WhatsApp with your completed registration details.',
+      statusOpenedTg: 'Opened Telegram with your completed registration details.',
+      printNote: 'Minimalism Tours Georgia · Guest Registration & Emergency Medical Form · STRICTLY CONFIDENTIAL',
+    };
+---
+
+<section class="reg-shell">
+  <div class="reg-print-letterhead" aria-hidden="true">
+    <strong>{SITE.brandName}</strong>
+    <span>{copy.printNote}</span>
+  </div>
+
+  <div class="reg-privacy-note">
+    <span class="badge badge-coral">{copy.badge}</span>
+    <h2 id="reg-form-heading">{copy.heading}</h2>
+    <p>{copy.intro}</p>
+  </div>
+
+  <form
+    id="guest-registration-form"
+    class="reg-form"
+    method="post"
+    data-enhanced-validation
+    novalidate
+    aria-labelledby="reg-form-heading"
+    data-lang={lang}
+    data-whatsapp-url={SITE.whatsappUrl}
+    data-telegram-url={SITE.telegramUrl}
+    data-status-invalid={copy.statusInvalid}
+    data-status-copied={copy.statusCopied}
+    data-status-wa={copy.statusOpenedWa}
+    data-status-tg={copy.statusOpenedTg}
+  >
+    <!-- 1. Trip Details & Optional Activities -->
+    <fieldset class="reg-fieldset">
+      <legend>{copy.tripLegend}</legend>
+      <div class="form-grid form-grid-2">
+        <div class="field">
+          <label for="reg-trip">{copy.tripNameLabel} <span aria-hidden="true">*</span></label>
+          <select id="reg-trip" name="tripName" required data-error="reg-trip-error">
+            {TOURS.map((tour) => (
+              <option value={tour.shortTitle}>{tour.shortTitle} ({tour.duration})</option>
+            ))}
+            <option value={copy.customTourOption}>{copy.customTourOption}</option>
+          </select>
+          <div id="reg-trip-error" class="error-msg">
+            <span role="img" aria-label="Error">⚠</span> {copy.tripNameLabel}
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="reg-trip-date">{copy.tripDateLabel} <span aria-hidden="true">*</span></label>
+          <input id="reg-trip-date" name="tripDate" type="date" required data-error="reg-trip-date-error" />
+          <div id="reg-trip-date-error" class="error-msg">
+            <span role="img" aria-label="Error">⚠</span> {copy.tripDateLabel}
+          </div>
+        </div>
+      </div>
+
+      <fieldset class="reg-sub-fieldset">
+        <legend>{copy.addonsLegend}</legend>
+        <p class="field-hint">{copy.addonsHint}</p>
+        <div class="reg-addons-grid">
+          {copy.addons.map((item) => (
+            <label class="reg-choice-pill">
+              <input type="checkbox" name="optionalAddons" value={item.value} />
+              <span>{item.label}</span>
+            </label>
+          ))}
+        </div>
+      </fieldset>
+    </fieldset>
+
+    <!-- 2. Guest Personal Information -->
+    <fieldset class="reg-fieldset">
+      <legend>{copy.personalLegend}</legend>
+      <div class="form-grid form-grid-2">
+        <div class="field">
+          <label for="reg-fullname">{copy.fullNameLabel} <span aria-hidden="true">*</span></label>
+          <span id="reg-fullname-hint" class="field-hint">{copy.fullNameHint}</span>
+          <input
+            id="reg-fullname"
+            name="fullName"
+            type="text"
+            required
+            minlength="2"
+            autocomplete="name"
+            aria-describedby="reg-fullname-hint"
+            data-error="reg-fullname-error"
+          />
+          <div id="reg-fullname-error" class="error-msg">
+            <span role="img" aria-label="Error">⚠</span> {copy.fullNameError}
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="reg-dob">{copy.dobLabel} <span aria-hidden="true">*</span></label>
+          <input
+            id="reg-dob"
+            name="dob"
+            type="date"
+            required
+            autocomplete="bday"
+            data-error="reg-dob-error"
+          />
+          <div id="reg-dob-error" class="error-msg">
+            <span role="img" aria-label="Error">⚠</span> {copy.dobError}
+          </div>
+        </div>
+      </div>
+
+      <div class="form-grid form-grid-2">
+        <div class="field">
+          <label for="reg-address">{copy.addressLabel} <span aria-hidden="true">*</span></label>
+          <span id="reg-address-hint" class="field-hint">{copy.addressHint}</span>
+          <textarea
+            id="reg-address"
+            name="address"
+            rows="2"
+            required
+            autocomplete="street-address"
+            aria-describedby="reg-address-hint"
+            data-error="reg-address-error"
+          ></textarea>
+          <div id="reg-address-error" class="error-msg">
+            <span role="img" aria-label="Error">⚠</span> {copy.addressError}
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="reg-mobile">{copy.mobileLabel} <span aria-hidden="true">*</span></label>
+          <span id="reg-mobile-hint" class="field-hint">{copy.mobileHint}</span>
+          <input
+            id="reg-mobile"
+            name="mobile"
+            type="tel"
+            required
+            autocomplete="tel"
+            inputmode="tel"
+            aria-describedby="reg-mobile-hint"
+            data-error="reg-mobile-error"
+          />
+          <div id="reg-mobile-error" class="error-msg">
+            <span role="img" aria-label="Error">⚠</span> {copy.mobileError}
+          </div>
+        </div>
+      </div>
+    </fieldset>
+
+    <!-- 3. Medical Information & Emergency Contact -->
+    <fieldset class="reg-fieldset">
+      <legend>{copy.medicalLegend}</legend>
+      <div class="form-grid">
+        <div class="field">
+          <label for="reg-doctor">{copy.doctorLabel}</label>
+          <input id="reg-doctor" name="doctor" type="text" />
+        </div>
+
+        <div class="field">
+          <label for="reg-medical">{copy.medicalLabel} <span aria-hidden="true">*</span></label>
+          <span id="reg-medical-hint" class="field-hint">{copy.medicalHint}</span>
+          <textarea
+            id="reg-medical"
+            name="medicalInfo"
+            rows="3"
+            required
+            aria-describedby="reg-medical-hint"
+            data-error="reg-medical-error"
+          ></textarea>
+          <div id="reg-medical-error" class="error-msg">
+            <span role="img" aria-label="Error">⚠</span> {copy.medicalError}
+          </div>
+        </div>
+
+        <div class="form-grid form-grid-2">
+          <div class="field">
+            <label for="reg-kin-name">{copy.kinNameLabel} <span aria-hidden="true">*</span></label>
+            <input
+              id="reg-kin-name"
+              name="kinName"
+              type="text"
+              required
+              minlength="2"
+              data-error="reg-kin-name-error"
+            />
+            <div id="reg-kin-name-error" class="error-msg">
+              <span role="img" aria-label="Error">⚠</span> {copy.kinNameError}
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="reg-kin-phone">{copy.kinPhoneLabel} <span aria-hidden="true">*</span></label>
+            <input
+              id="reg-kin-phone"
+              name="kinPhone"
+              type="tel"
+              required
+              inputmode="tel"
+              data-error="reg-kin-phone-error"
+            />
+            <div id="reg-kin-phone-error" class="error-msg">
+              <span role="img" aria-label="Error">⚠</span> {copy.kinPhoneError}
+            </div>
+          </div>
+        </div>
+      </div>
+    </fieldset>
+
+    <!-- 4. Travel Insurance -->
+    <fieldset class="reg-fieldset">
+      <legend>{copy.insuranceLegend}</legend>
+      <div class="form-grid">
+        <div class="form-grid form-grid-2">
+          <div class="field">
+            <label for="reg-ins-company">{copy.insCompLabel} <span aria-hidden="true">*</span></label>
+            <input
+              id="reg-ins-company"
+              name="insuranceCompany"
+              type="text"
+              required
+              data-error="reg-ins-company-error"
+            />
+            <div id="reg-ins-company-error" class="error-msg">
+              <span role="img" aria-label="Error">⚠</span> {copy.insCompError}
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="reg-ins-policy">{copy.insPolicyLabel} <span aria-hidden="true">*</span></label>
+            <input
+              id="reg-ins-policy"
+              name="insurancePolicy"
+              type="text"
+              required
+              autocorrect="off"
+              autocapitalize="none"
+              spellcheck="false"
+              data-error="reg-ins-policy-error"
+            />
+            <div id="reg-ins-policy-error" class="error-msg">
+              <span role="img" aria-label="Error">⚠</span> {copy.insPolicyError}
+            </div>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="reg-ins-phone">{copy.insPhoneLabel} <span aria-hidden="true">*</span></label>
+          <input
+            id="reg-ins-phone"
+            name="insurancePhone"
+            type="tel"
+            required
+            inputmode="tel"
+            data-error="reg-ins-phone-error"
+          />
+          <div id="reg-ins-phone-error" class="error-msg">
+            <span role="img" aria-label="Error">⚠</span> {copy.insPhoneError}
+          </div>
+        </div>
+
+        <fieldset class="radio-group-fieldset" id="reg-heli-fieldset">
+          <legend>{copy.heliLegend} <span aria-hidden="true">*</span></legend>
+          <div class="reg-radio-row">
+            {copy.heliOptions.map((opt, idx) => (
+              <label class="reg-choice-pill">
+                <input
+                  type="radio"
+                  name="helicopterRescue"
+                  value={opt.value}
+                  required={idx === 0}
+                />
+                <span>{opt.label}</span>
+              </label>
+            ))}
+          </div>
+          <div id="reg-heli-error" class="error-msg">
+            <span role="img" aria-label="Error">⚠</span> {copy.heliError}
+          </div>
+        </fieldset>
+      </div>
+    </fieldset>
+
+    <!-- 5. Declaration & Signature -->
+    <fieldset class="reg-fieldset">
+      <legend>{copy.declLegend}</legend>
+      <div class="form-grid">
+        <div class="check-field">
+          <div class="check-row">
+            <input
+              id="reg-agree"
+              name="agreeTerms"
+              type="checkbox"
+              required
+              data-error="reg-agree-error"
+            />
+            <label for="reg-agree">
+              {copy.agreePrefix}
+              <a href={withBase('/partners/#guarantees')} target="_blank" rel="noopener noreferrer">
+                {copy.agreeLinkText}
+              </a>
+              {copy.agreeSuffix} <span aria-hidden="true">*</span>
+            </label>
+          </div>
+          <div id="reg-agree-error" class="error-msg">
+            <span role="img" aria-label="Error">⚠</span> {copy.agreeError}
+          </div>
+        </div>
+
+        <div class="form-grid form-grid-2">
+          <div class="field">
+            <label for="reg-signed-name">{copy.signedLabel} <span aria-hidden="true">*</span></label>
+            <input
+              id="reg-signed-name"
+              name="signedName"
+              type="text"
+              required
+              minlength="2"
+              autocomplete="name"
+              data-error="reg-signed-name-error"
+            />
+            <div id="reg-signed-name-error" class="error-msg">
+              <span role="img" aria-label="Error">⚠</span> {copy.signedError}
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="reg-signed-date">{copy.signedDateLabel} <span aria-hidden="true">*</span></label>
+            <input
+              id="reg-signed-date"
+              name="signedDate"
+              type="date"
+              required
+              data-error="reg-signed-date-error"
+            />
+            <div id="reg-signed-date-error" class="error-msg">
+              <span role="img" aria-label="Error">⚠</span> {copy.signedDateError}
+            </div>
+          </div>
+        </div>
+      </div>
+    </fieldset>
+
+    <div class="reg-actions">
+      <button type="submit" class="btn btn-forest">{copy.btnPrint}</button>
+      <button type="button" id="reg-wa-btn" class="btn btn-coral">{copy.btnWa}</button>
+      <button type="button" id="reg-tg-btn" class="btn btn-outline">{copy.btnTg}</button>
+      <button type="button" id="reg-copy-btn" class="btn btn-outline">{copy.btnCopy}</button>
+      <button type="reset" class="btn btn-outline btn-sm">{copy.btnReset}</button>
+    </div>
+
+    <p id="reg-form-status" class="reg-status" role="status" aria-live="polite"></p>
+  </form>
+</section>
+
+<script>
+  const form = document.getElementById('guest-registration-form') as HTMLFormElement | null;
+  if (form) {
+    const signedDateInput = document.getElementById('reg-signed-date') as HTMLInputElement | null;
+    const heliFieldset = document.getElementById('reg-heli-fieldset');
+    const statusEl = document.getElementById('reg-form-status');
+    const waBtn = document.getElementById('reg-wa-btn');
+    const tgBtn = document.getElementById('reg-tg-btn');
+    const copyBtn = document.getElementById('reg-copy-btn');
+
+    const todayLocal = () => {
+      const now = new Date();
+      const y = now.getFullYear();
+      const m = String(now.getMonth() + 1).padStart(2, '0');
+      const d = String(now.getDate()).padStart(2, '0');
+      return `${y}-${m}-${d}`;
+    };
+
+    if (signedDateInput && !signedDateInput.value) {
+      signedDateInput.value = todayLocal();
+    }
+
+    const syncRadioError = () => {
+      if (!heliFieldset) return true;
+      const checked = form.querySelector<HTMLInputElement>('input[name="helicopterRescue"]:checked');
+      const valid = Boolean(checked);
+      heliFieldset.classList.toggle('radio-group-invalid', !valid);
+      return valid;
+    };
+
+    form.querySelectorAll<HTMLInputElement>('input[name="helicopterRescue"]').forEach((radio) => {
+      radio.addEventListener('change', () => {
+        heliFieldset?.classList.remove('radio-group-invalid');
+      });
+    });
+
+    const validateAll = () => {
+      let firstInvalid: HTMLElement | null = null;
+      const controls = Array.from(form.elements).filter(
+        (el): el is HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement =>
+          el instanceof HTMLInputElement ||
+          el instanceof HTMLSelectElement ||
+          el instanceof HTMLTextAreaElement
+      );
+
+      for (const el of controls) {
+        if (!el.checkValidity()) {
+          el.dispatchEvent(new Event('invalid', { bubbles: false }));
+          if (!firstInvalid) firstInvalid = el;
+        }
+      }
+
+      const radioValid = syncRadioError();
+      if (!radioValid && !firstInvalid) {
+        firstInvalid = form.querySelector<HTMLInputElement>('input[name="helicopterRescue"]');
+      }
+
+      if (firstInvalid) {
+        if (statusEl) statusEl.textContent = form.dataset.statusInvalid || '';
+        firstInvalid.focus();
+        return false;
+      }
+
+      if (statusEl) statusEl.textContent = '';
+      return true;
+    };
+
+    const buildSummary = () => {
+      const data = new FormData(form);
+      const addons = data.getAll('optionalAddons').map(String);
+      return [
+        'Minimalism Tours Georgia — Guest Registration & Emergency Medical Form (STRICTLY CONFIDENTIAL)',
+        `Trip: ${data.get('tripName') || ''}`,
+        `Trip Date: ${data.get('tripDate') || ''}`,
+        addons.length ? `Optional Add-Ons (on request): ${addons.join(', ')}` : 'Optional Add-Ons: None requested',
+        `Guest Name: ${data.get('fullName') || ''}`,
+        `Date of Birth: ${data.get('dob') || ''}`,
+        `Address: ${String(data.get('address') || '').replace(/\s+/g, ' ').trim()}`,
+        `Mobile: ${data.get('mobile') || ''}`,
+        data.get('doctor') ? `Doctor / Clinic: ${data.get('doctor')}` : '',
+        `Medical / Allergies: ${String(data.get('medicalInfo') || '').replace(/\s+/g, ' ').trim()}`,
+        `Next of Kin: ${data.get('kinName') || ''} (${data.get('kinPhone') || ''})`,
+        `Insurance: ${data.get('insuranceCompany') || ''} | Policy #${data.get('insurancePolicy') || ''}`,
+        `Insurance Emergency Phone: ${data.get('insurancePhone') || ''}`,
+        `Helicopter Rescue Covered: ${data.get('helicopterRescue') || ''}`,
+        `Terms Agreed: Yes | Signed: ${data.get('signedName') || ''} (${data.get('signedDate') || ''})`,
+      ]
+        .filter(Boolean)
+        .join('\n');
+    };
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      if (!validateAll()) return;
+      window.print();
+    });
+
+    waBtn?.addEventListener('click', () => {
+      if (!validateAll()) return;
+      const base = form.dataset.whatsappUrl || 'https://wa.me/995592043080';
+      window.open(`${base}?text=${encodeURIComponent(buildSummary())}`, '_blank', 'noopener,noreferrer');
+      if (statusEl) statusEl.textContent = form.dataset.statusWa || '';
+    });
+
+    tgBtn?.addEventListener('click', () => {
+      if (!validateAll()) return;
+      const base = form.dataset.telegramUrl || 'https://t.me/MinimalismToursGeorgia';
+      window.open(`${base}?text=${encodeURIComponent(buildSummary())}`, '_blank', 'noopener,noreferrer');
+      if (statusEl) statusEl.textContent = form.dataset.statusTg || '';
+    });
+
+    copyBtn?.addEventListener('click', async () => {
+      if (!validateAll()) return;
+      try {
+        await navigator.clipboard.writeText(buildSummary());
+        if (statusEl) statusEl.textContent = form.dataset.statusCopied || '';
+      } catch {
+        if (statusEl) statusEl.textContent = '';
+      }
+    });
+
+    form.addEventListener('reset', () => {
+      heliFieldset?.classList.remove('radio-group-invalid');
+      if (statusEl) statusEl.textContent = '';
+      setTimeout(() => {
+        if (signedDateInput && !signedDateInput.value) {
+          signedDateInput.value = todayLocal();
+        }
+      });
+    });
+  }
+</script>
+
+<style>
+  .reg-shell {
+    display: grid;
+    gap: 1.5rem;
+  }
+
+  .reg-print-letterhead {
+    display: none;
+  }
+
+  .reg-privacy-note {
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-inline-start: 4px solid var(--coral-600);
+    border-radius: var(--radius-lg);
+    padding: 1.25rem 1.4rem;
+  }
+
+  .reg-privacy-note h2 {
+    margin: 0.65rem 0 0.45rem;
+    font-size: 1.45rem;
+  }
+
+  .reg-privacy-note p {
+    margin: 0;
+    font-size: 0.94rem;
+    color: var(--ink-700);
+  }
+
+  .reg-form {
+    display: grid;
+    gap: 1.35rem;
+  }
+
+  .reg-fieldset {
+    margin: 0;
+    padding: clamp(1.15rem, 2.5vw, 1.65rem);
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-xs);
+    display: grid;
+    gap: 1.1rem;
+  }
+
+  .reg-fieldset > legend {
+    padding: 0 0.55rem;
+    font-weight: 700;
+    font-size: 1.05rem;
+    color: var(--forest-800);
+  }
+
+  .reg-sub-fieldset,
+  .radio-group-fieldset {
+    margin: 0;
+    padding: 0.95rem 1rem;
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    background-color: var(--bg-page);
+  }
+
+  .reg-sub-fieldset > legend,
+  .radio-group-fieldset > legend {
+    padding: 0 0.4rem;
+    font-weight: 600;
+    font-size: 0.92rem;
+    color: var(--ink-900);
+  }
+
+  .reg-addons-grid,
+  .reg-radio-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.55rem;
+    margin-top: 0.35rem;
+  }
+
+  .reg-choice-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    min-height: 48px;
+    padding: 0.45rem 0.9rem;
+    border-radius: var(--radius-pill);
+    border: 1.5px solid var(--border-strong);
+    background-color: var(--bg-surface);
+    color: var(--ink-900);
+    font-size: 0.92rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: border-color 0.16s ease, background-color 0.16s ease, color 0.16s ease;
+  }
+
+  .reg-choice-pill input {
+    width: 1.05rem;
+    height: 1.05rem;
+    margin: 0;
+    accent-color: var(--forest-800);
+  }
+
+  .reg-choice-pill:has(> :checked) {
+    border-color: var(--forest-800);
+    background-color: var(--forest-100);
+    color: var(--forest-900);
+  }
+
+  .reg-form :is(input:not([type='checkbox']):not([type='radio']), select, textarea) {
+    font-size: max(1rem, 1em);
+    min-height: 48px;
+  }
+
+  .check-field {
+    display: grid;
+    gap: 0.35rem;
+    padding: 0.9rem 1rem;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-subtle);
+    background-color: var(--bg-page);
+  }
+
+  .check-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.65rem;
+  }
+
+  .check-row input[type='checkbox'] {
+    flex-shrink: 0;
+    width: 1.2rem;
+    height: 1.2rem;
+    margin-top: 0.22rem;
+    accent-color: var(--forest-800);
+  }
+
+  .check-row label {
+    font-size: 0.93rem;
+    color: var(--ink-900);
+    cursor: pointer;
+  }
+
+  .check-field:has(input:is(:user-invalid, .user-invalid-fallback)) {
+    border-color: var(--error-red);
+    background-color: var(--error-bg);
+  }
+
+  .check-field:has(input:is(:user-invalid, .user-invalid-fallback)) .error-msg {
+    display: flex;
+  }
+
+  .radio-group-fieldset.radio-group-invalid {
+    border-color: var(--error-red);
+    background-color: var(--error-bg);
+  }
+
+  .radio-group-fieldset.radio-group-invalid .error-msg {
+    display: flex;
+  }
+
+  .reg-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.7rem;
+  }
+
+  .reg-status {
+    min-height: 1.4em;
+    margin: 0;
+    font-size: 0.92rem;
+    font-weight: 600;
+    color: var(--forest-800);
+  }
+
+  @media print {
+    :global(.site-header),
+    :global(.site-footer),
+    :global(.floating-whatsapp),
+    :global(.breadcrumbs),
+    :global(.page-hero),
+    .reg-privacy-note,
+    .reg-actions,
+    .reg-status {
+      display: none !important;
+    }
+
+    :global(body) {
+      padding-top: 0 !important;
+      background: #ffffff !important;
+      color: #000000 !important;
+      font-size: 11pt;
+    }
+
+    .reg-print-letterhead {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      border-bottom: 2px solid #000000;
+      padding-bottom: 0.4rem;
+      margin-bottom: 0.75rem;
+      font-size: 10pt;
+    }
+
+    .reg-fieldset {
+      box-shadow: none;
+      border: 1px solid #333333;
+      border-radius: 0;
+      padding: 0.65rem 0.8rem;
+      break-inside: avoid;
+    }
+
+    .reg-choice-pill {
+      min-height: auto;
+      border: none;
+      padding: 0.15rem 0.45rem 0.15rem 0;
+    }
+  }
+</style>

@@ -309,6 +309,31 @@ const videoJsonLd = (tour.videos || []).map((v) => ({
               </ul>
             </div>
           </div>
+
+          {
+            tour.optionalExtras && tour.optionalExtras.length > 0 && (
+              <div class="optional-extras-box">
+                <div class="optional-extras-head">
+                  <h3>Optional Add-Ons (If Desired)</h3>
+                  <span class="badge badge-sea">On Guest Request</span>
+                </div>
+                <p class="optional-extras-intro">
+                  Nothing here is mandatory — if you’d like to add any of these during your Mtirala day, let your guide know or tick them in the booking box.
+                </p>
+                <div class="optional-extras-grid">
+                  {tour.optionalExtras.map((extra) => (
+                    <div class="optional-extra-item">
+                      <div class="optional-extra-title">
+                        <strong>{extra.label}</strong>
+                        <span class="badge badge-forest">Optional</span>
+                      </div>
+                      <p>{extra.detail}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )
+          }
         </section>
 
         <!-- Weather & Packing -->
@@ -436,6 +461,20 @@ const videoJsonLd = (tour.videos || []).map((v) => ({
                       </select>
                     </div>
                   )}
+
+                  {tour.optionalExtras && tour.optionalExtras.length > 0 && (
+                    <fieldset class="opt-addons-fieldset">
+                      <legend>Optional Add-Ons (If Desired)</legend>
+                      <div class="opt-addons-grid">
+                        {tour.optionalExtras.map((extra) => (
+                          <label class="opt-addon-pill">
+                            <input type="checkbox" class="sb-addon-check" value={extra.label} />
+                            <span>{extra.shortLabel}</span>
+                          </label>
+                        ))}
+                      </div>
+                    </fieldset>
+                  )}
                 </div>
 
                 <div class="sb-summary-box">
@@ -536,6 +575,8 @@ const videoJsonLd = (tour.videos || []).map((v) => ({
 
           <p class="sb-trust-foot">
             ✓ {SITE.cancellationPolicy} · Direct booking with {SITE.brandName}
+            <br />
+            <a href={withBase('/guest-registration/')}>Pre-trip Guest Registration &amp; Medical Form →</a>
           </p>
         </div>
       </aside>
@@ -650,6 +691,7 @@ const videoJsonLd = (tour.videos || []).map((v) => ({
       const waBtn = document.getElementById('sb-wa-book') as HTMLAnchorElement | null;
       const tgBtn = document.getElementById('sb-tg-book') as HTMLAnchorElement | null;
       const currBtns = document.querySelectorAll<HTMLButtonElement>('.sb-curr-btn');
+      const addonChecks = document.querySelectorAll<HTMLInputElement>('.sb-addon-check');
 
       let currency: 'EUR' | 'USD' | 'GEL' = 'EUR';
 
@@ -679,14 +721,21 @@ const videoJsonLd = (tour.videos || []).map((v) => ({
 
         const dateStr = dateInput?.value || 'Flexible date';
         const pickupStr = pickupInput?.value || 'To be confirmed';
+        const selectedAddons = Array.from(addonChecks)
+          .filter((cb) => cb.checked)
+          .map((cb) => cb.value);
+
         const msg = [
           `Hello Minimalism Tours Georgia!`,
           `Tour: ${data.title}`,
           `Guests: ${adults} adult(s), ${children} child(ren)`,
           `Preferred Date: ${dateStr}`,
           `Pickup: ${pickupStr}`,
+          selectedAddons.length ? `Optional Add-Ons (if desired): ${selectedAddons.join(', ')}` : '',
           `Estimated Group Total: €${totalEur} (${fmt(totalEur)})`,
-        ].join('\n');
+        ]
+          .filter(Boolean)
+          .join('\n');
 
         if (waBtn) waBtn.href = `${data.whatsappUrl}?text=${encodeURIComponent(msg)}`;
         if (tgBtn) tgBtn.href = `${data.telegramUrl}?text=${encodeURIComponent(msg)}`;
@@ -704,7 +753,7 @@ const videoJsonLd = (tour.videos || []).map((v) => ({
         });
       });
 
-      [adultsInput, childInput, dateInput, pickupInput].forEach((el) => {
+      [adultsInput, childInput, dateInput, pickupInput, ...Array.from(addonChecks)].forEach((el) => {
         el?.addEventListener('input', updateSidebar);
         el?.addEventListener('change', updateSidebar);
       });
@@ -1245,5 +1294,121 @@ const videoJsonLd = (tour.videos || []).map((v) => ({
     font-size: 0.8rem;
     color: var(--ink-600);
     text-align: center;
+    line-height: 1.55;
+  }
+
+  .sb-trust-foot a {
+    display: inline-block;
+    margin-top: 0.35rem;
+    font-weight: 700;
+  }
+
+  .optional-extras-box {
+    margin-top: 1.15rem;
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-top: 3px solid var(--sea-600);
+    border-radius: var(--radius-lg);
+    padding: 1.25rem;
+  }
+
+  .optional-extras-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    margin-bottom: 0.4rem;
+  }
+
+  .optional-extras-head h3 {
+    margin: 0;
+  }
+
+  .optional-extras-intro {
+    font-size: 0.92rem;
+    color: var(--ink-600);
+    margin-bottom: 0.9rem;
+  }
+
+  .optional-extras-grid {
+    display: grid;
+    gap: 0.75rem;
+    grid-template-columns: repeat(auto-fit, minmax(13.5rem, 1fr));
+  }
+
+  .optional-extra-item {
+    background-color: var(--bg-page);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    padding: 0.85rem 0.95rem;
+  }
+
+  .optional-extra-title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    margin-bottom: 0.3rem;
+  }
+
+  .optional-extra-title strong {
+    font-size: 0.95rem;
+    color: var(--ink-900);
+  }
+
+  .optional-extra-item p {
+    margin: 0;
+    font-size: 0.86rem;
+    color: var(--ink-600);
+  }
+
+  .opt-addons-fieldset {
+    border: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .opt-addons-fieldset legend {
+    font-weight: 600;
+    font-size: 0.92rem;
+    color: var(--ink-900);
+    margin-bottom: 0.4rem;
+    padding: 0;
+  }
+
+  .opt-addons-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+  }
+
+  .opt-addon-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    min-height: 2.35rem;
+    padding: 0.35rem 0.72rem;
+    border-radius: var(--radius-pill);
+    border: 1.5px solid var(--border-strong);
+    background-color: var(--bg-page);
+    color: var(--ink-900);
+    font-size: 0.84rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: border-color 0.16s ease, background-color 0.16s ease, color 0.16s ease;
+  }
+
+  .opt-addon-pill input {
+    width: auto;
+    margin: 0;
+    padding: 0;
+    accent-color: var(--forest-800);
+  }
+
+  .opt-addon-pill:has(> :checked) {
+    border-color: var(--forest-800);
+    background-color: var(--forest-100);
+    color: var(--forest-900);
   }
 </style>

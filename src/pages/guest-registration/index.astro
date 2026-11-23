@@ -1,0 +1,77 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import GuestRegistrationForm from '../../components/GuestRegistrationForm.astro';
+import { SITE } from '../../data/site';
+import { withBase, absoluteUrl } from '../../lib/urls';
+
+const breadcrumbJsonLd = {
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: absoluteUrl('/', Astro.site) },
+    {
+      '@type': 'ListItem',
+      position: 2,
+      name: 'Guest Registration & Emergency Medical Form',
+      item: absoluteUrl('/guest-registration/', Astro.site),
+    },
+  ],
+};
+---
+
+<BaseLayout
+  title={`Guest Registration & Emergency Medical Form | ${SITE.brandName}`}
+  description="Confidential pre-trip guest registration, emergency contact, travel insurance, and medical safety form for Minimalism Tours Georgia departures."
+  canonicalPath="/guest-registration/"
+  alternateEnPath="/guest-registration/"
+  alternateKaPath="/ka/guest-registration/"
+  jsonLd={[breadcrumbJsonLd]}
+>
+  <section class="page-hero">
+    <div class="container">
+      <nav class="breadcrumbs" aria-label="Breadcrumb">
+        <a href={withBase('/')}>Home</a>
+        <span aria-hidden="true">/</span>
+        <span aria-current="page">Guest Registration &amp; Emergency Medical Form</span>
+      </nav>
+      <span class="eyebrow">Safety &amp; Pre-Departure</span>
+      <h1>Guest Registration &amp; Emergency Medical Form</h1>
+      <p>
+        Standard GMGA / Red Cross field safety registration for Mtirala, Machakhela, and Greater Caucasus tours operated by {SITE.brandName}.
+      </p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container" style="max-width: 58rem;">
+      <GuestRegistrationForm lang="en" />
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .page-hero {
+    background-color: var(--bg-surface);
+    border-bottom: 1px solid var(--border-subtle);
+    padding-block: clamp(2.25rem, 4.5vw, 3.5rem);
+  }
+
+  .breadcrumbs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+    font-size: 0.85rem;
+    color: var(--ink-600);
+    margin-bottom: 0.85rem;
+  }
+
+  .breadcrumbs a {
+    color: var(--ink-700);
+    text-decoration: none;
+    font-weight: 600;
+  }
+
+  .page-hero p {
+    max-width: 46rem;
+    margin-bottom: 0;
+  }
+</style>

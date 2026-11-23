@@ -103,6 +103,19 @@ const kaFeaturedTours: FeaturedTourSlide[] = [
           ))
         }
       </div>
+
+      <aside class="ka-optional-banner reveal-on-scroll" aria-label="დამატებითი აქტივობები სურვილისამებრ">
+        <div>
+          <span class="badge badge-sea">{KA_CONTENT.optionalExtras.badge}</span>
+          <h3>{KA_CONTENT.optionalExtras.title}</h3>
+          <p>{KA_CONTENT.optionalExtras.note}</p>
+        </div>
+        <div class="ka-optional-pills">
+          {KA_CONTENT.optionalExtras.items.map((item) => (
+            <span class="badge badge-forest">{item}</span>
+          ))}
+        </div>
+      </aside>
     </div>
   </section>
 
@@ -179,5 +192,36 @@ const kaFeaturedTours: FeaturedTourSlide[] = [
   .ka-pickup-card p {
     font-size: 0.88rem;
     margin-bottom: 0.75rem;
+  }
+
+  .ka-optional-banner {
+    margin-top: 1.5rem;
+    padding: 1.25rem 1.35rem;
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-inline-start: 4px solid var(--sea-600);
+    border-radius: var(--radius-lg);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem 1.25rem;
+  }
+
+  .ka-optional-banner h3 {
+    margin: 0.5rem 0 0.3rem;
+    font-size: 1.1rem;
+  }
+
+  .ka-optional-banner p {
+    margin: 0;
+    font-size: 0.92rem;
+    color: var(--ink-700);
+  }
+
+  .ka-optional-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem;
   }
 </style>
