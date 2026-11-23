@@ -1,0 +1,405 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { SITE, PICKUP_POINTS } from '../../data/site';
+import { TOURS } from '../../data/tours';
+import { withBase, absoluteUrl } from '../../lib/urls';
+
+const breadcrumbJsonLd = {
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: absoluteUrl('/', Astro.site) },
+    { '@type': 'ListItem', position: 2, name: 'Contact', item: absoluteUrl('/contact/', Astro.site) },
+  ],
+};
+---
+
+<BaseLayout
+  title={`Contact & Custom Tour Request | ${SITE.brandName}`}
+  description="Message guide Beka Gelashvili directly via WhatsApp, phone, or email to book Batumi day hikes, private Adjara trips, or summer Mount Kazbek expeditions."
+  canonicalPath="/contact/"
+  jsonLd={[breadcrumbJsonLd]}
+>
+  <section class="page-banner">
+    <div class="container">
+      <nav class="breadcrumbs" aria-label="Breadcrumb">
+        <a href={withBase('/')}>Home</a>
+        <span aria-hidden="true">/</span>
+        <span aria-current="page">Contact</span>
+      </nav>
+      <span class="eyebrow">Zero Booking Fees · Direct Local Reply</span>
+      <h1>Plan Your Tour or Ask a Question</h1>
+      <p style="max-width: 46rem; font-size: 1.05rem;">
+        Send your preferred dates, group size, and Batumi pickup stop directly to {SITE.founderName} — or message straight on WhatsApp for same-day trail conditions.
+      </p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container contact-grid">
+      <!-- Accessible Direct Request Form -->
+      <div class="contact-form-card">
+        <h2>Direct Booking &amp; Custom Route Builder</h2>
+        <p style="font-size: 0.94rem; margin-bottom: 1.5rem;">
+          Fill out the details below and choose how you want to send: instant pre-filled <strong>WhatsApp</strong>, pre-filled <strong>Email</strong>, or copy the formatted request to clipboard.
+        </p>
+
+        <form id="full-contact-form" class="form-grid" data-enhanced-validation novalidate>
+          <div class="form-grid form-grid-2">
+            <div class="field">
+              <label for="c-name">Full Name *</label>
+              <span id="c-name-hint" class="field-hint">Required so we can confirm your booking</span>
+              <input
+                id="c-name"
+                name="name"
+                type="text"
+                required
+                minlength="2"
+                autocomplete="name"
+                aria-describedby="c-name-hint"
+                data-error="c-name-error"
+                placeholder="Your name"
+              />
+              <div id="c-name-error" class="error-msg">
+                <span role="img" aria-label="Error">⚠</span> Please enter at least 2 characters for your name.
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="c-email">Email Address *</label>
+              <span id="c-email-hint" class="field-hint">Format: you@example.com</span>
+              <input
+                id="c-email"
+                name="email"
+                type="email"
+                required
+                autocomplete="email"
+                aria-describedby="c-email-hint"
+                data-error="c-email-error"
+                placeholder="you@example.com"
+              />
+              <div id="c-email-error" class="error-msg">
+                <span role="img" aria-label="Error">⚠</span> Enter an email address in the format you@example.com.
+              </div>
+            </div>
+          </div>
+
+          <div class="form-grid form-grid-2">
+            <div class="field">
+              <label for="c-tour">Preferred Tour or Route *</label>
+              <span id="c-tour-hint" class="field-hint">Select a standard route or custom itinerary</span>
+              <select
+                id="c-tour"
+                name="tour"
+                required
+                aria-describedby="c-tour-hint"
+                data-error="c-tour-error"
+              >
+                <option value="">Choose a tour...</option>
+                {TOURS.map((t) => <option value={t.title}>{t.shortTitle} ({t.duration})</option>)}
+                <option value="Custom Private Adjara / Green Lake / Kolkheti Route">
+                  Custom Private Adjara / Green Lake / Kolkheti Route
+                </option>
+                <option value="Hotel / Travel Agency B2B Partnership">
+                  Hotel / Travel Agency B2B Partnership
+                </option>
+              </select>
+              <div id="c-tour-error" class="error-msg">
+                <span role="img" aria-label="Error">⚠</span> Please select which tour or inquiry type you need.
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="c-pickup">Batumi Pickup Location</label>
+              <span id="c-pickup-hint" class="field-hint">Or select custom central hotel / other city</span>
+              <select id="c-pickup" name="pickup" aria-describedby="c-pickup-hint">
+                {PICKUP_POINTS.map((p) => <option value={p.name}>{p.name}</option>)}
+                <option value="Custom central Batumi hotel">Custom central Batumi hotel</option>
+                <option value="Stepantsminda / Kazbegi / Other region">Stepantsminda / Kazbegi / Other region</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-grid form-grid-2">
+            <div class="field">
+              <label for="c-date">Preferred Date</label>
+              <span id="c-date-hint" class="field-hint">Leave blank if flexible</span>
+              <input id="c-date" name="date" type="date" aria-describedby="c-date-hint" />
+            </div>
+
+            <div class="field">
+              <label for="c-guests">Group Size (1–16) *</label>
+              <span id="c-guests-hint" class="field-hint">Total travelers including children</span>
+              <input
+                id="c-guests"
+                name="guests"
+                type="number"
+                min="1"
+                max="16"
+                value="2"
+                required
+                aria-describedby="c-guests-hint"
+                data-error="c-guests-error"
+              />
+              <div id="c-guests-error" class="error-msg">
+                <span role="img" aria-label="Error">⚠</span> Group size must be between 1 and 16 guests.
+              </div>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="c-notes">Questions, Dietary Needs, or Gear Requests</label>
+            <span id="c-notes-hint" class="field-hint">Optional: vegetarian food, trekking poles, Kazbek dates, or children ages</span>
+            <textarea
+              id="c-notes"
+              name="notes"
+              aria-describedby="c-notes-hint"
+              placeholder="Tell us what makes your trip ideal..."
+            ></textarea>
+          </div>
+
+          <div class="contact-submit-row">
+            <button type="submit" class="btn btn-coral">
+              Send via WhatsApp →
+            </button>
+            <button id="c-email-btn" type="button" class="btn btn-forest">
+              Send via Email
+            </button>
+            <button id="c-copy-btn" type="button" class="btn btn-outline">
+              Copy Summary
+            </button>
+          </div>
+
+          <p id="c-feedback" class="contact-feedback" role="status" aria-live="polite"></p>
+        </form>
+      </div>
+
+      <!-- Direct Channels -->
+      <aside class="contact-side">
+        <div class="side-panel">
+          <span class="eyebrow">Direct Channels</span>
+          <h2>Talk Directly with Beka</h2>
+          <ul class="direct-list">
+            <li>
+              <strong>WhatsApp &amp; Phone</strong>
+              <a href={SITE.whatsappUrl} target="_blank" rel="noopener noreferrer">
+                {SITE.phoneDisplay} (Fastest Reply)
+              </a>
+            </li>
+            <li>
+              <strong>Email</strong>
+              <a href={`mailto:${SITE.email}`}>{SITE.email}</a>
+            </li>
+            <li>
+              <strong>YouTube Trail Previews</strong>
+              <a href={SITE.youtubeUrl} target="_blank" rel="noopener noreferrer">
+                @MinimalismToursGeorgia ↗
+              </a>
+            </li>
+            <li>
+              <strong>GetYourGuide Live Product</strong>
+              <a href={SITE.getYourGuideTourUrl} target="_blank" rel="noopener noreferrer">
+                Mtirala Lake &amp; Waterfall Hike ↗
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        <div class="side-panel">
+          <span class="eyebrow">Departure Hubs</span>
+          <h3>4 Verified Batumi Pickups</h3>
+          <ul class="pickup-compact">
+            {
+              PICKUP_POINTS.map((p) => (
+                <li>
+                  <strong>{p.name}</strong>
+                  <span>{p.address}</span>
+                  <a href={p.mapsUrl} target="_blank" rel="noopener noreferrer">Google Maps ↗</a>
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+      </aside>
+    </div>
+  </section>
+</BaseLayout>
+
+<script
+  id="contact-config"
+  type="application/json"
+  set:html={JSON.stringify({
+    whatsappUrl: SITE.whatsappUrl,
+    email: SITE.email,
+    formspreeEndpoint: SITE.formspreeEndpoint,
+  })}
+/>
+
+<script>
+  const cfgNode = document.getElementById('contact-config');
+  const cfg = cfgNode?.textContent ? JSON.parse(cfgNode.textContent) : null;
+
+  const form = document.getElementById('full-contact-form') as HTMLFormElement | null;
+  const emailBtn = document.getElementById('c-email-btn');
+  const copyBtn = document.getElementById('c-copy-btn');
+  const feedbackEl = document.getElementById('c-feedback');
+
+  const getSummary = () => {
+    if (!form) return '';
+    const d = new FormData(form);
+    return [
+      'Minimalism Tours Georgia — Booking / Inquiry Brief',
+      `Name: ${d.get('name')}`,
+      `Email: ${d.get('email')}`,
+      `Tour: ${d.get('tour')}`,
+      `Pickup: ${d.get('pickup')}`,
+      `Preferred Date: ${d.get('date') || 'Flexible'}`,
+      `Group Size: ${d.get('guests')} traveler(s)`,
+      d.get('notes') ? `Notes: ${d.get('notes')}` : '',
+    ]
+      .filter(Boolean)
+      .join('\n');
+  };
+
+  form?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if (!form.reportValidity() || !cfg) return;
+    const summary = getSummary();
+
+    if (cfg.formspreeEndpoint) {
+      try {
+        await fetch(cfg.formspreeEndpoint, {
+          method: 'POST',
+          headers: { Accept: 'application/json' },
+          body: new FormData(form),
+        });
+      } catch {
+        // Still proceed to WhatsApp fallback cleanly
+      }
+    }
+
+    const waUrl = `${cfg.whatsappUrl}?text=${encodeURIComponent(summary)}`;
+    window.open(waUrl, '_blank', 'noopener,noreferrer');
+    if (feedbackEl) {
+      feedbackEl.textContent = 'Opening WhatsApp with your pre-filled tour details.';
+    }
+  });
+
+  emailBtn?.addEventListener('click', () => {
+    if (!form || !form.reportValidity() || !cfg) return;
+    const summary = getSummary();
+    window.location.href = `mailto:${cfg.email}?subject=${encodeURIComponent(
+      'Tour Request — Minimalism Tours Georgia'
+    )}&body=${encodeURIComponent(summary)}`;
+    if (feedbackEl) {
+      feedbackEl.textContent = 'Opening your email app with your formatted tour request.';
+    }
+  });
+
+  copyBtn?.addEventListener('click', async () => {
+    if (!form || !form.reportValidity()) return;
+    try {
+      await navigator.clipboard.writeText(getSummary());
+      if (feedbackEl) {
+        feedbackEl.textContent = 'Inquiry summary copied to your clipboard!';
+      }
+    } catch {
+      if (feedbackEl) {
+        feedbackEl.textContent = 'Please use Send via WhatsApp or Email above.';
+      }
+    }
+  });
+</script>
+
+<style>
+  .page-banner {
+    background-color: var(--bg-surface);
+    border-bottom: 1px solid var(--border-subtle);
+    padding-block: clamp(2.25rem, 4.5vw, 3.75rem);
+  }
+
+  .breadcrumbs {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    font-size: 0.86rem;
+    color: var(--ink-600);
+    margin-bottom: 1rem;
+  }
+
+  .breadcrumbs a {
+    color: var(--ink-700);
+    text-decoration: none;
+    font-weight: 600;
+  }
+
+  .contact-grid {
+    display: grid;
+    gap: 2rem;
+    align-items: start;
+  }
+
+  @media (min-width: 58rem) {
+    .contact-grid {
+      grid-template-columns: 1.35fr 0.85fr;
+    }
+  }
+
+  .contact-form-card,
+  .side-panel {
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-xl);
+    padding: clamp(1.4rem, 3vw, 2.25rem);
+    box-shadow: var(--shadow-xs);
+  }
+
+  .contact-side {
+    display: grid;
+    gap: 1.5rem;
+  }
+
+  .direct-list,
+  .pickup-compact {
+    list-style: none;
+    margin: 0.75rem 0 0;
+    padding: 0;
+    display: grid;
+    gap: 0.9rem;
+  }
+
+  .direct-list li,
+  .pickup-compact li {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--border-subtle);
+    font-size: 0.92rem;
+  }
+
+  .direct-list li:last-child,
+  .pickup-compact li:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+
+  .pickup-compact span {
+    color: var(--ink-600);
+    font-size: 0.85rem;
+  }
+
+  .contact-submit-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 0.4rem;
+  }
+
+  .contact-feedback {
+    margin: 0.25rem 0 0;
+    min-height: 1.4rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--forest-800);
+  }
+</style>

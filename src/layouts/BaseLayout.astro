@@ -1,0 +1,355 @@
+---
+import '../styles/global.css';
+import SeoHead, { type Props as SeoProps } from '../components/SeoHead.astro';
+import { SITE, PICKUP_POINTS } from '../data/site';
+import { TOURS } from '../data/tours';
+import { withBase } from '../lib/urls';
+
+export interface Props extends SeoProps {}
+
+const props = Astro.props;
+const lang = props.lang || 'en';
+const currentPath = Astro.url.pathname;
+
+const navLinks = [
+  { label: lang === 'ka' ? 'მთავარი' : 'Home', href: withBase('/') },
+  { label: lang === 'ka' ? 'ტურები' : 'Tours', href: withBase('/tours/') },
+  { label: lang === 'ka' ? 'მიმართულებები' : 'Destinations', href: withBase('/destinations/') },
+  { label: lang === 'ka' ? 'ჩვენ შესახებ' : 'About', href: withBase('/about/') },
+  { label: lang === 'ka' ? 'კონტაქტი' : 'Contact', href: withBase('/contact/') },
+];
+---
+
+<!doctype html>
+<html lang={lang}>
+  <head>
+    <SeoHead {...props} />
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">
+      {lang === 'ka' ? 'გადასვლა მთავარ შინაარსზე' : 'Skip to main content'}
+    </a>
+
+    <header class="site-header">
+      <div class="header-inner">
+        <a class="brand-link" href={withBase(lang === 'ka' ? '/ka/' : '/')}>
+          <span class="brand-logo-wrap">
+            <img
+              src={withBase(SITE.logoPath)}
+              alt={`${SITE.brandName} logo`}
+              width="42"
+              height="42"
+            />
+          </span>
+          <span class="brand-text">
+            <span class="brand-title">{SITE.brandName}</span>
+            <span class="brand-sub">{SITE.motto}</span>
+          </span>
+        </a>
+
+        <nav class="primary-nav" aria-label="Main navigation">
+          {
+            navLinks.map((item) => (
+              <a
+                href={item.href}
+                aria-current={currentPath === item.href ? 'page' : undefined}
+              >
+                {item.label}
+              </a>
+            ))
+          }
+        </nav>
+
+        <div class="header-actions">
+          <a
+            class="lang-switch"
+            href={lang === 'ka' ? withBase('/') : withBase('/ka/')}
+            hreflang={lang === 'ka' ? 'en' : 'ka'}
+            aria-label={lang === 'ka' ? 'Switch to English' : 'ქართულ ენაზე გადართვა'}
+          >
+            {lang === 'ka' ? 'EN' : 'ქარ'}
+          </a>
+
+          <button
+            type="button"
+            class="btn btn-coral btn-sm header-cta"
+            command="show-modal"
+            commandfor="quick-inquiry-dialog"
+          >
+            {lang === 'ka' ? 'დაგეგმე ტური' : 'Plan a Tour'}
+          </button>
+
+          <button
+            type="button"
+            class="mobile-menu-btn"
+            command="show-modal"
+            commandfor="mobile-nav-dialog"
+            aria-label="Open navigation menu"
+          >
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true">
+              <line x1="3" y1="6" x2="21" y2="6" />
+              <line x1="3" y1="12" x2="21" y2="12" />
+              <line x1="3" y1="18" x2="21" y2="18" />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <main id="main-content">
+      <slot />
+    </main>
+
+    <footer class="site-footer">
+      <div class="container">
+        <div class="footer-grid">
+          <div>
+            <a class="brand-link" href={withBase('/')} style="margin-bottom: 1rem; color: #ffffff;">
+              <span class="brand-logo-wrap">
+                <img
+                  src={withBase(SITE.logoPath)}
+                  alt={`${SITE.brandName} emblem`}
+                  loading="lazy"
+                  width="42"
+                  height="42"
+                />
+              </span>
+              <span class="brand-text">
+                <span class="brand-title" style="color: #ffffff;">{SITE.brandName}</span>
+                <span class="brand-sub" style="color: #f4b69f;">{SITE.campaignTagline}</span>
+              </span>
+            </a>
+            <p>
+              Small-group and private nature, hiking, and cultural tours from Batumi across Adjara and the Greater Caucasus.
+            </p>
+            <p style="margin-bottom: 0;">
+              <strong>Lead Guide:</strong> {SITE.founderName} · UNESCO Heritage &amp; Red Cross First Aid Certified
+            </p>
+          </div>
+
+          <div>
+            <h3>Signature Tours</h3>
+            <ul class="footer-links">
+              {
+                TOURS.slice(0, 5).map((tour) => (
+                  <li>
+                    <a href={withBase(`/tours/${tour.slug}/`)}>{tour.shortTitle}</a>
+                  </li>
+                ))
+              }
+              <li><a href={withBase('/tours/')}>View All 7 Tours →</a></li>
+            </ul>
+          </div>
+
+          <div>
+            <h3>Batumi Pickups</h3>
+            <ul class="footer-links">
+              {
+                PICKUP_POINTS.map((p) => (
+                  <li>
+                    <a href={p.mapsUrl} target="_blank" rel="noopener noreferrer">
+                      {p.name} — {p.district}
+                    </a>
+                  </li>
+                ))
+              }
+            </ul>
+          </div>
+
+          <div>
+            <h3>Direct Contact</h3>
+            <ul class="footer-links">
+              <li>
+                <a href={SITE.whatsappUrl} target="_blank" rel="noopener noreferrer">
+                  WhatsApp: {SITE.phoneDisplay}
+                </a>
+              </li>
+              <li>
+                <a href={`tel:${SITE.phoneRaw}`}>Call: {SITE.phoneDisplay}</a>
+              </li>
+              <li>
+                <a href={`mailto:${SITE.email}`}>{SITE.email}</a>
+              </li>
+              <li>
+                <a href={SITE.youtubeUrl} target="_blank" rel="noopener noreferrer">
+                  YouTube @MinimalismToursGeorgia
+                </a>
+              </li>
+              <li>
+                <a href={SITE.getYourGuideTourUrl} target="_blank" rel="noopener noreferrer">
+                  Verified on GetYourGuide
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="footer-bottom">
+          <span>© 2026 {SITE.brandName}. Batumi, Adjara, Georgia.</span>
+          <span>24-hour free cancellation · English &amp; ქართული guiding · Transparent pricing</span>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Floating Quick WhatsApp Button -->
+    <a
+      class="floating-whatsapp"
+      href={`${SITE.whatsappUrl}?text=${encodeURIComponent('Hello Minimalism Tours Georgia! I would like to ask about tours from Batumi.')}`}
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label="Chat directly on WhatsApp with Minimalism Tours Georgia"
+    >
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path d="M12.03 2a9.94 9.94 0 0 0-8.48 15.16L2 22l4.98-1.48A9.95 9.95 0 1 0 12.03 2Zm5.82 14.12c-.25.7-1.43 1.34-1.99 1.41-.51.07-1.15.1-1.85-.12-.43-.14-.98-.32-1.69-.63-2.97-1.29-4.91-4.32-5.06-4.52-.15-.2-1.21-1.61-1.21-3.07 0-1.46.76-2.18 1.03-2.48.27-.3.59-.37.79-.37h.57c.18 0 .43-.07.67.51.25.59.84 2.05.91 2.2.07.15.12.33.02.53-.1.2-.15.32-.3.5-.15.18-.32.4-.45.54-.15.15-.3.32-.13.62.18.3.78 1.29 1.68 2.09 1.15 1.02 2.13 1.34 2.43 1.49.3.15.48.13.66-.08.18-.2.75-.88.95-1.18.2-.3.4-.25.67-.15.27.1 1.73.82 2.03.97.3.15.5.22.57.34.08.12.08.7-.17 1.4Z" />
+      </svg>
+      <span>WhatsApp Guide</span>
+    </a>
+
+    <!-- Mobile Navigation Drawer (<dialog closedby="any">) -->
+    <dialog id="mobile-nav-dialog" closedby="any" aria-labelledby="mobile-nav-title">
+      <div class="dialog-head">
+        <h2 id="mobile-nav-title">{SITE.brandName}</h2>
+        <button
+          type="button"
+          class="dialog-close"
+          command="close"
+          commandfor="mobile-nav-dialog"
+          aria-label="Close navigation menu"
+        >
+          ✕
+        </button>
+      </div>
+      <div class="dialog-body">
+        <nav aria-label="Mobile navigation" style="display: grid; gap: 0.6rem; margin-bottom: 1.5rem;">
+          {
+            navLinks.map((item) => (
+              <a
+                href={item.href}
+                class="btn btn-outline"
+                style="justify-content: flex-start; border-radius: var(--radius-md);"
+              >
+                {item.label}
+              </a>
+            ))
+          }
+          <a
+            href={withBase('/ka/')}
+            class="btn btn-outline"
+            style="justify-content: flex-start; border-radius: var(--radius-md);"
+          >
+            ქართული ვერსია (Georgian)
+          </a>
+        </nav>
+        <button
+          type="button"
+          class="btn btn-coral"
+          style="width: 100%;"
+          command="show-modal"
+          commandfor="quick-inquiry-dialog"
+          onclick="document.getElementById('mobile-nav-dialog')?.close()"
+        >
+          Plan a Custom Tour
+        </button>
+      </div>
+    </dialog>
+
+    <!-- Quick Inquiry Modal (<dialog closedby="any">) -->
+    <dialog id="quick-inquiry-dialog" closedby="any" aria-labelledby="quick-inquiry-title">
+      <div class="dialog-head">
+        <h2 id="quick-inquiry-title">Plan a Tour with Beka</h2>
+        <button
+          type="button"
+          class="dialog-close"
+          command="close"
+          commandfor="quick-inquiry-dialog"
+          aria-label="Close inquiry modal"
+        >
+          ✕
+        </button>
+      </div>
+      <div class="dialog-body">
+        <p style="font-size: 0.94rem; margin-bottom: 1.15rem;">
+          Message directly with zero booking middleman fees. Free cancellation up to 24 hours before departure.
+        </p>
+        <form id="quick-inquiry-form" class="form-grid" data-enhanced-validation novalidate>
+          <div class="field">
+            <label for="quick-name">Your Name</label>
+            <span id="quick-name-hint" class="field-hint">So we know how to greet you</span>
+            <input
+              id="quick-name"
+              name="name"
+              type="text"
+              required
+              minlength="2"
+              autocomplete="name"
+              autofocus
+              aria-describedby="quick-name-hint"
+              data-error="quick-name-error"
+              placeholder="e.g. Elena &amp; Lukas"
+            />
+            <div id="quick-name-error" class="error-msg">
+              <span role="img" aria-label="Error">⚠</span> Please enter at least 2 characters for your name.
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="quick-tour">Tour or Destination</label>
+            <select id="quick-tour" name="tour">
+              {
+                TOURS.map((t) => (
+                  <option value={t.shortTitle}>{t.shortTitle} ({t.duration})</option>
+                ))
+              }
+              <option value="Custom Adjara / Georgia Private Route">Custom Adjara / Georgia Private Route</option>
+            </select>
+          </div>
+
+          <div class="form-grid form-grid-2">
+            <div class="field">
+              <label for="quick-date">Preferred Date</label>
+              <input id="quick-date" name="date" type="date" />
+            </div>
+            <div class="field">
+              <label for="quick-guests">Travelers (1–16)</label>
+              <input id="quick-guests" name="guests" type="number" min="1" max="16" value="2" />
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="quick-notes">Pickup Location or Questions</label>
+            <textarea
+              id="quick-notes"
+              name="notes"
+              placeholder="Europe Square pickup, vegetarian lunch, or Kazbek gear questions..."
+            ></textarea>
+          </div>
+
+          <div style="display: flex; flex-wrap: wrap; gap: 0.65rem; margin-top: 0.25rem;">
+            <a
+              id="quick-wa-send"
+              class="btn btn-coral"
+              style="flex: 1 1 12rem;"
+              href={SITE.whatsappUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Send via WhatsApp
+            </a>
+            <a
+              id="quick-email-send"
+              class="btn btn-outline"
+              style="flex: 1 1 10rem;"
+              href={`mailto:${SITE.email}`}
+            >
+              Send via Email
+            </a>
+          </div>
+        </form>
+      </div>
+    </dialog>
+
+    <script>
+      import '../scripts/site.ts';
+    </script>
+  </body>
+</html>

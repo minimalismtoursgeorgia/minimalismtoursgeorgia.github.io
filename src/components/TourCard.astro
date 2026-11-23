@@ -1,0 +1,61 @@
+---
+import type { Tour } from '../data/tours';
+import { withBase } from '../lib/urls';
+
+export interface Props {
+  tour: Tour;
+  priority?: boolean;
+}
+
+const { tour, priority = false } = Astro.props;
+---
+
+<article
+  class="tour-card reveal-on-scroll"
+  data-category={tour.category}
+  data-region={tour.regionSlug}
+  data-duration={tour.durationBucket}
+  data-difficulty={tour.difficulty}
+  data-price={tour.startingPriceEur ?? 9999}
+  data-hours={tour.durationHours}
+  data-search={`${tour.title} ${tour.region} ${tour.category} ${tour.summary}`.toLowerCase()}
+>
+  <img
+    src={withBase(tour.heroImage)}
+    alt={tour.heroAlt}
+    width="1200"
+    height="750"
+    loading={priority ? undefined : 'lazy'}
+    decoding="async"
+  />
+  <header>
+    <div class="tour-card-meta">
+      <span class="badge badge-forest">{tour.category}</span>
+      <span class="badge badge-sea">{tour.duration}</span>
+    </div>
+    <h3>
+      <a class="card-link" href={withBase(`/tours/${tour.slug}/`)}>
+        {tour.shortTitle}
+      </a>
+    </h3>
+  </header>
+  <div class="tour-card-body">
+    <p>{tour.summary}</p>
+    <ul class="tour-facts-inline">
+      <li>📍 {tour.region}</li>
+      <li>🥾 {tour.difficulty}</li>
+      <li>👥 {tour.groupSize}</li>
+    </ul>
+  </div>
+  <footer>
+    <div class="tour-price-block">
+      <span class="tour-price-kicker">
+        {tour.startingPriceEur !== null ? 'Direct Group Rate From' : 'Seasonal Expedition'}
+      </span>
+      <span class="tour-price-value">
+        {tour.startingPriceEur !== null ? `€${tour.startingPriceEur} / guest` : 'Custom Quote'}
+      </span>
+    </div>
+    <span class="btn btn-outline btn-sm" aria-hidden="true">Explore →</span>
+  </footer>
+</article>

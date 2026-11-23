@@ -1,0 +1,21 @@
+{
+  "name": "minimalismtoursgeorgia",
+  "type": "module",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro check && astro build",
+    "build:fast": "astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "astro": "^7.4.13"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.8",
+    "sharp": "^0.35.5",
+    "typescript": "^5.9.3"
+  }
+}

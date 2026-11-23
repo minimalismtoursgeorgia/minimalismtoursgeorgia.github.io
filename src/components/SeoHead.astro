@@ -1,0 +1,145 @@
+---
+import { SITE } from '../data/site';
+import { withBase, absoluteUrl } from '../lib/urls';
+
+export interface Props {
+  title: string;
+  description: string;
+  canonicalPath?: string;
+  ogImage?: string;
+  ogType?: 'website' | 'article';
+  lang?: 'en' | 'ka';
+  alternateEnPath?: string;
+  alternateKaPath?: string;
+  keywords?: string[];
+  jsonLd?: Record<string, unknown>[];
+}
+
+const {
+  title,
+  description,
+  canonicalPath = Astro.url.pathname,
+  ogImage = SITE.ogImagePath,
+  ogType = 'website',
+  lang = 'en',
+  alternateEnPath,
+  alternateKaPath,
+  keywords = [
+    'Minimalism Tours Georgia',
+    'Batumi day tours',
+    'Mtirala National Park hike',
+    'Machakhela hiking tour',
+    'Georgia private local guide',
+  ],
+  jsonLd = [],
+} = Astro.props;
+
+const canonicalUrl = canonicalPath.startsWith('http')
+  ? canonicalPath
+  : absoluteUrl(canonicalPath, Astro.site);
+
+const ogImageUrl = ogImage.startsWith('http')
+  ? ogImage
+  : absoluteUrl(ogImage, Astro.site);
+
+const defaultOrgSchema = {
+  '@type': 'TravelAgency',
+  '@id': `${absoluteUrl('/', Astro.site)}#organization`,
+  name: SITE.brandName,
+  slogan: `${SITE.motto} — ${SITE.campaignTagline}`,
+  description: SITE.description,
+  url: absoluteUrl('/', Astro.site),
+  logo: absoluteUrl(SITE.logoPath, Astro.site),
+  image: ogImageUrl,
+  telephone: SITE.phoneRaw,
+  email: SITE.email,
+  founder: {
+    '@type': 'Person',
+    name: SITE.founderName,
+    jobTitle: SITE.founderRole,
+  },
+  address: {
+    '@type': 'PostalAddress',
+    addressLocality: SITE.baseCity,
+    addressRegion: SITE.baseRegion,
+    addressCountry: 'GE',
+  },
+  geo: {
+    '@type': 'GeoCoordinates',
+    latitude: SITE.coordinates.lat,
+    longitude: SITE.coordinates.lng,
+  },
+  areaServed: [
+    { '@type': 'AdministrativeArea', name: 'Adjara, Georgia' },
+    { '@type': 'City', name: 'Batumi' },
+    { '@type': 'Country', name: 'Georgia' },
+  ],
+  sameAs: [SITE.youtubeUrl, SITE.getYourGuideTourUrl],
+  priceRange: '€€',
+};
+
+const schemaGraph = {
+  '@context': 'https://schema.org',
+  '@graph': [defaultOrgSchema, ...jsonLd],
+};
+---
+
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>{title}</title>
+<meta name="description" content={description} />
+<meta name="keywords" content={keywords.join(', ')} />
+<meta name="author" content={`${SITE.brandName} (${SITE.founderName})`} />
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
+<meta name="theme-color" content="#1B4332" />
+
+<link rel="canonical" href={canonicalUrl} />
+
+{
+  alternateEnPath && (
+    <link rel="alternate" hreflang="en" href={absoluteUrl(alternateEnPath, Astro.site)} />
+  )
+}
+{
+  alternateKaPath && (
+    <link rel="alternate" hreflang="ka" href={absoluteUrl(alternateKaPath, Astro.site)} />
+  )
+}
+{
+  (alternateEnPath || alternateKaPath) && (
+    <link
+      rel="alternate"
+      hreflang="x-default"
+      href={absoluteUrl(alternateEnPath || '/', Astro.site)}
+    />
+  )
+}
+
+<meta property="og:locale" content={lang === 'ka' ? 'ka_GE' : 'en_US'} />
+<meta property="og:type" content={ogType} />
+<meta property="og:site_name" content={SITE.brandName} />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:url" content={canonicalUrl} />
+<meta property="og:image" content={ogImageUrl} />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:alt" content={`${SITE.brandName} — ${SITE.campaignTagline}`} />
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={ogImageUrl} />
+
+<link rel="icon" type="image/png" href={withBase('/favicon.png')} />
+<link rel="apple-touch-icon" href={withBase('/apple-touch-icon.png')} />
+<link rel="manifest" href={withBase('/site.webmanifest')} />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link
+  rel="stylesheet"
+  href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Noto+Sans+Georgian:wght@400;600;700&family=Noto+Serif+Georgian:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+/>
+
+<script type="application/ld+json" set:html={JSON.stringify(schemaGraph)} />

@@ -1,0 +1,21 @@
+{
+  "name": "Minimalism Tours Georgia",
+  "short_name": "Minimalism Tours",
+  "description": "Guided nature hikes, rainforest walks, and cultural tours from Batumi across Georgia.",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#FAF8F5",
+  "theme_color": "#1B4332",
+  "icons": [
+    {
+      "src": "apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    },
+    {
+      "src": "images/brand-logo.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

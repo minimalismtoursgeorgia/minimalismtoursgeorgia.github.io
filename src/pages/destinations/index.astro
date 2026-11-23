@@ -1,0 +1,211 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { SITE } from '../../data/site';
+import { DESTINATIONS } from '../../data/destinations';
+import { TOURS } from '../../data/tours';
+import { withBase, absoluteUrl } from '../../lib/urls';
+
+const breadcrumbJsonLd = {
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: absoluteUrl('/', Astro.site) },
+    { '@type': 'ListItem', position: 2, name: 'Destinations', item: absoluteUrl('/destinations/', Astro.site) },
+  ],
+};
+---
+
+<BaseLayout
+  title={`Destinations Across Georgia | ${SITE.brandName}`}
+  description="Explore Mtirala National Park, Batumi & Green Cape, Machakhela Gorge, Green Lake, Kolkheti Wetlands, and Kazbegi & Upper Svaneti with local guide Beka Gelashvili."
+  canonicalPath="/destinations/"
+  jsonLd={[breadcrumbJsonLd]}
+>
+  <section class="page-banner">
+    <div class="container">
+      <nav class="breadcrumbs" aria-label="Breadcrumb">
+        <a href={withBase('/')}>Home</a>
+        <span aria-hidden="true">/</span>
+        <span aria-current="page">Destinations</span>
+      </nav>
+      <span class="eyebrow">From Black Sea Coast to 5,054m</span>
+      <h1>Regions &amp; Natural Heritage of Georgia</h1>
+      <p style="max-width: 46rem; font-size: 1.05rem;">
+        From UNESCO-listed Colchic temperate rainforests 45 minutes outside Batumi to subalpine Green Lake pastures and Greater Caucasus ridges.
+      </p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container dest-stack">
+      {
+        DESTINATIONS.map((dest, idx) => {
+          const linkedTours = dest.tourSlugs
+            .map((slug) => TOURS.find((t) => t.slug === slug))
+            .filter((t): t is NonNullable<typeof t> => Boolean(t));
+
+          return (
+            <article id={dest.slug} class={`dest-row reveal-on-scroll ${idx % 2 === 1 ? 'dest-row-reverse' : ''}`}>
+              <div class="dest-photo">
+                <img
+                  src={withBase(dest.image)}
+                  alt={dest.imageAlt}
+                  width="1200"
+                  height="800"
+                  loading={idx === 0 ? undefined : 'lazy'}
+                  fetchpriority={idx === 0 ? 'high' : undefined}
+                  decoding="async"
+                />
+              </div>
+
+              <div class="dest-info">
+                <span class="eyebrow">{dest.regionLabel}</span>
+                <h2>{dest.name}</h2>
+                <p class="dest-tagline">{dest.tagline}</p>
+                <p>{dest.description}</p>
+
+                <dl class="dest-facts">
+                  <div>
+                    <dt>Travel Time</dt>
+                    <dd>{dest.driveTimeFromBatumi}</dd>
+                  </div>
+                  <div>
+                    <dt>Elevation</dt>
+                    <dd>{dest.elevation}</dd>
+                  </div>
+                  <div>
+                    <dt>Best Window</dt>
+                    <dd>{dest.bestSeason}</dd>
+                  </div>
+                </dl>
+
+                <ul class="dest-highlights">
+                  {dest.highlights.map((item) => <li>{item}</li>)}
+                </ul>
+
+                <div style="display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 1.25rem;">
+                  {linkedTours.length > 0 ? (
+                    linkedTours.map((t) => (
+                      <a class="btn btn-forest btn-sm" href={withBase(`/tours/${t.slug}/`)}>
+                        {t.shortTitle} →
+                      </a>
+                    ))
+                  ) : (
+                    <a
+                      class="btn btn-coral btn-sm"
+                      href={`${SITE.whatsappUrl}?text=${encodeURIComponent(`Hello Beka! I'd like to plan a custom tour to ${dest.name}.`)}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      Inquire Custom Route for {dest.name} ↗
+                    </a>
+                  )}
+                </div>
+              </div>
+            </article>
+          );
+        })
+      }
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .page-banner {
+    background-color: var(--bg-surface);
+    border-bottom: 1px solid var(--border-subtle);
+    padding-block: clamp(2.25rem, 4.5vw, 3.75rem);
+  }
+
+  .breadcrumbs {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    font-size: 0.86rem;
+    color: var(--ink-600);
+    margin-bottom: 1rem;
+  }
+
+  .breadcrumbs a {
+    color: var(--ink-700);
+    text-decoration: none;
+    font-weight: 600;
+  }
+
+  .dest-stack {
+    display: grid;
+    gap: clamp(2.5rem, 5vw, 4rem);
+  }
+
+  .dest-row {
+    display: grid;
+    gap: 2rem;
+    align-items: center;
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    padding: clamp(1.25rem, 3vw, 2rem);
+    box-shadow: var(--shadow-xs);
+  }
+
+  @media (min-width: 56rem) {
+    .dest-row {
+      grid-template-columns: 1fr 1.12fr;
+    }
+    .dest-row-reverse .dest-photo {
+      order: 2;
+    }
+  }
+
+  .dest-photo {
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+  }
+
+  .dest-photo img {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+  }
+
+  .dest-tagline {
+    font-weight: 600;
+    color: var(--forest-800);
+    margin-bottom: 0.75rem;
+  }
+
+  .dest-facts {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
+    gap: 0.85rem;
+    margin: 1rem 0;
+    padding: 0.9rem 1rem;
+    border-radius: var(--radius-md);
+    background-color: var(--bg-page);
+    border: 1px solid var(--border-subtle);
+  }
+
+  .dest-facts dt {
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--ink-600);
+  }
+
+  .dest-facts dd {
+    margin: 0.15rem 0 0;
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: var(--ink-900);
+  }
+
+  .dest-highlights {
+    margin: 0;
+    padding-inline-start: 1.2rem;
+    display: grid;
+    gap: 0.35rem;
+    font-size: 0.92rem;
+    color: var(--ink-700);
+  }
+</style>

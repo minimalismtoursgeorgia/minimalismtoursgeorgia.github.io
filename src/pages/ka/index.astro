@@ -1,0 +1,232 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { SITE, PICKUP_POINTS } from '../../data/site';
+import { KA_CONTENT } from '../../data/i18n-ka';
+import { withBase, absoluteUrl } from '../../lib/urls';
+
+const breadcrumbJsonLd = {
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'მთავარი', item: absoluteUrl('/ka/', Astro.site) },
+  ],
+};
+---
+
+<BaseLayout
+  title={KA_CONTENT.title}
+  description={KA_CONTENT.description}
+  canonicalPath="/ka/"
+  alternateEnPath="/"
+  alternateKaPath="/ka/"
+  lang="ka"
+  jsonLd={[breadcrumbJsonLd]}
+>
+  <section class="ka-hero">
+    <img
+      class="ka-hero-img"
+      src={withBase('/images/mtirala-hero.webp')}
+      alt="მტირალას ეროვნული პარკის კოლხური ტყე და ხის ხიდი"
+      fetchpriority="high"
+      width="1600"
+      height="1200"
+      decoding="async"
+    />
+    <div class="ka-scrim" aria-hidden="true"></div>
+
+    <div class="container ka-hero-content">
+      <span class="ka-eyebrow">{KA_CONTENT.eyebrow}</span>
+      <h1>{KA_CONTENT.heroHeadline}</h1>
+      <p class="ka-motto"><strong>{KA_CONTENT.motto}</strong></p>
+      <p class="ka-sub">{KA_CONTENT.heroSub}</p>
+
+      <div style="display: flex; flex-wrap: wrap; gap: 0.75rem;">
+        <a
+          class="btn btn-coral"
+          href={`${SITE.whatsappUrl}?text=${encodeURIComponent('გამარჯობა ბექა! მინდა ტურის დაჯავშნა Minimalism Tours Georgia-სთან.')}`}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          {KA_CONTENT.ctaWhatsapp}
+        </a>
+        <a class="btn btn-outline-light" href={withBase('/tours/')}>
+          {KA_CONTENT.ctaPrimary}
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section-surface section-tight">
+    <div class="container">
+      <h2 style="font-size: 1.35rem; margin-bottom: 1rem;">{KA_CONTENT.credentialsTitle}</h2>
+      <ul class="ka-cred-grid">
+        {KA_CONTENT.credentials.map((c) => <li>✓ {c}</li>)}
+      </ul>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="section-header">
+        <div>
+          <span class="eyebrow">ბათუმი · აჭარა</span>
+          <h2>{KA_CONTENT.coreToursTitle}</h2>
+        </div>
+        <p>{KA_CONTENT.contactNote}</p>
+      </div>
+
+      <div class="ka-tours-grid">
+        {
+          KA_CONTENT.coreTours.map((t) => (
+            <article class="ka-tour-card reveal-on-scroll">
+              <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 0.65rem;">
+                <span class="badge badge-forest">{t.duration}</span>
+                <span class="badge badge-sea">{t.price}</span>
+              </div>
+              <h3>
+                <a href={withBase(`/tours/${t.slug}/`)}>{t.title}</a>
+              </h3>
+              <p>{t.note}</p>
+              <a class="btn btn-outline btn-sm" href={withBase(`/tours/${t.slug}/`)}>
+                დეტალები და ფასები →
+              </a>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-surface">
+    <div class="container">
+      <div class="section-header">
+        <div>
+          <span class="eyebrow">{SITE.defaultStartTime} გასვლა</span>
+          <h2>{KA_CONTENT.pickupsTitle}</h2>
+        </div>
+      </div>
+
+      <div class="ka-pickup-grid">
+        {
+          PICKUP_POINTS.map((p, i) => (
+            <article class="ka-pickup-card">
+              <span class="badge badge-coral">0{i + 1}</span>
+              <h3>{p.name}</h3>
+              <p>{p.address}</p>
+              <a href={p.mapsUrl} target="_blank" rel="noopener noreferrer">
+                რუკაზე ნახვა ↗
+              </a>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .ka-hero {
+    position: relative;
+    min-height: 29rem;
+    display: flex;
+    align-items: center;
+    padding-block: 3.5rem;
+    overflow: hidden;
+    background-color: var(--forest-900);
+    color: #ffffff;
+  }
+
+  .ka-hero-img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .ka-scrim {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(100deg, rgba(15, 36, 26, 0.92), rgba(29, 78, 104, 0.65));
+  }
+
+  .ka-hero-content {
+    position: relative;
+    z-index: 2;
+  }
+
+  .ka-eyebrow {
+    display: inline-block;
+    padding: 0.35rem 0.85rem;
+    border-radius: var(--radius-pill);
+    background: rgba(255, 255, 255, 0.14);
+    color: #f4b69f;
+    font-size: 0.8rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+  }
+
+  .ka-hero-content h1 {
+    color: #ffffff;
+    max-width: 18ch;
+    margin-bottom: 0.65rem;
+  }
+
+  .ka-motto {
+    color: #f4b69f;
+    font-size: 1.05rem;
+    margin-bottom: 0.65rem;
+  }
+
+  .ka-sub {
+    max-width: 44rem;
+    color: rgba(255, 255, 255, 0.9);
+    margin-bottom: 1.5rem;
+  }
+
+  .ka-cred-grid {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 0.75rem 1.5rem;
+    grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+    font-weight: 600;
+    font-size: 0.93rem;
+    color: var(--ink-900);
+  }
+
+  .ka-tours-grid,
+  .ka-pickup-grid {
+    display: grid;
+    gap: 1.25rem;
+    grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr));
+  }
+
+  .ka-tour-card,
+  .ka-pickup-card {
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    padding: 1.35rem;
+  }
+
+  .ka-tour-card h3 {
+    font-size: 1.18rem;
+    margin-bottom: 0.55rem;
+  }
+
+  .ka-tour-card h3 a {
+    color: var(--ink-900);
+    text-decoration: none;
+  }
+
+  .ka-pickup-card h3 {
+    margin-top: 0.65rem;
+    margin-bottom: 0.3rem;
+  }
+
+  .ka-pickup-card p {
+    font-size: 0.88rem;
+    margin-bottom: 0.75rem;
+  }
+</style>
