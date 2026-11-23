@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import HeroShowcase, { type FeaturedTourSlide } from '../components/HeroShowcase.astro';
 import TourCard from '../components/TourCard.astro';
 import ReviewsSection from '../components/ReviewsSection.astro';
 import {
@@ -16,6 +17,35 @@ import { withBase, absoluteUrl } from '../lib/urls';
 
 const pricedTours = TOURS.filter((t) => t.pricingTiers.length > 0);
 const defaultDestination = DESTINATIONS[0];
+
+const heroFeaturedTours: FeaturedTourSlide[] = [
+  {
+    titleLines: ['Mtirala Lake', '& Waterfall Hike'],
+    location: 'Mtirala, Georgia',
+    badgeText: 'UNESCO',
+    image: withBase('/images/mtirala-waterfall-hiker.webp'),
+    imageAlt:
+      'Hiker with backpack facing the cascading waterfall inside lush green Mtirala National Park rainforest in Georgia',
+    href: withBase('/tours/mtirala-lake-waterfall-hike/'),
+  },
+  {
+    titleLines: ['Mtirala 2-Day', 'Shelter Trek'],
+    location: 'Adjara, Georgia',
+    badgeText: '2 Days',
+    image: withBase('/images/mtirala-2day.webp'),
+    imageAlt:
+      'Wooden A-frame mountain shelter surrounded by misty Colchic beech forest in Mtirala National Park',
+    href: withBase('/tours/mtirala-2-day-shelter-hike/'),
+  },
+  {
+    titleLines: ['Mount Kazbek', 'Alpine Summit'],
+    location: 'Kazbegi, Georgia',
+    badgeText: '5,054 m',
+    image: withBase('/images/kazbegi-peak.webp'),
+    imageAlt: 'Snow-capped Mount Kazbek rising above the volcanic valley in Stepantsminda, Georgia',
+    href: withBase('/tours/kazbegi-mount-kazbek-expedition/'),
+  },
+];
 
 const faqJsonLd = {
   '@type': 'FAQPage',
@@ -59,39 +89,26 @@ const destinationsClientData = DESTINATIONS.map((d) => ({
   alternateKaPath="/ka/"
   jsonLd={[breadcrumbJsonLd, faqJsonLd]}
 >
-  <!-- Hero Section -->
-  <section class="hero-band">
-    <img
-      class="hero-bg-img"
-      src={withBase('/images/mtirala-hero.webp')}
-      alt="Wooden bridge across a clear mountain river inside luminous green Mtirala National Park rainforest in Georgia"
-      fetchpriority="high"
-      width="1600"
-      height="1200"
-      decoding="async"
-    />
-    <div class="hero-scrim" aria-hidden="true"></div>
+  <!-- Hero Showcase Section -->
+  <HeroShowcase
+    watermarkText="MINIMALISM"
+    headlineLines={['Georgia,', 'Beyond the', 'Postcard.']}
+    ctaLabel="Explore Journeys"
+    ctaHref={withBase('/tours/')}
+    subcopy="Discover UNESCO Colchic rainforests, hidden Adjarian trails, and authentic Caucasus journeys crafted for travelers who expect more."
+    bgImage={withBase('/images/mestia-svaneti.webp')}
+    bgAlt="Hiker walking along a sunlit green alpine ridge toward snow-capped Greater Caucasus peaks under blue sky and clouds in Georgia"
+    featuredTours={heroFeaturedTours}
+    trustStat={`${SITE.experienceYears}+ yrs`}
+    trustCopy="Trusted by direct travelers & B2B partners across Georgia for certified, seamless journeys."
+    trustLinkLabel="Read verified reviews ↓"
+    trustLinkHref="#reviews"
+    switcherLabel="Preview featured Georgia tours"
+  />
 
-    <div class="container hero-content">
-      <span class="hero-eyebrow">Batumi · Adjara · Greater Caucasus</span>
-      <h1>{SITE.campaignTagline}</h1>
-      <p class="hero-motto">
-        <strong>{SITE.motto}.</strong> Guided rainforest hikes, Adjarian village hospitality, Batumi Old Town architecture walks, and summer Caucasus expeditions operated by a Batumi-based licensed tour operator with {SITE.experienceYears}+ years of regional experience.
-      </p>
-      <div class="hero-actions">
-        <a class="btn btn-coral" href={withBase('/tours/')}>Explore All 7 Tours</a>
-        <a class="btn btn-outline-light" href="#price-estimator">Estimate Group Price</a>
-        <a
-          class="btn btn-outline-light"
-          href={`${SITE.whatsappUrl}?text=${encodeURIComponent('Hello Minimalism Tours Georgia! I would like advice choosing a tour or B2B itinerary in Georgia.')}`}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          WhatsApp Reservations
-        </a>
-      </div>
-
-      <!-- Quick Tour Finder -->
+  <!-- Quick Tour Finder & Verified Credentials Strip (Strictly Authentic — Zero Fabricated Numbers) -->
+  <section class="section-surface section-tight" aria-label="Quick tour finder and operational standards">
+    <div class="container">
       <form class="hero-finder" action={withBase('/tours/')} method="get" aria-label="Quick tour finder">
         <div class="finder-field">
           <label for="finder-region">Region</label>
@@ -127,12 +144,7 @@ const destinationsClientData = DESTINATIONS.map((d) => ({
           Find Tours →
         </button>
       </form>
-    </div>
-  </section>
 
-  <!-- Verified Credentials Strip (Strictly Authentic — Zero Fabricated Numbers) -->
-  <section class="section-surface section-tight" aria-label="Company guiding and operational standards">
-    <div class="container">
       <ul class="trust-strip">
         <li>
           <strong>GMGA / FMGA &amp; UNESCO</strong>
@@ -688,92 +700,18 @@ const destinationsClientData = DESTINATIONS.map((d) => ({
 </BaseLayout>
 
 <style>
-  .hero-band {
-    position: relative;
-    min-height: clamp(34rem, 78vh, 47rem);
-    display: flex;
-    align-items: center;
-    padding-block: 3.5rem;
-    overflow: hidden;
-    background-color: var(--forest-900);
-    color: #ffffff;
-  }
-
-  .hero-bg-img {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center 45%;
-  }
-
-  .hero-scrim {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(
-      105deg,
-      rgba(15, 36, 26, 0.9) 0%,
-      rgba(21, 53, 39, 0.76) 52%,
-      rgba(29, 78, 104, 0.48) 100%
-    );
-  }
-
-  .hero-content {
-    position: relative;
-    z-index: 2;
-  }
-
-  .hero-eyebrow {
-    display: inline-block;
-    padding: 0.35rem 0.85rem;
-    border-radius: var(--radius-pill);
-    background-color: rgba(255, 255, 255, 0.14);
-    border: 1px solid rgba(255, 255, 255, 0.25);
-    backdrop-filter: blur(6px);
-    font-size: 0.8rem;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: #f4b69f;
-    margin-bottom: 1rem;
-  }
-
-  .hero-content h1 {
-    color: #ffffff;
-    max-width: 15ch;
-    margin-bottom: 1rem;
-    text-shadow: 0 2px 18px rgba(0, 0, 0, 0.35);
-  }
-
-  .hero-motto {
-    max-width: 42rem;
-    font-size: clamp(1.02rem, 1.5vw, 1.18rem);
-    color: rgba(255, 255, 255, 0.92);
-    margin-bottom: 1.75rem;
-  }
-
-  .hero-motto strong {
-    color: #ffffff;
-  }
-
-  .hero-actions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.75rem;
-    margin-bottom: 2.4rem;
-  }
-
   .hero-finder {
     display: grid;
     grid-template-columns: 1fr;
     gap: 0.85rem;
     align-items: end;
-    background-color: rgba(255, 255, 255, 0.97);
+    background-color: var(--bg-page);
     color: var(--ink-900);
     padding: 1.1rem;
+    margin-bottom: 1.75rem;
+    border: 1px solid var(--border-subtle);
     border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-lg);
+    box-shadow: var(--shadow-sm);
   }
 
   @media (min-width: 52rem) {

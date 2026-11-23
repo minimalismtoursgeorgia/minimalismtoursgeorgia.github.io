@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import HeroShowcase, { type FeaturedTourSlide } from '../../components/HeroShowcase.astro';
 import { SITE, PICKUP_POINTS } from '../../data/site';
 import { KA_CONTENT } from '../../data/i18n-ka';
 import { withBase, absoluteUrl } from '../../lib/urls';
@@ -10,6 +11,33 @@ const breadcrumbJsonLd = {
     { '@type': 'ListItem', position: 1, name: 'მთავარი', item: absoluteUrl('/ka/', Astro.site) },
   ],
 };
+
+const kaFeaturedTours: FeaturedTourSlide[] = [
+  {
+    titleLines: ['მტირალას ტბა', 'და ჩანჩქერი'],
+    location: 'მტირალა, საქართველო',
+    badgeText: 'UNESCO',
+    image: withBase('/images/mtirala-waterfall-hiker.webp'),
+    imageAlt: 'მოლაშქრე მტირალას ეროვნული პარკის ჩანჩქერთან კოლხურ ტყეში',
+    href: withBase('/tours/mtirala-lake-waterfall-hike/'),
+  },
+  {
+    titleLines: ['მტირალა 2 დღე', 'თავშესაფარში'],
+    location: 'აჭარა, საქართველო',
+    badgeText: '2 დღე',
+    image: withBase('/images/mtirala-2day.webp'),
+    imageAlt: 'მტირალას ეროვნული პარკის ხის თავშესაფარი ნისლიან წიფლნარში',
+    href: withBase('/tours/mtirala-2-day-shelter-hike/'),
+  },
+  {
+    titleLines: ['მყინვარწვერი', 'ალპური ლაშქრობა'],
+    location: 'ყაზბეგი, საქართველო',
+    badgeText: '5,054 მ',
+    image: withBase('/images/kazbegi-peak.webp'),
+    imageAlt: 'დათოვლილი მყინვარწვერი სტეფანწმინდას ხეობის თავზე',
+    href: withBase('/tours/kazbegi-mount-kazbek-expedition/'),
+  },
+];
 ---
 
 <BaseLayout
@@ -21,39 +49,21 @@ const breadcrumbJsonLd = {
   lang="ka"
   jsonLd={[breadcrumbJsonLd]}
 >
-  <section class="ka-hero">
-    <img
-      class="ka-hero-img"
-      src={withBase('/images/mtirala-hero.webp')}
-      alt="მტირალას ეროვნული პარკის კოლხური ტყე და ხის ხიდი"
-      fetchpriority="high"
-      width="1600"
-      height="1200"
-      decoding="async"
-    />
-    <div class="ka-scrim" aria-hidden="true"></div>
-
-    <div class="container ka-hero-content">
-      <span class="ka-eyebrow">{KA_CONTENT.eyebrow}</span>
-      <h1>{KA_CONTENT.heroHeadline}</h1>
-      <p class="ka-motto"><strong>{KA_CONTENT.motto}</strong></p>
-      <p class="ka-sub">{KA_CONTENT.heroSub}</p>
-
-      <div style="display: flex; flex-wrap: wrap; gap: 0.75rem;">
-        <a
-          class="btn btn-coral"
-          href={`${SITE.whatsappUrl}?text=${encodeURIComponent('გამარჯობა Minimalism Tours Georgia! მინდა ტურის დაჯავშნა.')}`}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          {KA_CONTENT.ctaWhatsapp}
-        </a>
-        <a class="btn btn-outline-light" href={withBase('/tours/')}>
-          {KA_CONTENT.ctaPrimary}
-        </a>
-      </div>
-    </div>
-  </section>
+  <HeroShowcase
+    watermarkText="MINIMALISM"
+    headlineLines={['საქართველო,', 'ღია ბარათების', 'მიღმა.']}
+    ctaLabel="ტურების ნახვა"
+    ctaHref={withBase('/tours/')}
+    subcopy="აღმოაჩინე იუნესკოს კოლხური ტყეები, აჭარის ფარული ბილიკები და კავკასიონის ავთენტური მარშრუტები სერტიფიცირებულ გიდებთან ერთად."
+    bgImage={withBase('/images/mestia-svaneti.webp')}
+    bgAlt="კავკასიონის ალპური ბილიკი და დათოვლილი მწვერვალები საქართველოში"
+    featuredTours={kaFeaturedTours}
+    trustStat={`${SITE.experienceYears}+ წ.`}
+    trustCopy="10+ წლიანი გამოცდილება, GMGA/FMGA და იუნესკოს სტანდარტები ინდივიდუალური და B2B ჯგუფებისთვის."
+    trustLinkLabel="ძირითადი ტურები ↓"
+    trustLinkHref="#ka-tours"
+    switcherLabel="რჩეული ტურების გადართვა"
+  />
 
   <section class="section-surface section-tight">
     <div class="container">
@@ -64,7 +74,7 @@ const breadcrumbJsonLd = {
     </div>
   </section>
 
-  <section class="section">
+  <section id="ka-tours" class="section">
     <div class="container">
       <div class="section-header">
         <div>
@@ -124,65 +134,6 @@ const breadcrumbJsonLd = {
 </BaseLayout>
 
 <style>
-  .ka-hero {
-    position: relative;
-    min-height: 29rem;
-    display: flex;
-    align-items: center;
-    padding-block: 3.5rem;
-    overflow: hidden;
-    background-color: var(--forest-900);
-    color: #ffffff;
-  }
-
-  .ka-hero-img {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-
-  .ka-scrim {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(100deg, rgba(15, 36, 26, 0.92), rgba(29, 78, 104, 0.65));
-  }
-
-  .ka-hero-content {
-    position: relative;
-    z-index: 2;
-  }
-
-  .ka-eyebrow {
-    display: inline-block;
-    padding: 0.35rem 0.85rem;
-    border-radius: var(--radius-pill);
-    background: rgba(255, 255, 255, 0.14);
-    color: #f4b69f;
-    font-size: 0.8rem;
-    font-weight: 700;
-    margin-bottom: 1rem;
-  }
-
-  .ka-hero-content h1 {
-    color: #ffffff;
-    max-width: 18ch;
-    margin-bottom: 0.65rem;
-  }
-
-  .ka-motto {
-    color: #f4b69f;
-    font-size: 1.05rem;
-    margin-bottom: 0.65rem;
-  }
-
-  .ka-sub {
-    max-width: 44rem;
-    color: rgba(255, 255, 255, 0.9);
-    margin-bottom: 1.5rem;
-  }
-
   .ka-cred-grid {
     list-style: none;
     margin: 0;

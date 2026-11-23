@@ -1,0 +1,706 @@
+---
+import { withBase } from '../lib/urls';
+
+export interface FeaturedTourSlide {
+  titleLines: [string, string];
+  location: string;
+  badgeText: string;
+  image: string;
+  imageAlt: string;
+  href: string;
+}
+
+export interface Props {
+  watermarkText: string;
+  headlineLines: string[];
+  ctaLabel: string;
+  ctaHref: string;
+  subcopy: string;
+  bgImage: string;
+  bgAlt: string;
+  featuredTours: FeaturedTourSlide[];
+  trustStat: string;
+  trustCopy: string;
+  trustLinkLabel: string;
+  trustLinkHref: string;
+  switcherLabel?: string;
+}
+
+const {
+  watermarkText,
+  headlineLines,
+  ctaLabel,
+  ctaHref,
+  subcopy,
+  bgImage,
+  bgAlt,
+  featuredTours,
+  trustStat,
+  trustCopy,
+  trustLinkLabel,
+  trustLinkHref,
+  switcherLabel = 'Preview featured journeys',
+} = Astro.props;
+
+const activeTour = featuredTours[0];
+const trustAvatars = [
+  withBase('/images/mtirala-hero.webp'),
+  withBase('/images/machakhela-tour.webp'),
+  withBase('/images/mtirala-river.webp'),
+];
+---
+
+<section class="hero-showcase">
+  <img
+    class="hero-bg-img"
+    src={bgImage}
+    alt={bgAlt}
+    fetchpriority="high"
+    width="1400"
+    height="1050"
+    decoding="async"
+  />
+  <div class="hero-scrim" aria-hidden="true"></div>
+
+  <div class="hero-watermark" aria-hidden="true">
+    <span>{watermarkText}</span>
+  </div>
+
+  <div class="container hero-grid">
+    <!-- Left Column: Headline & Paired CTA -->
+    <div class="hero-col-left">
+      <h1 class="hero-headline">
+        {
+          headlineLines.map((line, idx) => (
+            <>
+              {line}
+              {idx < headlineLines.length - 1 && <br />}
+            </>
+          ))
+        }
+      </h1>
+
+      <a class="hero-cta" href={ctaHref}>
+        <span class="hero-cta-pill">{ctaLabel}</span>
+        <span class="hero-cta-circle" aria-hidden="true">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="7" y1="7" x2="17" y2="17" />
+            <polyline points="17 7 17 17 7 17" />
+          </svg>
+        </span>
+      </a>
+    </div>
+
+    <!-- Center Column: Elevated White-Framed Showcase Card + Switcher + Subcopy -->
+    <div class="hero-col-center">
+      <article class="hero-feature-card">
+        <img
+          class="hero-card-img"
+          src={activeTour.image}
+          alt={activeTour.imageAlt}
+          fetchpriority="high"
+          width="900"
+          height="1200"
+          decoding="async"
+        />
+        <div class="hero-card-photo-scrim" aria-hidden="true"></div>
+        <div class="hero-card-photo-meta">
+          <span class="hero-card-badge">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M12 2.4l2.85 5.78 6.38.93-4.62 4.5 1.09 6.36L12 16.96l-5.7 3.01 1.09-6.36-4.62-4.5 6.38-.93L12 2.4z" />
+            </svg>
+            <span data-hero-badge>{activeTour.badgeText}</span>
+          </span>
+          <span class="hero-card-location">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+              <circle cx="12" cy="10" r="3" />
+            </svg>
+            <span data-hero-location>{activeTour.location}</span>
+          </span>
+        </div>
+
+        <footer class="hero-card-footer">
+          <h2 class="hero-card-title">
+            <a class="card-link" href={activeTour.href} data-hero-link>
+              {activeTour.titleLines[0]}
+              <br />
+              {activeTour.titleLines[1]}
+            </a>
+          </h2>
+          <span class="hero-card-arrow" aria-hidden="true">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="5" y1="12" x2="19" y2="12" />
+              <polyline points="12 5 19 12 12 19" />
+            </svg>
+          </span>
+        </footer>
+      </article>
+
+      {
+        featuredTours.length > 1 && (
+          <div class="hero-card-switcher" role="group" aria-label={switcherLabel}>
+            {featuredTours.map((item, idx) => (
+              <button
+                type="button"
+                class={`hero-switch-pill ${idx === 0 ? 'active' : ''}`}
+                data-hero-slide-btn={idx}
+                aria-pressed={idx === 0 ? 'true' : 'false'}
+              >
+                {item.titleLines[0]}
+              </button>
+            ))}
+          </div>
+        )
+      }
+
+      <p class="visually-hidden" aria-live="polite" data-hero-announcer></p>
+      <p class="hero-subcopy">{subcopy}</p>
+    </div>
+
+    <!-- Bottom-Right Column: Frosted Glass Trust Card -->
+    <div class="hero-col-right">
+      <a class="hero-trust-card" href={trustLinkHref}>
+        <div class="hero-trust-top">
+          <div class="hero-trust-avatars" aria-hidden="true">
+            {
+              trustAvatars.map((avatarSrc) => (
+                <img src={avatarSrc} alt="" width="36" height="36" decoding="async" />
+              ))
+            }
+          </div>
+          <strong class="hero-trust-stat">{trustStat}</strong>
+        </div>
+        <p class="hero-trust-copy">{trustCopy}</p>
+        <span class="hero-trust-cue">{trustLinkLabel}</span>
+      </a>
+    </div>
+  </div>
+
+  <script type="application/json" data-hero-slides set:html={JSON.stringify(featuredTours)} />
+</section>
+
+<script>
+  document.querySelectorAll<HTMLElement>('.hero-showcase').forEach((root) => {
+    const slidesEl = root.querySelector<HTMLScriptElement>('script[data-hero-slides]');
+    if (!slidesEl?.textContent) return;
+
+    let slides: Array<{
+      titleLines: [string, string];
+      location: string;
+      badgeText: string;
+      image: string;
+      imageAlt: string;
+      href: string;
+    }> = [];
+
+    try {
+      slides = JSON.parse(slidesEl.textContent);
+    } catch {
+      return;
+    }
+
+    const imgEl = root.querySelector<HTMLImageElement>('.hero-card-img');
+    const badgeEl = root.querySelector<HTMLElement>('[data-hero-badge]');
+    const locationEl = root.querySelector<HTMLElement>('[data-hero-location]');
+    const linkEl = root.querySelector<HTMLAnchorElement>('[data-hero-link]');
+    const announcerEl = root.querySelector<HTMLElement>('[data-hero-announcer]');
+    const buttons = root.querySelectorAll<HTMLButtonElement>('[data-hero-slide-btn]');
+
+    if (!slides.length || !imgEl || !linkEl || !buttons.length) return;
+
+    buttons.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const idx = Number(btn.dataset.heroSlideBtn);
+        const slide = slides[idx];
+        if (!slide) return;
+
+        buttons.forEach((other) => {
+          const isMatch = other === btn;
+          other.classList.toggle('active', isMatch);
+          other.setAttribute('aria-pressed', String(isMatch));
+        });
+
+        imgEl.src = slide.image;
+        imgEl.alt = slide.imageAlt;
+        if (badgeEl) badgeEl.textContent = slide.badgeText;
+        if (locationEl) locationEl.textContent = slide.location;
+        linkEl.href = slide.href;
+
+        linkEl.replaceChildren();
+        linkEl.append(document.createTextNode(slide.titleLines[0]));
+        linkEl.append(document.createElement('br'));
+        linkEl.append(document.createTextNode(slide.titleLines[1]));
+
+        if (announcerEl) {
+          announcerEl.textContent = `${slide.titleLines[0]} ${slide.titleLines[1]} — ${slide.location}`;
+        }
+      });
+    });
+  });
+</script>
+
+<style>
+  .hero-showcase {
+    position: relative;
+    min-height: calc(100dvh - var(--header-height));
+    display: flex;
+    align-items: stretch;
+    padding-block: clamp(2.75rem, 5.5dvh, 4.25rem) clamp(5rem, 8.5dvh, 6.25rem);
+    overflow-x: clip;
+    overflow-y: hidden;
+    background-color: var(--forest-900);
+    color: #ffffff;
+  }
+
+  .hero-bg-img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 42%;
+  }
+
+  .hero-scrim {
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(180deg, rgba(14, 30, 22, 0.24) 0%, rgba(14, 30, 22, 0.14) 45%, rgba(11, 22, 16, 0.56) 100%),
+      linear-gradient(95deg, rgba(12, 26, 19, 0.62) 0%, rgba(12, 26, 19, 0.24) 44%, rgba(12, 26, 19, 0.2) 100%);
+  }
+
+  .hero-watermark {
+    position: absolute;
+    top: clamp(0.2rem, 1.5dvh, 1.1rem);
+    left: 0;
+    right: 0;
+    z-index: 1;
+    display: flex;
+    justify-content: center;
+    pointer-events: none;
+    user-select: none;
+    overflow: hidden;
+    -webkit-mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.96) 0%, rgba(0, 0, 0, 0.52) 55%, transparent 100%);
+    mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.96) 0%, rgba(0, 0, 0, 0.52) 55%, transparent 100%);
+  }
+
+  .hero-watermark span {
+    font-family: var(--font-sans);
+    font-weight: 700;
+    font-size: clamp(3.6rem, 14.2vw, 12.2rem);
+    letter-spacing: 0.04em;
+    line-height: 0.86;
+    text-transform: uppercase;
+    white-space: nowrap;
+    color: rgba(255, 255, 255, 0.26);
+  }
+
+  .hero-grid {
+    position: relative;
+    z-index: 2;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: clamp(1.75rem, 3.5vw, 2.5rem);
+    align-items: center;
+  }
+
+  .hero-col-left {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.5rem;
+    min-width: 0;
+  }
+
+  .hero-headline {
+    margin: 0;
+    max-width: 100%;
+    font-family: var(--font-sans);
+    font-size: clamp(2.35rem, 1.3rem + 3vw, 4.15rem);
+    font-weight: 600;
+    line-height: 1.06;
+    letter-spacing: -0.03em;
+    color: #ffffff;
+    text-shadow: 0 4px 24px rgba(10, 22, 16, 0.42);
+  }
+
+  :global(html[lang='ka']) .hero-headline {
+    font-size: clamp(1.9rem, 1.15rem + 2.15vw, 3.1rem);
+    line-height: 1.14;
+    letter-spacing: -0.02em;
+  }
+
+  .hero-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    text-decoration: none;
+    border-radius: var(--radius-pill);
+  }
+
+  .hero-cta-pill {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 2.85rem;
+    padding: 0.65rem 1.35rem;
+    border-radius: var(--radius-pill);
+    background-color: #c6f028;
+    color: #111c16;
+    font-family: var(--font-sans);
+    font-size: 0.94rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    box-shadow: 0 8px 24px rgba(10, 22, 16, 0.24);
+  }
+
+  .hero-cta-circle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.85rem;
+    height: 2.85rem;
+    border-radius: 50%;
+    background-color: #ffffff;
+    color: #111c16;
+    box-shadow: 0 8px 24px rgba(10, 22, 16, 0.22);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .hero-cta-pill,
+    .hero-cta-circle {
+      transition: transform 0.2s ease, background-color 0.2s ease;
+    }
+
+    .hero-cta:hover .hero-cta-pill {
+      background-color: #d4f84b;
+      transform: translateY(-1px);
+    }
+
+    .hero-cta:hover .hero-cta-circle {
+      transform: translate(2px, 1px);
+    }
+  }
+
+  /* Center Showcase Column */
+  .hero-col-center {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 20.5rem;
+    justify-self: center;
+  }
+
+  .hero-feature-card {
+    container-type: inline-size;
+    position: relative;
+    width: 100%;
+    padding: 0.45rem;
+    border-radius: 1.65rem;
+    background-color: #ffffff;
+    box-shadow: 0 28px 60px rgba(8, 18, 13, 0.38);
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto auto;
+  }
+
+  .hero-feature-card > img {
+    grid-column: 1;
+    grid-row: 1;
+    width: 100%;
+    aspect-ratio: 4 / 4.35;
+    object-fit: cover;
+    object-position: center 45%;
+    border-radius: 1.25rem;
+  }
+
+  .hero-card-photo-scrim {
+    grid-column: 1;
+    grid-row: 1;
+    align-self: end;
+    height: 44%;
+    border-radius: 0 0 1.25rem 1.25rem;
+    background: linear-gradient(180deg, rgba(12, 22, 17, 0) 0%, rgba(12, 22, 17, 0.74) 100%);
+    pointer-events: none;
+  }
+
+  .hero-card-photo-meta {
+    grid-column: 1;
+    grid-row: 1;
+    align-self: end;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    padding: 0.85rem 0.9rem;
+    color: #ffffff;
+    font-size: 0.82rem;
+    font-weight: 600;
+    text-shadow: 0 1px 6px rgba(0, 0, 0, 0.45);
+    pointer-events: none;
+  }
+
+  .hero-card-badge,
+  .hero-card-location {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.32rem;
+    min-width: 0;
+  }
+
+  .hero-card-location span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .hero-card-footer {
+    grid-column: 1;
+    grid-row: 2;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    padding: 0.85rem 0.65rem 0.65rem;
+    background-color: #ffffff;
+    border-radius: 0 0 1.25rem 1.25rem;
+  }
+
+  .hero-card-title {
+    margin: 0;
+    font-family: var(--font-sans);
+    font-size: 1.08rem;
+    font-weight: 600;
+    line-height: 1.22;
+    letter-spacing: -0.015em;
+    color: var(--ink-900);
+  }
+
+  .hero-card-title a.card-link {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .hero-card-title a.card-link::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 1.65rem;
+  }
+
+  .hero-card-title a.card-link:focus-visible {
+    outline: none;
+  }
+
+  .hero-feature-card:has(a.card-link:focus-visible) {
+    outline: 3px solid #c6f028;
+    outline-offset: 4px;
+  }
+
+  .hero-card-arrow {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.35rem;
+    height: 2.35rem;
+    border-radius: 50%;
+    flex-shrink: 0;
+    background-color: #c6f028;
+    color: #111c16;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .hero-feature-card,
+    .hero-card-arrow {
+      transition: transform 0.22s ease, box-shadow 0.22s ease;
+    }
+
+    .hero-feature-card:has(a.card-link:hover) {
+      transform: translateY(-4px);
+      box-shadow: 0 34px 68px rgba(8, 18, 13, 0.45);
+    }
+
+    .hero-feature-card:has(a.card-link:hover) .hero-card-arrow {
+      transform: translateX(2px);
+    }
+  }
+
+  .hero-card-switcher {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.4rem;
+    margin-top: 0.9rem;
+  }
+
+  .hero-switch-pill {
+    min-height: 2rem;
+    padding: 0.3rem 0.72rem;
+    border-radius: var(--radius-pill);
+    border: 1px solid rgba(255, 255, 255, 0.34);
+    background-color: rgba(14, 28, 21, 0.42);
+    backdrop-filter: blur(8px);
+    color: rgba(255, 255, 255, 0.9);
+    font-family: var(--font-sans);
+    font-size: 0.76rem;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  .hero-switch-pill:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+    color: #ffffff;
+  }
+
+  .hero-switch-pill.active {
+    background-color: #ffffff;
+    border-color: #ffffff;
+    color: #111c16;
+  }
+
+  .hero-subcopy {
+    margin: 0.85rem 0 0;
+    text-align: center;
+    font-size: 0.86rem;
+    line-height: 1.5;
+    color: rgba(255, 255, 255, 0.92);
+    max-width: 28ch;
+    text-shadow: 0 1px 10px rgba(0, 0, 0, 0.55);
+  }
+
+  /* Bottom-Right Glass Trust Card */
+  .hero-col-right {
+    display: flex;
+    justify-content: center;
+  }
+
+  .hero-trust-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+    width: 100%;
+    max-width: 19.5rem;
+    padding: 1.05rem 1.2rem;
+    border-radius: 1.25rem;
+    background-color: rgba(16, 28, 22, 0.48);
+    backdrop-filter: blur(16px) saturate(140%);
+    border: 1px solid rgba(255, 255, 255, 0.28);
+    box-shadow: 0 18px 42px rgba(8, 18, 13, 0.28);
+    color: #ffffff;
+    text-decoration: none;
+  }
+
+  .hero-trust-card:hover {
+    color: #ffffff;
+    border-color: rgba(255, 255, 255, 0.48);
+    background-color: rgba(16, 28, 22, 0.58);
+  }
+
+  .hero-trust-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+  }
+
+  .hero-trust-avatars {
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .hero-trust-avatars img {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid rgba(255, 255, 255, 0.9);
+  }
+
+  .hero-trust-avatars img + img {
+    margin-inline-start: -0.6rem;
+  }
+
+  .hero-trust-stat {
+    font-family: var(--font-sans);
+    font-size: clamp(1.5rem, 1.2rem + 1.1vw, 1.95rem);
+    font-weight: 600;
+    line-height: 1;
+    letter-spacing: -0.025em;
+    color: #ffffff;
+    white-space: nowrap;
+  }
+
+  .hero-trust-copy {
+    margin: 0;
+    font-size: 0.83rem;
+    line-height: 1.45;
+    color: rgba(255, 255, 255, 0.92);
+  }
+
+  .hero-trust-cue {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #c6f028;
+  }
+
+  /* Tablet layout: 2 columns */
+  @media (min-width: 48rem) {
+    .hero-grid {
+      grid-template-columns: minmax(0, 1fr) minmax(18rem, 20.5rem);
+      align-items: center;
+    }
+
+    .hero-col-left {
+      grid-column: 1;
+      grid-row: 1;
+      align-self: end;
+    }
+
+    .hero-col-right {
+      grid-column: 1;
+      grid-row: 2;
+      justify-content: flex-start;
+      align-self: start;
+    }
+
+    .hero-col-center {
+      grid-column: 2;
+      grid-row: 1 / span 2;
+    }
+  }
+
+  /* Desktop layout: 3 columns matching the editorial mockup */
+  @media (min-width: 64rem) {
+    .hero-showcase {
+      padding-block: clamp(2.5rem, 5dvh, 4rem) clamp(5.75rem, 11dvh, 7.25rem);
+    }
+
+    .hero-grid {
+      grid-template-columns: minmax(14.5rem, 1fr) minmax(18rem, 21rem) minmax(14.5rem, 1fr);
+      gap: clamp(1.25rem, 2.5vw, 2.25rem);
+    }
+
+    .hero-col-left {
+      grid-column: 1;
+      grid-row: 1;
+      align-self: center;
+    }
+
+    .hero-col-center {
+      grid-column: 2;
+      grid-row: 1;
+      align-self: center;
+      max-width: 21rem;
+    }
+
+    .hero-col-right {
+      grid-column: 3;
+      grid-row: 1;
+      justify-content: flex-end;
+      align-self: end;
+      margin-bottom: 1.5rem;
+    }
+  }
+</style>
