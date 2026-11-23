@@ -1,0 +1,1211 @@
+---
+import { SITE } from '../data/site';
+import { TOURS } from '../data/tours';
+import {
+  BATUMI_ANNUAL_CALENDAR,
+  BATUMI_CATEGORY_LABELS,
+  BATUMI_ESSENTIAL_FACTS,
+  BATUMI_NEWS_FAQS,
+  BATUMI_NEWS_ITEMS,
+  BATUMI_NEWS_META,
+  BATUMI_STATUS_LABELS,
+  type BatumiNewsCategory,
+  type BatumiNewsStatus,
+} from '../data/batumi-news';
+import { withBase } from '../lib/urls';
+
+export interface Props {
+  lang?: 'en' | 'ka';
+}
+
+const { lang = 'en' } = Astro.props;
+const isKa = lang === 'ka';
+const homePath = withBase(isKa ? '/ka/' : '/');
+
+const categoryFilters: { id: 'all' | BatumiNewsCategory; label: string; count: number }[] = [
+  { id: 'all', label: isKa ? 'ყველა' : 'All Updates', count: BATUMI_NEWS_ITEMS.length },
+  ...(['events', 'projects', 'travel-rules', 'seasonal'] as BatumiNewsCategory[]).map((cat) => ({
+    id: cat,
+    label: BATUMI_CATEGORY_LABELS[cat][lang],
+    count: BATUMI_NEWS_ITEMS.filter((i) => i.category === cat).length,
+  })),
+];
+
+const statusOptions: { id: 'all' | BatumiNewsStatus; label: string }[] = [
+  { id: 'all', label: isKa ? 'ყველა სტატუსი' : 'Any Timeline' },
+  ...(['happening-soon', 'active-2026', 'planned-2027', 'annual-highlight'] as BatumiNewsStatus[]).map((st) => ({
+    id: st,
+    label: BATUMI_STATUS_LABELS[st][lang],
+  })),
+];
+
+const copy = isKa
+  ? {
+      breadcrumbHome: 'მთავარი',
+      breadcrumbCurrent: 'ბათუმის სიახლეები',
+      eyebrow: 'ბათუმის სრული საინფორმაციო ცენტრი · 2026–2027',
+      h1: 'ბათუმში დაგეგმილი სიახლეები, ღონისძიებები და წესები',
+      heroDesc:
+        'ყველა პასუხი ერთ გვერდზე, რომ სტუმარმა სხვაგან ძებნა არ დასჭირდეს: საახალწლო პროგრამა, ფესტივალები, სანაპირო პროექტები, 2026 წლის სავალდებულო დაზღვევა, გოდერძის სეზონი და ბილეთების ფასები.',
+      verifiedLabel: 'ბოლო გადამოწმება:',
+      verifiedDate: BATUMI_NEWS_META.lastVerifiedKa,
+      jumpUpdates: 'მიმდინარე და დაგეგმილი სიახლეები',
+      jumpCalendar: '12-თვიანი ფესტივალების კალენდარი',
+      jumpResources: 'ბილეთები და კონსულტაცია',
+      jumpFaq: 'ხშირი კითხვები',
+      snapshotHeading: 'მთავარი ფაქტები ერთი შეხედვით',
+      searchLandmarkLabel: 'ბათუმის სიახლეების ძიება და ფილტრაცია',
+      searchLabel: 'ძიება საკვანძო სიტყვით',
+      searchPlaceholder: 'ევროპის მოედანი, გოდერძი, დაზღვევა, ჯაზი, ბოტანიკური...',
+      statusLabel: 'პერიოდი / სტატუსი',
+      showingPrefix: 'ნაჩვენებია',
+      showingOf: 'სიახლე სულ',
+      clearFilters: 'ფილტრის გასუფთავება',
+      emptyTitle: 'შესაბამისი სიახლე ვერ მოიძებნა',
+      emptyDesc: 'სცადეთ სხვა საკვანძო სიტყვა ან მოგვწერეთ WhatsApp-ში თქვენი ვიზიტის კონკრეტულ თარიღებზე.',
+      emptyReset: 'ყველას ჩვენება',
+      emptyAsk: 'ჰკითხე გიდს WhatsApp-ში',
+      venueLabel: 'ლოკაცია',
+      mapsLinkLabel: 'რუკა ↗',
+      admissionLabel: 'დასწრება / ფასი',
+      detailsSummary: 'სრული დეტალები და გიდის რჩევა',
+      guideTipLabel: 'ადგილობრივი გიდის რჩევა',
+      askAboutTopic: 'იკითხე WhatsApp-ში ↗',
+      relatedTourPrefix: 'შეათავსე ტურს:',
+      calendarEyebrow: 'იანვრიდან დეკემბრამდე',
+      calendarHeading: 'ბათუმის და აჭარის ყოველწლიური კალენდარი',
+      calendarIntro:
+        'რომელ თვეშიც არ უნდა გეგმავდეთ ბათუმში ჩამოსვლას, აქ ნახავთ სეზონურ ფესტივალებს, ბუნების პიკს და საუკეთესო ტურებს.',
+      pairLabel: 'რეკომენდებული ტური:',
+      resourcesEyebrow: 'ოფიციალური ბილეთები და კონსიერჟი',
+      resourcesHeading: 'სად შევიძინოთ ბილეთები და როგორ დავგეგმოთ დღე ბათუმში',
+      resourcesIntro:
+        'ქვემოთ მოცემულია ოფიციალური პლატფორმები, სადაც ბილეთები იყიდება, და ჩვენი გუნდის პირდაპირი დახმარება.',
+      conciergeTitle: 'Minimalism Tours Georgia — ბათუმის ლოკალური გზამკვლევი',
+      conciergeDesc:
+        'გჭირდებათ დაზუსტება, კონკრეტულ დღეს მუშაობს თუ არა საბაგირო, რა ხდება საახალწლო მოედანზე ან როგორ მოხვდეთ გოდერძიზე 4x4-ით? მოგვწერეთ უშუალოდ ბათუმელ გიდებს.',
+      conciergeWa: 'მოგვწერეთ WhatsApp-ში',
+      conciergeTg: 'მოგვწერეთ Telegram-ში',
+      faqEyebrow: 'სტუმრების მთავარი კითხვები',
+      faqHeading: 'ხშირად დასმული კითხვები ბათუმის სიახლეებზე',
+      expandAll: 'ყველას გაშლა',
+      collapseAll: 'ყველას ჩაკეცვა',
+    }
+  : {
+      breadcrumbHome: 'Home',
+      breadcrumbCurrent: 'Batumi News & Events',
+      eyebrow: 'All-In-One Local Briefing · 2026–2027',
+      h1: 'Batumi News, Planned Events & Visitor Updates',
+      heroDesc:
+        'Everything planned in Batumi—festivals, New Year’s Village schedules, coastal mega-projects, mandatory 2026 travel insurance rules, Goderdzi ski opening, and verified attraction tariffs—answered thoroughly in one place.',
+      verifiedLabel: 'Last verified:',
+      verifiedDate: BATUMI_NEWS_META.lastVerifiedEn,
+      jumpUpdates: 'Live & Planned Updates',
+      jumpCalendar: '12-Month Festival Calendar',
+      jumpResources: 'Tickets & Local Concierge',
+      jumpFaq: 'Visitor FAQs',
+      snapshotHeading: 'Essential 2026–2027 Facts at a Glance',
+      searchLandmarkLabel: 'Search and filter Batumi news and planned events',
+      searchLabel: 'Search keyword',
+      searchPlaceholder: 'Europe Square, Goderdzi, insurance, jazz, Botanical...',
+      statusLabel: 'Timeline / Status',
+      showingPrefix: 'Showing',
+      showingOf: 'updates of',
+      clearFilters: 'Clear Filters',
+      emptyTitle: 'No matching Batumi updates found',
+      emptyDesc:
+        'Try another keyword or clear a filter—or message our Batumi desk directly for live date-specific advice.',
+      emptyReset: 'Show All Updates',
+      emptyAsk: 'Ask Local Guide on WhatsApp',
+      venueLabel: 'Location',
+      mapsLinkLabel: 'Map ↗',
+      admissionLabel: 'Access / Price',
+      detailsSummary: 'Full briefing, key dates & guide advice',
+      guideTipLabel: 'Local Guide Tip',
+      askAboutTopic: 'Ask on WhatsApp ↗',
+      relatedTourPrefix: 'Pair with:',
+      calendarEyebrow: 'January to December',
+      calendarHeading: 'Year-Round Batumi & Adjara Event Calendar',
+      calendarIntro:
+        'No matter which month you visit Batumi, preview the signature festivals, mountain seasons, and ideal matching day tours.',
+      pairLabel: 'Best paired tour:',
+      resourcesEyebrow: 'Official Tickets & Live Support',
+      resourcesHeading: 'How Ticketing & Daily Schedules Work in Batumi',
+      resourcesIntro:
+        'Save time avoiding guesswork: see where verified tickets are sold and reach our Batumi operations team anytime for live daily updates.',
+      conciergeTitle: 'Minimalism Tours Georgia — Direct Batumi Concierge',
+      conciergeDesc:
+        'Want to check if Argo Cable Car is running in strong wind, get exact Europe Square concert hours, or arrange safe 4x4 transport to Goderdzi or Mtirala? Message our licensed local team directly.',
+      conciergeWa: 'Message on WhatsApp',
+      conciergeTg: 'Message on Telegram',
+      faqEyebrow: 'Quick Answers',
+      faqHeading: 'Batumi Events & Visitor Rules FAQ',
+      expandAll: 'Expand all',
+      collapseAll: 'Collapse all',
+    };
+
+const ticketingPlatforms = isKa
+  ? [
+      {
+        name: 'TKT.ge და Biletebi.ge',
+        role: 'კონცერტები, ცირკი, თეატრი და კლუბური ივენთები',
+        detail: 'ბათუმის დრამატული თეატრის, STAR Circus-ის, მუსიკალური ცენტრის, Teatro-სა და სტენდ-აპ შოუების ოფიციალური ბილეთები.',
+        url: 'https://tkt.ge',
+      },
+      {
+        name: 'GoBatumi.com',
+        role: 'აჭარის ტურიზმის დეპარტამენტის ოფიციალური კალენდარი',
+        detail: 'მერიისა და რეგიონული ფესტივალების (ბათუმობა, განდაგანა, ზაფხულის ფესტივალი) ზუსტი დღის განრიგი.',
+        url: 'https://gobatumi.com',
+      },
+      {
+        name: 'MTA.ski',
+        role: 'გოდერძის სათხილამურო ტრასების და საბაგიროების სტატუსი',
+        detail: 'ზანკას გონდოლას, ჭანჭახის საბაგიროს, თოვლის საფარისა და 2026–27 სკი-პასების ყოველდღიური სტატუსი.',
+        url: 'https://mta.ski',
+      },
+    ]
+  : [
+      {
+        name: 'TKT.ge & Biletebi.ge',
+        role: 'Concerts, STAR Circus, Theatre & NYE Club Tickets',
+        detail: 'Georgia’s primary verified box offices for Batumi Drama Theatre, Music Center, STAR Circus Georgia, Teatro NYE, and touring stand-up shows.',
+        url: 'https://tkt.ge',
+      },
+      {
+        name: 'GoBatumi.com',
+        role: 'Official Adjara Tourism Portal',
+        detail: 'Official municipal announcements for Batumoba, Summer Festival, Gandagana, and regional folk holidays as exact dates lock in.',
+        url: 'https://gobatumi.com',
+      },
+      {
+        name: 'MTA.ski',
+        role: 'Live Goderdzi Lifts & Mountain Trails Agency',
+        detail: 'Check daily gondola/chairlift openings, natural snow updates, and 2026–2027 tiered ski passes before heading inland from Batumi.',
+        url: 'https://mta.ski',
+      },
+    ];
+---
+
+<section class="page-banner">
+  <div class="container">
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
+      <a href={homePath}>{copy.breadcrumbHome}</a>
+      <span aria-hidden="true">/</span>
+      <span aria-current="page">{copy.breadcrumbCurrent}</span>
+    </nav>
+
+    <div class="news-banner-meta">
+      <span class="eyebrow" style="margin-bottom: 0;">{copy.eyebrow}</span>
+      <span class="badge badge-forest">
+        {copy.verifiedLabel} <time datetime={BATUMI_NEWS_META.lastVerifiedIso}>{copy.verifiedDate}</time>
+      </span>
+    </div>
+
+    <h1>{copy.h1}</h1>
+    <p style="max-width: 50rem; font-size: 1.06rem;">{copy.heroDesc}</p>
+
+    <nav class="news-jump-pills" aria-label={isKa ? 'სექციებზე გადასვლა' : 'On this page'}>
+      <a class="btn btn-outline btn-sm" href="#live-updates">{copy.jumpUpdates}</a>
+      <a class="btn btn-outline btn-sm" href="#annual-calendar">{copy.jumpCalendar}</a>
+      <a class="btn btn-outline btn-sm" href="#official-resources">{copy.jumpResources}</a>
+      <a class="btn btn-outline btn-sm" href="#batumi-faq">{copy.jumpFaq}</a>
+    </nav>
+  </div>
+</section>
+
+<!-- Essential Facts Snapshot -->
+<section class="section-tight" aria-label={copy.snapshotHeading}>
+  <div class="container">
+    <div class="facts-snapshot-grid">
+      {
+        BATUMI_ESSENTIAL_FACTS.map((fact) => (
+          <a href={`#${fact.targetSlug}`} class="fact-tile">
+            <article class={`fact-tile-inner fact-tone-${fact.tone}`}>
+              <span class="fact-kicker">{fact.kicker[lang]}</span>
+              <h2>{fact.headline[lang]}</h2>
+              <p>{fact.detail[lang]}</p>
+            </article>
+          </a>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<!-- Filterable & Searchable Exhaustive Updates -->
+<section id="live-updates" class="section">
+  <div class="container">
+    <search class="news-filter-shell" aria-label={copy.searchLandmarkLabel}>
+      <div class="news-category-pills" role="group" aria-label={isKa ? 'კატეგორიის ფილტრი' : 'Filter by category'}>
+        {
+          categoryFilters.map((cat, idx) => (
+            <button
+              type="button"
+              class={`news-cat-btn ${idx === 0 ? 'active' : ''}`}
+              data-news-cat={cat.id}
+              aria-pressed={idx === 0 ? 'true' : 'false'}
+            >
+              {cat.label} ({cat.count})
+            </button>
+          ))
+        }
+      </div>
+
+      <div class="news-inputs-row">
+        <div class="field">
+          <label for="news-search-input">{copy.searchLabel}</label>
+          <input
+            id="news-search-input"
+            type="search"
+            placeholder={copy.searchPlaceholder}
+            autocomplete="off"
+          />
+        </div>
+
+        <div class="field">
+          <label for="news-status-select">{copy.statusLabel}</label>
+          <select id="news-status-select">
+            {statusOptions.map((st) => <option value={st.id}>{st.label}</option>)}
+          </select>
+        </div>
+      </div>
+
+      <div class="news-status-bar">
+        <p id="news-results-count" aria-live="polite">
+          {copy.showingPrefix} <strong>{BATUMI_NEWS_ITEMS.length}</strong> {copy.showingOf} {BATUMI_NEWS_ITEMS.length}
+        </p>
+        <button id="news-clear-btn" type="button" class="btn btn-outline btn-sm" hidden>
+          {copy.clearFilters}
+        </button>
+      </div>
+    </search>
+
+    <ul id="news-list" class="news-grid" role="list">
+      {
+        BATUMI_NEWS_ITEMS.map((item) => {
+          const catMeta = BATUMI_CATEGORY_LABELS[item.category];
+          const statusText = BATUMI_STATUS_LABELS[item.status][lang];
+          const relatedTour = item.relatedTourSlug
+            ? TOURS.find((t) => t.slug === item.relatedTourSlug)
+            : undefined;
+          const searchHaystack = [
+            item.title[lang],
+            item.summary[lang],
+            item.dateRange[lang],
+            item.venue[lang],
+            item.admission[lang],
+            item.localTip[lang],
+            ...item.keyDetails[lang],
+          ]
+            .join(' ')
+            .toLowerCase();
+
+          return (
+            <li
+              data-news-item
+              data-category={item.category}
+              data-status={item.status}
+              data-search={searchHaystack}
+            >
+              <article id={item.slug} class="news-card">
+                {
+                  item.image && item.imageAlt && (
+                    <img
+                      src={withBase(item.image)}
+                      alt={item.imageAlt[lang]}
+                      width="1200"
+                      height="800"
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  )
+                }
+
+                <header class="news-card-head">
+                  <div class="news-card-badges">
+                    <span class={`badge ${catMeta.badgeClass}`}>{catMeta[lang]}</span>
+                    <span class="news-status-pill">{statusText}</span>
+                    <span class="news-date-pill">{item.dateRange[lang]}</span>
+                  </div>
+                  <h3>{item.title[lang]}</h3>
+                </header>
+
+                <div class="news-card-body">
+                  <p class="news-summary">{item.summary[lang]}</p>
+
+                  <dl class="news-facts">
+                    <div>
+                      <dt>{copy.venueLabel}</dt>
+                      <dd>
+                        {item.venue[lang]}
+                        {item.mapsUrl && (
+                          <>
+                            {' '}
+                            <a
+                              href={item.mapsUrl}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              class="news-inline-map"
+                            >
+                              {copy.mapsLinkLabel}
+                            </a>
+                          </>
+                        )}
+                      </dd>
+                    </div>
+                    <div>
+                      <dt>{copy.admissionLabel}</dt>
+                      <dd>{item.admission[lang]}</dd>
+                    </div>
+                  </dl>
+
+                  <details class="news-disclosure">
+                    <summary>{copy.detailsSummary}</summary>
+                    <div class="news-disclosure-panel">
+                      <ul class="news-detail-list">
+                        {item.keyDetails[lang].map((bullet) => <li>{bullet}</li>)}
+                      </ul>
+
+                      <div class="news-guide-tip">
+                        <strong>{copy.guideTipLabel}:</strong> {item.localTip[lang]}
+                      </div>
+                    </div>
+                  </details>
+                </div>
+
+                <footer class="news-card-foot">
+                  {relatedTour ? (
+                    <a class="btn btn-forest btn-sm" href={withBase(`/tours/${relatedTour.slug}/`)}>
+                      {copy.relatedTourPrefix} {relatedTour.shortTitle} →
+                    </a>
+                  ) : (
+                    <span class="news-foot-tag">{catMeta[lang]}</span>
+                  )}
+
+                  <a
+                    class="btn btn-outline btn-sm"
+                    href={`${SITE.whatsappUrl}?text=${encodeURIComponent(
+                      isKa
+                        ? `გამარჯობა Minimalism Tours Georgia! მაინტერესებს: ${item.whatsappTopic.ka}`
+                        : `Hello Minimalism Tours Georgia! I'd like details about: ${item.whatsappTopic.en}`
+                    )}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {copy.askAboutTopic}
+                  </a>
+                </footer>
+              </article>
+            </li>
+          );
+        })
+      }
+    </ul>
+
+    <div id="news-empty" class="empty-state" hidden>
+      <h2>{copy.emptyTitle}</h2>
+      <p>{copy.emptyDesc}</p>
+      <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 0.75rem;">
+        <button id="news-empty-reset" type="button" class="btn btn-forest">{copy.emptyReset}</button>
+        <a
+          class="btn btn-coral"
+          href={`${SITE.whatsappUrl}?text=${encodeURIComponent(
+            isKa
+              ? 'გამარჯობა Minimalism Tours Georgia! მინდა ვიკითხო ბათუმში დაგეგმილი ღონისძიებების შესახებ.'
+              : 'Hello Minimalism Tours Georgia! Could you share what is happening in Batumi during my dates?'
+          )}`}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          {copy.emptyAsk}
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Year-Round Batumi & Adjara Calendar -->
+<section id="annual-calendar" class="section section-surface">
+  <div class="container">
+    <div class="section-header">
+      <div>
+        <span class="eyebrow">{copy.calendarEyebrow}</span>
+        <h2>{copy.calendarHeading}</h2>
+      </div>
+      <p>{copy.calendarIntro}</p>
+    </div>
+
+    <div class="calendar-grid">
+      {
+        BATUMI_ANNUAL_CALENDAR.map((block) => (
+          <article class="calendar-card reveal-on-scroll">
+            <span class="badge badge-sea">{block.months[lang]}</span>
+            <h3>{block.title[lang]}</h3>
+            <ul class="calendar-list">
+              {block.highlights[lang].map((hl) => <li>{hl}</li>)}
+            </ul>
+            <footer>
+              <span>{copy.pairLabel}</span>
+              <a href={withBase(`/tours/${block.pairWithTourSlug}/`)}>
+                {block.pairWithTourLabel[lang]} →
+              </a>
+            </footer>
+          </article>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<!-- Ticketing & Direct Local Concierge -->
+<section id="official-resources" class="section section-forest">
+  <div class="container">
+    <div class="section-header">
+      <div>
+        <span class="eyebrow">{copy.resourcesEyebrow}</span>
+        <h2>{copy.resourcesHeading}</h2>
+      </div>
+      <p>{copy.resourcesIntro}</p>
+    </div>
+
+    <div class="resources-layout">
+      <div class="resources-list">
+        {
+          ticketingPlatforms.map((plat) => (
+            <article class="resource-item">
+              <span class="resource-role">{plat.role}</span>
+              <h3>
+                <a href={plat.url} target="_blank" rel="noopener noreferrer">
+                  {plat.name} ↗
+                </a>
+              </h3>
+              <p>{plat.detail}</p>
+            </article>
+          ))
+        }
+      </div>
+
+      <aside class="concierge-box">
+        <span class="eyebrow">{SITE.baseCity} · {SITE.officeHoursDisplay}</span>
+        <h3>{copy.conciergeTitle}</h3>
+        <p>{copy.conciergeDesc}</p>
+        <div class="concierge-actions">
+          <a
+            class="btn btn-coral"
+            href={`${SITE.whatsappUrl}?text=${encodeURIComponent(
+              isKa
+                ? 'გამარჯობა Minimalism Tours Georgia! ბათუმის ღონისძიებებსა და ტურებზე მსურს კონსულტაცია.'
+                : 'Hello Minimalism Tours Georgia! I would like live Batumi event & tour advice.'
+            )}`}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            {copy.conciergeWa}
+          </a>
+          <a
+            class="btn btn-outline-light"
+            href={SITE.telegramUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            {copy.conciergeTg}
+          </a>
+        </div>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ Accordion -->
+<section id="batumi-faq" class="section section-surface">
+  <div class="container" style="max-width: 58rem;">
+    <div class="section-header">
+      <div>
+        <span class="eyebrow">{copy.faqEyebrow}</span>
+        <h2>{copy.faqHeading}</h2>
+      </div>
+    </div>
+
+    <section class="accordion" id="batumi-news-faq" aria-label={copy.faqHeading}>
+      <div class="accordion-toolbar">
+        <button
+          type="button"
+          class="btn btn-outline btn-sm"
+          commandfor="batumi-news-faq"
+          command="--toggle-all"
+          aria-expanded="false"
+        >
+          <span class="expand-label">{copy.expandAll}</span>
+          <span class="collapse-label">{copy.collapseAll}</span>
+        </button>
+      </div>
+
+      {
+        BATUMI_NEWS_FAQS.map((faq) => (
+          <details>
+            <summary>{faq.question[lang]}</summary>
+            <div class="accordion-panel">
+              <p>{faq.answer[lang]}</p>
+            </div>
+          </details>
+        ))
+      }
+    </section>
+  </div>
+</section>
+
+<script
+  id="batumi-news-ui-i18n"
+  type="application/json"
+  set:html={JSON.stringify({
+    showingPrefix: copy.showingPrefix,
+    showingOf: copy.showingOf,
+    total: BATUMI_NEWS_ITEMS.length,
+  })}
+/>
+
+<script>
+  const i18nEl = document.getElementById('batumi-news-ui-i18n');
+  const uiText = i18nEl?.textContent
+    ? JSON.parse(i18nEl.textContent)
+    : { showingPrefix: 'Showing', showingOf: 'updates of', total: 0 };
+
+  const catButtons = document.querySelectorAll<HTMLButtonElement>('[data-news-cat]');
+  const searchInput = document.getElementById('news-search-input') as HTMLInputElement | null;
+  const statusSelect = document.getElementById('news-status-select') as HTMLSelectElement | null;
+  const countEl = document.getElementById('news-results-count');
+  const clearBtn = document.getElementById('news-clear-btn') as HTMLButtonElement | null;
+  const emptyResetBtn = document.getElementById('news-empty-reset') as HTMLButtonElement | null;
+  const emptyEl = document.getElementById('news-empty');
+  const listItems = Array.from(document.querySelectorAll<HTMLLIElement>('[data-news-item]'));
+
+  let activeCategory = 'all';
+
+  const params = new URLSearchParams(window.location.search);
+  const paramCat = params.get('category');
+  if (paramCat) {
+    const matchBtn = Array.from(catButtons).find((b) => b.dataset.newsCat === paramCat);
+    if (matchBtn) {
+      activeCategory = paramCat;
+      catButtons.forEach((b) => {
+        const isActive = b === matchBtn;
+        b.classList.toggle('active', isActive);
+        b.setAttribute('aria-pressed', String(isActive));
+      });
+    }
+  }
+  if (searchInput && params.get('q')) {
+    searchInput.value = params.get('q') || '';
+  }
+  if (statusSelect && params.get('status')) {
+    statusSelect.value = params.get('status') || 'all';
+  }
+
+  const applyNewsFilters = () => {
+    const q = (searchInput?.value || '').trim().toLowerCase();
+    const st = statusSelect?.value || 'all';
+    let visible = 0;
+
+    listItems.forEach((li) => {
+      const catMatch = activeCategory === 'all' || li.dataset.category === activeCategory;
+      const statusMatch = st === 'all' || li.dataset.status === st;
+      const textMatch = !q || (li.dataset.search || '').includes(q);
+      const show = catMatch && statusMatch && textMatch;
+      li.hidden = !show;
+      if (show) visible += 1;
+    });
+
+    if (countEl) {
+      countEl.innerHTML = `${uiText.showingPrefix} <strong>${visible}</strong> ${uiText.showingOf} ${listItems.length}`;
+    }
+
+    const hasActiveFilter = activeCategory !== 'all' || st !== 'all' || q.length > 0;
+    if (clearBtn) clearBtn.hidden = !hasActiveFilter;
+    if (emptyEl) emptyEl.hidden = visible > 0;
+  };
+
+  const resetAllFilters = () => {
+    activeCategory = 'all';
+    catButtons.forEach((b) => {
+      const isAll = b.dataset.newsCat === 'all';
+      b.classList.toggle('active', isAll);
+      b.setAttribute('aria-pressed', String(isAll));
+    });
+    if (searchInput) searchInput.value = '';
+    if (statusSelect) statusSelect.value = 'all';
+    applyNewsFilters();
+  };
+
+  catButtons.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      activeCategory = btn.dataset.newsCat || 'all';
+      catButtons.forEach((other) => {
+        const isMatch = other === btn;
+        other.classList.toggle('active', isMatch);
+        other.setAttribute('aria-pressed', String(isMatch));
+      });
+      applyNewsFilters();
+    });
+  });
+
+  searchInput?.addEventListener('input', applyNewsFilters);
+  statusSelect?.addEventListener('change', applyNewsFilters);
+  clearBtn?.addEventListener('click', resetAllFilters);
+  emptyResetBtn?.addEventListener('click', resetAllFilters);
+
+  const openTargetFromHash = () => {
+    const hash = window.location.hash.replace(/^#/, '');
+    if (!hash) return;
+    const targetCard = document.getElementById(hash);
+    if (!targetCard || !targetCard.classList.contains('news-card')) return;
+
+    const parentLi = targetCard.closest<HTMLLIElement>('[data-news-item]');
+    if (parentLi?.hidden) {
+      resetAllFilters();
+    }
+
+    const disclosure = targetCard.querySelector<HTMLDetailsElement>('details.news-disclosure');
+    if (disclosure) disclosure.open = true;
+
+    targetCard.classList.remove('is-targeted');
+    void targetCard.offsetWidth;
+    targetCard.classList.add('is-targeted');
+    targetCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+
+  applyNewsFilters();
+  openTargetFromHash();
+  window.addEventListener('hashchange', openTargetFromHash);
+</script>
+
+<style>
+  .page-banner {
+    background-color: var(--bg-surface);
+    border-bottom: 1px solid var(--border-subtle);
+    padding-block: clamp(2.25rem, 4.5vw, 3.75rem);
+  }
+
+  .breadcrumbs {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.45rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--ink-600);
+    margin-bottom: 1rem;
+  }
+
+  .breadcrumbs a {
+    color: var(--forest-800);
+    text-decoration: none;
+  }
+
+  .breadcrumbs a:hover {
+    text-decoration: underline;
+  }
+
+  .news-banner-meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.65rem 1rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .news-jump-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.55rem;
+    margin-top: 1.25rem;
+  }
+
+  /* Snapshot Fact Tiles */
+  .facts-snapshot-grid {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));
+  }
+
+  .fact-tile {
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+  }
+
+  .fact-tile-inner {
+    width: 100%;
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-top: 3px solid var(--forest-700);
+    border-radius: var(--radius-lg);
+    padding: 1.15rem;
+    box-shadow: var(--shadow-xs);
+    transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+  }
+
+  .fact-tile-inner.fact-tone-coral {
+    border-top-color: var(--coral-600);
+  }
+
+  .fact-tile-inner.fact-tone-sea {
+    border-top-color: var(--sea-600);
+  }
+
+  .fact-tile:hover .fact-tile-inner,
+  .fact-tile:focus-visible .fact-tile-inner {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-sm);
+    border-color: var(--border-strong);
+  }
+
+  .fact-kicker {
+    display: block;
+    font-size: 0.74rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--ink-600);
+    margin-bottom: 0.35rem;
+  }
+
+  .fact-tile-inner h2 {
+    font-size: 1.08rem;
+    margin-bottom: 0.45rem;
+    color: var(--ink-900);
+  }
+
+  .fact-tile-inner p {
+    margin: 0;
+    font-size: 0.88rem;
+    line-height: 1.5;
+    color: var(--ink-700);
+  }
+
+  /* Filter & Search Shell */
+  .news-filter-shell {
+    display: grid;
+    gap: 1.1rem;
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    padding: 1.25rem;
+    box-shadow: var(--shadow-xs);
+    margin-bottom: 1.75rem;
+  }
+
+  .news-category-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .news-cat-btn {
+    min-height: 2.35rem;
+    padding: 0.42rem 0.95rem;
+    border-radius: var(--radius-pill);
+    border: 1.5px solid var(--border-strong);
+    background-color: var(--bg-page);
+    color: var(--ink-700);
+    font-family: var(--font-sans);
+    font-size: 0.84rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background-color 0.16s ease, border-color 0.16s ease, color 0.16s ease;
+  }
+
+  .news-cat-btn:hover {
+    border-color: var(--forest-800);
+    background-color: var(--forest-100);
+    color: var(--forest-900);
+  }
+
+  .news-cat-btn.active {
+    background-color: var(--forest-800);
+    border-color: var(--forest-800);
+    color: #ffffff;
+  }
+
+  .news-inputs-row {
+    display: grid;
+    gap: 1rem;
+  }
+
+  @media (min-width: 44rem) {
+    .news-inputs-row {
+      grid-template-columns: 1.6fr 1fr;
+    }
+  }
+
+  .news-status-bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    padding-top: 0.65rem;
+    border-top: 1px solid var(--border-subtle);
+  }
+
+  .news-status-bar p {
+    margin: 0;
+    font-size: 0.9rem;
+    color: var(--ink-700);
+  }
+
+  /* News Cards */
+  .news-grid {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 1.5rem;
+    grid-template-columns: 1fr;
+  }
+
+  @media (min-width: 58rem) {
+    .news-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  .news-grid > li {
+    display: flex;
+  }
+
+  .news-grid > li[hidden] {
+    display: none !important;
+  }
+
+  .news-card {
+    width: 100%;
+    container-type: inline-size;
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    box-shadow: var(--shadow-xs);
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    scroll-margin-top: 6.25rem;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .news-card.is-targeted {
+    border-color: var(--coral-600);
+    box-shadow: 0 0 0 3px rgba(194, 72, 37, 0.18), var(--shadow-md);
+  }
+
+  .news-card > img {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+  }
+
+  .news-card-head {
+    padding: 1.35rem 1.35rem 0.65rem;
+  }
+
+  .news-card-badges {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.45rem;
+    margin-bottom: 0.7rem;
+  }
+
+  .news-status-pill,
+  .news-date-pill {
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 0.22rem 0.65rem;
+    border-radius: var(--radius-pill);
+    border: 1px solid var(--border-subtle);
+    background-color: var(--bg-page);
+    color: var(--ink-700);
+  }
+
+  .news-card-head h3 {
+    font-size: 1.28rem;
+    margin: 0;
+  }
+
+  .news-card-body {
+    padding: 0 1.35rem 1.2rem;
+    display: grid;
+    gap: 0.9rem;
+    align-content: start;
+  }
+
+  .news-summary {
+    margin: 0;
+    font-size: 0.95rem;
+    color: var(--ink-700);
+  }
+
+  .news-facts {
+    display: grid;
+    gap: 0.65rem;
+    margin: 0;
+    padding: 0.85rem 1rem;
+    border-radius: var(--radius-md);
+    background-color: var(--bg-page);
+    border: 1px solid var(--border-subtle);
+  }
+
+  @container (min-width: 28rem) {
+    .news-facts {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.75rem 1rem;
+    }
+  }
+
+  .news-facts dt {
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--ink-600);
+    margin-bottom: 0.15rem;
+  }
+
+  .news-facts dd {
+    margin: 0;
+    font-size: 0.87rem;
+    font-weight: 600;
+    color: var(--ink-900);
+  }
+
+  .news-inline-map {
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--sea-800);
+  }
+
+  /* Native <details> inside news card */
+  .news-disclosure {
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    background-color: #fcfbfa;
+    padding: 0.15rem 1rem;
+  }
+
+  .news-disclosure[open] {
+    border-color: var(--forest-700);
+    background-color: var(--bg-surface);
+  }
+
+  .news-disclosure summary {
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: 0.65ch;
+    padding-block: 0.75rem;
+    font-size: 0.92rem;
+    font-weight: 700;
+    color: var(--forest-800);
+    cursor: pointer;
+  }
+
+  .news-disclosure summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .news-disclosure summary::before {
+    content: '';
+    inline-size: 1em;
+    block-size: 1em;
+    flex-shrink: 0;
+    background-color: var(--coral-600);
+    -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E") no-repeat center / contain;
+    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E") no-repeat center / contain;
+    rotate: -90deg;
+    transition: rotate 0.18s ease;
+  }
+
+  .news-disclosure[open] > summary::before {
+    rotate: 0deg;
+  }
+
+  .news-disclosure-panel {
+    padding-bottom: 1rem;
+    display: grid;
+    gap: 0.85rem;
+  }
+
+  .news-detail-list {
+    margin: 0;
+    padding-inline-start: 1.15rem;
+    display: grid;
+    gap: 0.45rem;
+    font-size: 0.91rem;
+    color: var(--ink-700);
+  }
+
+  .news-guide-tip {
+    padding: 0.75rem 0.9rem;
+    border-radius: var(--radius-sm);
+    background-color: var(--forest-100);
+    border-inline-start: 3px solid var(--forest-800);
+    font-size: 0.89rem;
+    color: var(--ink-900);
+  }
+
+  .news-card-foot {
+    padding: 0.95rem 1.35rem 1.2rem;
+    border-top: 1px solid var(--border-subtle);
+    background-color: #fcfbfa;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.65rem;
+  }
+
+  .news-foot-tag {
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--ink-600);
+  }
+
+  .empty-state {
+    text-align: center;
+    padding: 3rem 1.5rem;
+    background-color: var(--bg-surface);
+    border: 1px dashed var(--border-strong);
+    border-radius: var(--radius-lg);
+    margin-top: 1rem;
+  }
+
+  /* Calendar Grid */
+  .calendar-grid {
+    display: grid;
+    gap: 1.25rem;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 17rem), 1fr));
+  }
+
+  .calendar-card {
+    background-color: var(--bg-page);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    padding: 1.35rem;
+    display: grid;
+    grid-template-rows: auto auto 1fr auto;
+    gap: 0.75rem;
+  }
+
+  .calendar-card h3 {
+    font-size: 1.15rem;
+    margin: 0;
+  }
+
+  .calendar-list {
+    margin: 0;
+    padding-inline-start: 1.15rem;
+    display: grid;
+    gap: 0.45rem;
+    font-size: 0.9rem;
+    color: var(--ink-700);
+  }
+
+  .calendar-card footer {
+    padding-top: 0.8rem;
+    border-top: 1px solid var(--border-subtle);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.85rem;
+  }
+
+  .calendar-card footer span {
+    color: var(--ink-600);
+    font-weight: 600;
+  }
+
+  .calendar-card footer a {
+    font-weight: 700;
+    color: var(--forest-800);
+    text-decoration: none;
+  }
+
+  .calendar-card footer a:hover {
+    color: var(--coral-600);
+    text-decoration: underline;
+  }
+
+  /* Resources & Concierge */
+  .resources-layout {
+    display: grid;
+    gap: 1.5rem;
+  }
+
+  @media (min-width: 56rem) {
+    .resources-layout {
+      grid-template-columns: 1.25fr 1fr;
+      align-items: start;
+    }
+  }
+
+  .resources-list {
+    display: grid;
+    gap: 1rem;
+  }
+
+  .resource-item {
+    padding: 1.2rem 1.35rem;
+    border-radius: var(--radius-lg);
+    background-color: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+  }
+
+  .resource-role {
+    display: block;
+    font-size: 0.76rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: #f4b69f;
+    margin-bottom: 0.25rem;
+  }
+
+  .resource-item h3 {
+    font-size: 1.15rem;
+    margin-bottom: 0.35rem;
+  }
+
+  .resource-item h3 a {
+    color: #ffffff;
+    text-decoration: none;
+  }
+
+  .resource-item h3 a:hover {
+    color: #f4b69f;
+    text-decoration: underline;
+  }
+
+  .resource-item p {
+    margin: 0;
+    font-size: 0.92rem;
+  }
+
+  .concierge-box {
+    padding: 1.5rem;
+    border-radius: var(--radius-xl);
+    background-color: rgba(16, 36, 28, 0.55);
+    border: 1px solid rgba(255, 255, 255, 0.22);
+  }
+
+  .concierge-box h3 {
+    font-size: 1.35rem;
+    margin-bottom: 0.65rem;
+  }
+
+  .concierge-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.65rem;
+    margin-top: 1.25rem;
+  }
+</style>

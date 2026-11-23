@@ -1,0 +1,64 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import BatumiNewsHub from '../../../components/BatumiNewsHub.astro';
+import { SITE } from '../../../data/site';
+import { BATUMI_NEWS_FAQS, BATUMI_NEWS_ITEMS } from '../../../data/batumi-news';
+import { absoluteUrl } from '../../../lib/urls';
+
+const breadcrumbJsonLd = {
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'მთავარი', item: absoluteUrl('/ka/', Astro.site) },
+    {
+      '@type': 'ListItem',
+      position: 2,
+      name: 'ბათუმის სიახლეები',
+      item: absoluteUrl('/ka/batumi-news/', Astro.site),
+    },
+  ],
+};
+
+const itemListJsonLd = {
+  '@type': 'ItemList',
+  name: 'ბათუმის სიახლეები, დაგეგმილი ღონისძიებები და წესები (2026–2027)',
+  numberOfItems: BATUMI_NEWS_ITEMS.length,
+  itemListElement: BATUMI_NEWS_ITEMS.map((item, idx) => ({
+    '@type': 'ListItem',
+    position: idx + 1,
+    name: item.title.ka,
+    url: `${absoluteUrl('/ka/batumi-news/', Astro.site)}#${item.slug}`,
+  })),
+};
+
+const faqJsonLd = {
+  '@type': 'FAQPage',
+  mainEntity: BATUMI_NEWS_FAQS.map((faq) => ({
+    '@type': 'Question',
+    name: faq.question.ka,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: faq.answer.ka,
+    },
+  })),
+};
+---
+
+<BaseLayout
+  title={`ბათუმის სიახლეები, ღონისძიებები და 2026–2027 კალენდარი | ${SITE.brandName}`}
+  description="ამომწურავი გზამკვლევი ბათუმში დაგეგმილ სიახლეებზე: ევროპის მოედნის საახალწლო სოფელი, გოდერძის ზამთრის სეზონი, 2026 წლის სავალდებულო დაზღვევა, ფესტივალები, პროექტები და ბილეთების ფასები."
+  canonicalPath="/ka/batumi-news/"
+  alternateEnPath="/batumi-news/"
+  alternateKaPath="/ka/batumi-news/"
+  lang="ka"
+  keywords={[
+    'ბათუმის სიახლეები 2026 2027',
+    'ბათუმში დაგეგმილი ღონისძიებები',
+    'ბათუმი საახალწლო სოფელი ევროპის მოედანი',
+    'სავალდებულო სამოგზაურო დაზღვევა საქართველო 2026',
+    'გოდერძი გახსნა 2026',
+    'Minimalism Tours Georgia',
+  ]}
+  jsonLd={[breadcrumbJsonLd, itemListJsonLd, faqJsonLd]}
+>
+  <BatumiNewsHub lang="ka" />
+</BaseLayout>

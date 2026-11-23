@@ -12,11 +12,18 @@ const props = Astro.props;
 const lang = props.lang || 'en';
 const currentPath = Astro.url.pathname;
 
+const enSwitchHref = withBase(props.alternateEnPath || '/');
+const kaSwitchHref = withBase(props.alternateKaPath || '/ka/');
+
 const navLinks = [
-  { label: lang === 'ka' ? 'მთავარი' : 'Home', href: withBase('/') },
+  { label: lang === 'ka' ? 'მთავარი' : 'Home', href: withBase(lang === 'ka' ? '/ka/' : '/') },
   { label: lang === 'ka' ? 'ტურები' : 'Tours', href: withBase('/tours/') },
+  {
+    label: lang === 'ka' ? 'ბათუმის სიახლეები' : 'Batumi News',
+    href: withBase(lang === 'ka' ? '/ka/batumi-news/' : '/batumi-news/'),
+  },
   { label: lang === 'ka' ? 'მიმართულებები' : 'Destinations', href: withBase('/destinations/') },
-  { label: lang === 'ka' ? 'B2B პარტნიორობა' : 'B2B & Partners', href: withBase('/partners/') },
+  { label: lang === 'ka' ? 'პარტნიორები' : 'B2B & Partners', href: withBase('/partners/') },
   { label: lang === 'ka' ? 'ჩვენ შესახებ' : 'About', href: withBase('/about/') },
   { label: lang === 'ka' ? 'კონტაქტი' : 'Contact', href: withBase('/contact/') },
 ];
@@ -65,7 +72,7 @@ const navLinks = [
         <div class="header-actions">
           <a
             class="lang-switch"
-            href={lang === 'ka' ? withBase('/') : withBase('/ka/')}
+            href={lang === 'ka' ? enSwitchHref : kaSwitchHref}
             hreflang={lang === 'ka' ? 'en' : 'ka'}
             aria-label={lang === 'ka' ? 'Switch to English' : 'ქართულ ენაზე გადართვა'}
           >
@@ -163,6 +170,11 @@ const navLinks = [
           <div>
             <h3>Useful Links</h3>
             <ul class="footer-links">
+              <li>
+                <a href={withBase(lang === 'ka' ? '/ka/batumi-news/' : '/batumi-news/')}>
+                  {lang === 'ka' ? 'ბათუმის სიახლეები (2026–2027)' : 'Batumi News & Events (2026–2027)'}
+                </a>
+              </li>
               <li><a href={withBase('/contact/')}>Request a Tour</a></li>
               <li><a href={withBase('/tours/')}>View All 7 Tours</a></li>
               <li><a href={withBase('/#price-estimator')}>Group Price Estimator</a></li>
@@ -241,7 +253,9 @@ const navLinks = [
           <div class="footer-bottom-meta">
             <a href={`tel:${SITE.phoneRaw}`}>Call: {SITE.phoneDisplay}</a>
             <span aria-hidden="true">·</span>
-            <a href={withBase('/ka/')} hreflang="ka">ქართული ვერსია</a>
+            <a href={lang === 'ka' ? enSwitchHref : kaSwitchHref} hreflang={lang === 'ka' ? 'en' : 'ka'}>
+              {lang === 'ka' ? 'English Version' : 'ქართული ვერსია'}
+            </a>
             <span aria-hidden="true">·</span>
             <span>24-hour free cancellation · Transparent pricing</span>
           </div>
@@ -291,11 +305,11 @@ const navLinks = [
             ))
           }
           <a
-            href={withBase('/ka/')}
+            href={lang === 'ka' ? enSwitchHref : kaSwitchHref}
             class="btn btn-outline"
             style="justify-content: flex-start; border-radius: var(--radius-md);"
           >
-            ქართული ვერსია (Georgian)
+            {lang === 'ka' ? 'English Version' : 'ქართული ვერსია (Georgian)'}
           </a>
         </nav>
         <button

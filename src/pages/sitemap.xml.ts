@@ -34,6 +34,26 @@ export const GET: APIRoute = ({ site }) => {
       ],
     },
     { path: '/tours/', priority: '0.9', changefreq: 'weekly' },
+    {
+      path: '/batumi-news/',
+      priority: '0.9',
+      changefreq: 'weekly',
+      hreflangPairs: [
+        { lang: 'en', path: '/batumi-news/' },
+        { lang: 'ka', path: '/ka/batumi-news/' },
+        { lang: 'x-default', path: '/batumi-news/' },
+      ],
+    },
+    {
+      path: '/ka/batumi-news/',
+      priority: '0.9',
+      changefreq: 'weekly',
+      hreflangPairs: [
+        { lang: 'en', path: '/batumi-news/' },
+        { lang: 'ka', path: '/ka/batumi-news/' },
+        { lang: 'x-default', path: '/batumi-news/' },
+      ],
+    },
     { path: '/destinations/', priority: '0.8', changefreq: 'monthly' },
     { path: '/partners/', priority: '0.85', changefreq: 'monthly' },
     { path: '/about/', priority: '0.7', changefreq: 'monthly' },

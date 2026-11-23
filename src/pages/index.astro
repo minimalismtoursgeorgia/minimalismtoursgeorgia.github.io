@@ -2,6 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import HeroShowcase, { type FeaturedTourSlide } from '../components/HeroShowcase.astro';
 import TourCard from '../components/TourCard.astro';
+import BatumiNewsTeaser from '../components/BatumiNewsTeaser.astro';
 import ReviewsSection from '../components/ReviewsSection.astro';
 import {
   SITE,
@@ -195,6 +196,9 @@ const destinationsClientData = DESTINATIONS.map((d) => ({
       </div>
     </div>
   </section>
+
+  <!-- Batumi Live News & Planned Events -->
+  <BatumiNewsTeaser lang="en" />
 
   <!-- Verified Guest Reviews -->
   <ReviewsSection

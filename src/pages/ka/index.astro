@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import HeroShowcase, { type FeaturedTourSlide } from '../../components/HeroShowcase.astro';
+import BatumiNewsTeaser from '../../components/BatumiNewsTeaser.astro';
 import { SITE, PICKUP_POINTS } from '../../data/site';
 import { KA_CONTENT } from '../../data/i18n-ka';
 import { withBase, absoluteUrl } from '../../lib/urls';
@@ -105,6 +106,8 @@ const kaFeaturedTours: FeaturedTourSlide[] = [
       </div>
     </div>
   </section>
+
+  <BatumiNewsTeaser lang="ka" />
 
   <section class="section section-surface">
     <div class="container">

@@ -1,0 +1,91 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import BatumiNewsHub from '../../components/BatumiNewsHub.astro';
+import { SITE } from '../../data/site';
+import { BATUMI_NEWS_FAQS, BATUMI_NEWS_ITEMS } from '../../data/batumi-news';
+import { absoluteUrl } from '../../lib/urls';
+
+const breadcrumbJsonLd = {
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: absoluteUrl('/', Astro.site) },
+    {
+      '@type': 'ListItem',
+      position: 2,
+      name: 'Batumi News & Events',
+      item: absoluteUrl('/batumi-news/', Astro.site),
+    },
+  ],
+};
+
+const itemListJsonLd = {
+  '@type': 'ItemList',
+  name: 'Batumi News, Upcoming Events & Visitor Updates (2026–2027)',
+  numberOfItems: BATUMI_NEWS_ITEMS.length,
+  itemListElement: BATUMI_NEWS_ITEMS.map((item, idx) => ({
+    '@type': 'ListItem',
+    position: idx + 1,
+    name: item.title.en,
+    url: `${absoluteUrl('/batumi-news/', Astro.site)}#${item.slug}`,
+  })),
+};
+
+const eventJsonLds = BATUMI_NEWS_ITEMS.filter((item) => item.isoStartDate && item.category !== 'travel-rules').map(
+  (item) => ({
+    '@type': 'Event',
+    name: item.title.en,
+    description: item.summary.en,
+    startDate: item.isoStartDate,
+    ...(item.isoEndDate ? { endDate: item.isoEndDate } : {}),
+    eventStatus: 'https://schema.org/EventScheduled',
+    eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
+    location: {
+      '@type': 'Place',
+      name: item.venue.en,
+      address: {
+        '@type': 'PostalAddress',
+        addressLocality: 'Batumi',
+        addressRegion: 'Adjara',
+        addressCountry: 'GE',
+      },
+    },
+    organizer: {
+      '@type': 'Organization',
+      name: SITE.brandName,
+      url: absoluteUrl('/', Astro.site),
+    },
+  })
+);
+
+const faqJsonLd = {
+  '@type': 'FAQPage',
+  mainEntity: BATUMI_NEWS_FAQS.map((faq) => ({
+    '@type': 'Question',
+    name: faq.question.en,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: faq.answer.en,
+    },
+  })),
+};
+---
+
+<BaseLayout
+  title={`Batumi News, Planned Events & 2026–2027 Visitor Guide | ${SITE.brandName}`}
+  description="Complete guide to what is planned in Batumi in 2026–2027: Europe Square New Year’s Village, Goderdzi ski season, coastal mega-projects, mandatory 30,000 GEL travel insurance, festivals, and attraction hours."
+  canonicalPath="/batumi-news/"
+  alternateEnPath="/batumi-news/"
+  alternateKaPath="/ka/batumi-news/"
+  keywords={[
+    'Batumi upcoming events 2026 2027',
+    'Batumi New Year Village Europe Square',
+    'Batumi festivals calendar',
+    'Georgia mandatory travel insurance 2026',
+    'Goderdzi ski resort opening 2026',
+    'Batumi Botanical Garden hours tickets',
+    'Minimalism Tours Georgia',
+  ]}
+  jsonLd={[breadcrumbJsonLd, itemListJsonLd, ...eventJsonLds, faqJsonLd]}
+>
+  <BatumiNewsHub lang="en" />
+</BaseLayout>
