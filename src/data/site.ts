@@ -64,8 +64,6 @@ export const SITE = {
   youtubeUrl: 'https://www.youtube.com/@MinimalismToursGeorgia',
   getYourGuideSupplierUrl: 'https://www.getyourguide.com/minimalism-tours-georgia-s433573/',
   getYourGuideTourUrl: 'https://www.getyourguide.com/-t1525407/',
-  viatorUrl:
-    'https://www.viator.com/tours/Batumi/Snowshoes-Hiking-Ajara-Mountain-Guides/d24045-446870P1',
   /**
    * Optional free form backend (e.g. Formspree or Web3Forms endpoint).
    * Leave empty to route direct inquiries seamlessly through WhatsApp, Email, and instant clipboard quote copy.
