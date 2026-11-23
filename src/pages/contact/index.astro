@@ -1,6 +1,6 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { SITE, PICKUP_POINTS } from '../../data/site';
+import { SITE, PICKUP_POINTS, SOCIAL_LINKS } from '../../data/site';
 import { TOURS } from '../../data/tours';
 import { withBase, absoluteUrl } from '../../lib/urls';
 
@@ -187,6 +187,12 @@ const breadcrumbJsonLd = {
               <a href={`tel:${SITE.phoneRaw}`}>Call {SITE.phoneDisplay}</a>
             </li>
             <li>
+              <strong>Telegram</strong>
+              <a href={SITE.telegramUrl} target="_blank" rel="noopener noreferrer">
+                @MinimalismToursGeorgia ↗
+              </a>
+            </li>
+            <li>
               <strong>Email</strong>
               <a href={`mailto:${SITE.email}`}>{SITE.email}</a>
             </li>
@@ -201,15 +207,9 @@ const breadcrumbJsonLd = {
               <span>{SITE.officeHoursDisplay}</span>
             </li>
             <li>
-              <strong>YouTube Trail Previews</strong>
-              <a href={SITE.youtubeUrl} target="_blank" rel="noopener noreferrer">
-                @MinimalismToursGeorgia ↗
-              </a>
-            </li>
-            <li>
-              <strong>GetYourGuide Live Product</strong>
-              <a href={SITE.getYourGuideTourUrl} target="_blank" rel="noopener noreferrer">
-                Mtirala Lake &amp; Waterfall Hike ↗
+              <strong>GetYourGuide</strong>
+              <a href={SITE.getYourGuideSupplierUrl} target="_blank" rel="noopener noreferrer">
+                All Minimalism Tours Georgia Tours ↗
               </a>
             </li>
             <li>
@@ -218,6 +218,29 @@ const breadcrumbJsonLd = {
                 Ajara &amp; Batumi Guided Tours ↗
               </a>
             </li>
+            <li>
+              <strong>Google Reviews</strong>
+              <a href={SITE.googleReviewUrl} target="_blank" rel="noopener noreferrer">
+                Leave a Google Review ↗
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        <div class="side-panel">
+          <span class="eyebrow">Follow Minimalism Tours Georgia</span>
+          <h3>Official Social Media</h3>
+          <ul class="social-grid">
+            {
+              SOCIAL_LINKS.map((s) => (
+                <li>
+                  <a class="social-card-link" href={s.url} target="_blank" rel="noopener noreferrer">
+                    <strong>{s.name}</strong>
+                    <span>{s.handle} ↗</span>
+                  </a>
+                </li>
+              ))
+            }
           </ul>
         </div>
 
@@ -403,6 +426,46 @@ const breadcrumbJsonLd = {
   .pickup-compact span {
     color: var(--ink-600);
     font-size: 0.85rem;
+  }
+
+  .social-grid {
+    list-style: none;
+    margin: 0.9rem 0 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(10.5rem, 1fr));
+    gap: 0.65rem;
+  }
+
+  .social-card-link {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    padding: 0.75rem 0.9rem;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-subtle);
+    background-color: var(--bg-page);
+    color: var(--ink-900);
+    text-decoration: none;
+    transition: border-color 160ms ease, background-color 160ms ease, transform 160ms ease;
+  }
+
+  .social-card-link strong {
+    font-size: 0.92rem;
+    color: var(--forest-800);
+  }
+
+  .social-card-link span {
+    font-size: 0.8rem;
+    color: var(--ink-600);
+    overflow-wrap: anywhere;
+  }
+
+  .social-card-link:hover,
+  .social-card-link:focus-visible {
+    border-color: var(--forest-800);
+    background-color: var(--forest-100);
+    transform: translateY(-1px);
   }
 
   .contact-submit-row {

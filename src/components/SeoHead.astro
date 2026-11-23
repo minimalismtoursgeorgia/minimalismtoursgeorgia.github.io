@@ -1,5 +1,5 @@
 ---
-import { SITE } from '../data/site';
+import { SITE, SOCIAL_LINKS } from '../data/site';
 import { withBase, absoluteUrl } from '../lib/urls';
 
 export interface Props {
@@ -77,7 +77,12 @@ const defaultOrgSchema = {
     { '@type': 'City', name: 'Batumi' },
     { '@type': 'Country', name: 'Georgia' },
   ],
-  sameAs: [SITE.youtubeUrl, SITE.getYourGuideTourUrl, SITE.viatorUrl],
+  sameAs: [
+    ...SOCIAL_LINKS.map((s) => s.url),
+    SITE.getYourGuideSupplierUrl,
+    SITE.getYourGuideTourUrl,
+    SITE.viatorUrl,
+  ],
   priceRange: '€€',
 };
 

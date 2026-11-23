@@ -28,6 +28,13 @@ export interface SeasonPlan {
   practicalNote: string;
 }
 
+export interface SocialChannel {
+  id: 'instagram' | 'facebook' | 'youtube' | 'tiktok' | 'telegram' | 'pinterest' | 'snapchat';
+  name: string;
+  handle: string;
+  url: string;
+}
+
 export const SITE = {
   brandName: 'Minimalism Tours Georgia',
   shortBrand: 'Minimalism Tours',
@@ -45,6 +52,7 @@ export const SITE = {
   phoneRaw: '+995592043080',
   whatsappNumber: '995592043080',
   whatsappUrl: 'https://wa.me/995592043080',
+  telegramUrl: 'https://t.me/MinimalismToursGeorgia',
   email: 'beqa.gelashvili.2@gmail.com',
   streetAddress: 'Selim Khimshiashvili St',
   postalCode: '6010',
@@ -52,7 +60,9 @@ export const SITE = {
   officeHoursDisplay: 'Open 24 hours · Monday–Sunday',
   googleBusinessUrl:
     'https://www.google.com/maps/search/?api=1&query=Minimalism+Tours+Georgia+Batumi',
+  googleReviewUrl: 'https://g.page/r/CVoYIo0JHrCdEBI/review',
   youtubeUrl: 'https://www.youtube.com/@MinimalismToursGeorgia',
+  getYourGuideSupplierUrl: 'https://www.getyourguide.com/minimalism-tours-georgia-s433573/',
   getYourGuideTourUrl: 'https://www.getyourguide.com/-t1525407/',
   viatorUrl:
     'https://www.viator.com/tours/Batumi/Snowshoes-Hiking-Ajara-Mountain-Guides/d24045-446870P1',
@@ -77,6 +87,51 @@ export const SITE = {
     lng: 41.6359,
   },
 } as const;
+
+export const SOCIAL_LINKS: SocialChannel[] = [
+  {
+    id: 'instagram',
+    name: 'Instagram',
+    handle: '@minimalismtoursgeorgia',
+    url: 'https://www.instagram.com/minimalismtoursgeorgia/',
+  },
+  {
+    id: 'facebook',
+    name: 'Facebook',
+    handle: 'Minimalism Tours Georgia',
+    url: 'https://www.facebook.com/minimalismtoursgeorgia',
+  },
+  {
+    id: 'youtube',
+    name: 'YouTube',
+    handle: '@MinimalismToursGeorgia',
+    url: 'https://www.youtube.com/@MinimalismToursGeorgia',
+  },
+  {
+    id: 'tiktok',
+    name: 'TikTok',
+    handle: '@minimalismtoursgeorgia',
+    url: 'https://www.tiktok.com/@minimalismtoursgeorgia',
+  },
+  {
+    id: 'telegram',
+    name: 'Telegram',
+    handle: '@MinimalismToursGeorgia',
+    url: 'https://t.me/MinimalismToursGeorgia',
+  },
+  {
+    id: 'pinterest',
+    name: 'Pinterest',
+    handle: '@minimalismtoursgeorgia',
+    url: 'https://www.pinterest.com/minimalismtoursgeorgia/',
+  },
+  {
+    id: 'snapchat',
+    name: 'Snapchat',
+    handle: '@minimalismtours',
+    url: 'https://www.snapchat.com/add/minimalismtours',
+  },
+];
 
 export const PICKUP_POINTS: PickupPoint[] = [
   {

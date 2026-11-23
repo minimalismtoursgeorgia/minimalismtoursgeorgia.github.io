@@ -1,7 +1,7 @@
 ---
 import '../styles/global.css';
 import SeoHead, { type Props as SeoProps } from '../components/SeoHead.astro';
-import { SITE, PICKUP_POINTS } from '../data/site';
+import { SITE, PICKUP_POINTS, SOCIAL_LINKS } from '../data/site';
 import { TOURS } from '../data/tours';
 import { withBase } from '../lib/urls';
 
@@ -125,6 +125,21 @@ const navLinks = [
             <p style="margin-bottom: 0;">
               <strong>Lead Guide:</strong> {SITE.founderName} · UNESCO Heritage &amp; Red Cross First Aid Certified
             </p>
+            <nav class="footer-socials" aria-label="Minimalism Tours Georgia social media">
+              {
+                SOCIAL_LINKS.map((social) => (
+                  <a
+                    class="footer-social-link"
+                    href={social.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={`Minimalism Tours Georgia on ${social.name}`}
+                  >
+                    {social.name} ↗
+                  </a>
+                ))
+              }
+            </nav>
           </div>
 
           <div>
@@ -168,16 +183,21 @@ const navLinks = [
                 <a href={`tel:${SITE.phoneRaw}`}>Call: {SITE.phoneDisplay}</a>
               </li>
               <li>
-                <a href={`mailto:${SITE.email}`}>{SITE.email}</a>
-              </li>
-              <li>
-                <a href={SITE.youtubeUrl} target="_blank" rel="noopener noreferrer">
-                  YouTube @MinimalismToursGeorgia
+                <a href={SITE.telegramUrl} target="_blank" rel="noopener noreferrer">
+                  Telegram: @MinimalismToursGeorgia
                 </a>
               </li>
               <li>
-                <a href={SITE.getYourGuideTourUrl} target="_blank" rel="noopener noreferrer">
-                  Verified on GetYourGuide
+                <a href={`mailto:${SITE.email}`}>{SITE.email}</a>
+              </li>
+              <li>
+                <a href={SITE.getYourGuideSupplierUrl} target="_blank" rel="noopener noreferrer">
+                  All Tours on GetYourGuide
+                </a>
+              </li>
+              <li>
+                <a href={SITE.googleReviewUrl} target="_blank" rel="noopener noreferrer">
+                  Leave a Google Review ↗
                 </a>
               </li>
             </ul>

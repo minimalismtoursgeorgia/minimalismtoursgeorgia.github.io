@@ -1068,6 +1068,36 @@ dialog.lightbox-dialog img {
   text-decoration: underline;
 }
 
+.footer-socials {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin-top: 1.15rem;
+}
+
+.footer-social-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.25rem;
+  padding: 0.35rem 0.72rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  background-color: rgba(255, 255, 255, 0.06);
+  color: rgba(246, 249, 247, 0.92);
+  font-size: 0.82rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background-color 160ms ease, border-color 160ms ease, color 160ms ease;
+}
+
+.footer-social-link:hover,
+.footer-social-link:focus-visible {
+  background-color: rgba(244, 182, 159, 0.14);
+  border-color: #f4b69f;
+  color: #f4b69f;
+  text-decoration: none;
+}
+
 .footer-bottom {
   margin-top: 2.5rem;
   padding-top: 1.5rem;
