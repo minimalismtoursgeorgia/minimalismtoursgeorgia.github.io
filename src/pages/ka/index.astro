@@ -1,7 +1,6 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import HeroShowcase, { type FeaturedTourSlide } from '../../components/HeroShowcase.astro';
-import BatumiNewsTeaser from '../../components/BatumiNewsTeaser.astro';
 import { SITE, PICKUP_POINTS } from '../../data/site';
 import { KA_CONTENT } from '../../data/i18n-ka';
 import { withBase, absoluteUrl } from '../../lib/urls';
@@ -15,12 +14,12 @@ const breadcrumbJsonLd = {
 
 const kaFeaturedTours: FeaturedTourSlide[] = [
   {
-    titleLines: ['მტირალას ტბა', 'და ჩანჩქერი'],
-    location: 'მტირალა, საქართველო',
+    titleLines: ['მტირალა 9 კმ', 'ჩანჩქერის ბილიკი'],
+    location: 'მტირალას პარკი',
     badgeText: 'UNESCO',
     image: withBase('/images/mtirala-waterfall-hiker.webp'),
-    imageAlt: 'მოლაშქრე მტირალას ეროვნული პარკის ჩანჩქერთან კოლხურ ტყეში',
-    href: withBase('/tours/mtirala-lake-waterfall-hike/'),
+    imageAlt: 'მოლაშქრე ჩანჩქერთან მტირალას ეროვნული პარკის 9 კმ ტყის ბილიკზე',
+    href: withBase('/tours/?region=mtirala'),
   },
   {
     titleLines: ['მტირალა 2 დღე', 'თავშესაფარში'],
@@ -106,8 +105,6 @@ const kaFeaturedTours: FeaturedTourSlide[] = [
       </div>
     </div>
   </section>
-
-  <BatumiNewsTeaser lang="ka" />
 
   <section class="section section-surface">
     <div class="container">
