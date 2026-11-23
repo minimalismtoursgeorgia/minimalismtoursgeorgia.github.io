@@ -41,13 +41,21 @@ export const SITE = {
   baseCity: 'Batumi',
   baseRegion: 'Adjara',
   country: 'Georgia',
-  phoneDisplay: '+995 557 204 307',
-  phoneRaw: '+995557204307',
-  whatsappNumber: '995557204307',
-  whatsappUrl: 'https://wa.me/995557204307',
+  phoneDisplay: '+995 592 04 30 80',
+  phoneRaw: '+995592043080',
+  whatsappNumber: '995592043080',
+  whatsappUrl: 'https://wa.me/995592043080',
   email: 'beqa.gelashvili.2@gmail.com',
+  streetAddress: 'Selim Khimshiashvili St',
+  postalCode: '6010',
+  officeAddressDisplay: 'Selim Khimshiashvili St, Batumi 6010, Georgia',
+  officeHoursDisplay: 'Open 24 hours · Monday–Sunday',
+  googleBusinessUrl:
+    'https://www.google.com/maps/search/?api=1&query=Minimalism+Tours+Georgia+Batumi',
   youtubeUrl: 'https://www.youtube.com/@MinimalismToursGeorgia',
   getYourGuideTourUrl: 'https://www.getyourguide.com/-t1525407/',
+  viatorUrl:
+    'https://www.viator.com/tours/Batumi/Snowshoes-Hiking-Ajara-Mountain-Guides/d24045-446870P1',
   /**
    * Optional free form backend (e.g. Formspree or Web3Forms endpoint).
    * Leave empty to route direct inquiries seamlessly through WhatsApp, Email, and instant clipboard quote copy.

@@ -60,10 +60,13 @@ const defaultOrgSchema = {
   },
   address: {
     '@type': 'PostalAddress',
+    streetAddress: SITE.streetAddress,
+    postalCode: SITE.postalCode,
     addressLocality: SITE.baseCity,
     addressRegion: SITE.baseRegion,
     addressCountry: 'GE',
   },
+  openingHours: 'Mo-Su 00:00-23:59',
   geo: {
     '@type': 'GeoCoordinates',
     latitude: SITE.coordinates.lat,
@@ -74,7 +77,7 @@ const defaultOrgSchema = {
     { '@type': 'City', name: 'Batumi' },
     { '@type': 'Country', name: 'Georgia' },
   ],
-  sameAs: [SITE.youtubeUrl, SITE.getYourGuideTourUrl],
+  sameAs: [SITE.youtubeUrl, SITE.getYourGuideTourUrl, SITE.viatorUrl],
   priceRange: '€€',
 };
 

@@ -15,7 +15,7 @@ const breadcrumbJsonLd = {
 
 <BaseLayout
   title={`Contact & Custom Tour Request | ${SITE.brandName}`}
-  description="Message guide Beka Gelashvili directly via WhatsApp, phone, or email to book Batumi day hikes, private Adjara trips, or summer Mount Kazbek expeditions."
+  description="Contact Minimalism Tours Georgia via WhatsApp, phone, or email to book Batumi day hikes, private Adjara trips, B2B group tours, or summer Mount Kazbek expeditions."
   canonicalPath="/contact/"
   jsonLd={[breadcrumbJsonLd]}
 >
@@ -29,7 +29,7 @@ const breadcrumbJsonLd = {
       <span class="eyebrow">Zero Booking Fees · Direct Local Reply</span>
       <h1>Plan Your Tour or Ask a Question</h1>
       <p style="max-width: 46rem; font-size: 1.05rem;">
-        Send your preferred dates, group size, and Batumi pickup stop directly to {SITE.founderName} — or message straight on WhatsApp for same-day trail conditions.
+        Send your preferred dates, group size, and Batumi pickup stop directly to our reservations desk — or message straight on WhatsApp for same-day trail conditions.
       </p>
     </div>
   </section>
@@ -177,17 +177,28 @@ const breadcrumbJsonLd = {
       <aside class="contact-side">
         <div class="side-panel">
           <span class="eyebrow">Direct Channels</span>
-          <h2>Talk Directly with Beka</h2>
+          <h2>Contact Minimalism Tours Georgia</h2>
           <ul class="direct-list">
             <li>
               <strong>WhatsApp &amp; Phone</strong>
               <a href={SITE.whatsappUrl} target="_blank" rel="noopener noreferrer">
                 {SITE.phoneDisplay} (Fastest Reply)
               </a>
+              <a href={`tel:${SITE.phoneRaw}`}>Call {SITE.phoneDisplay}</a>
             </li>
             <li>
               <strong>Email</strong>
               <a href={`mailto:${SITE.email}`}>{SITE.email}</a>
+            </li>
+            <li>
+              <strong>Office Address</strong>
+              <a href={SITE.googleBusinessUrl} target="_blank" rel="noopener noreferrer">
+                {SITE.officeAddressDisplay} ↗
+              </a>
+            </li>
+            <li>
+              <strong>Hours</strong>
+              <span>{SITE.officeHoursDisplay}</span>
             </li>
             <li>
               <strong>YouTube Trail Previews</strong>
@@ -199,6 +210,12 @@ const breadcrumbJsonLd = {
               <strong>GetYourGuide Live Product</strong>
               <a href={SITE.getYourGuideTourUrl} target="_blank" rel="noopener noreferrer">
                 Mtirala Lake &amp; Waterfall Hike ↗
+              </a>
+            </li>
+            <li>
+              <strong>Viator</strong>
+              <a href={SITE.viatorUrl} target="_blank" rel="noopener noreferrer">
+                Ajara &amp; Batumi Guided Tours ↗
               </a>
             </li>
           </ul>

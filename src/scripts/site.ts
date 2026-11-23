@@ -309,14 +309,14 @@ function initQuickInquiryModal() {
     e.preventDefault();
     if (!form.reportValidity()) return;
     const msg = buildMessage();
-    const waUrl = `https://wa.me/995557204307?text=${encodeURIComponent(msg)}`;
+    const waUrl = `https://wa.me/995592043080?text=${encodeURIComponent(msg)}`;
     window.open(waUrl, '_blank', 'noopener,noreferrer');
   });
 
   const syncLinks = () => {
     const msg = buildMessage();
     if (waAnchor) {
-      waAnchor.href = `https://wa.me/995557204307?text=${encodeURIComponent(msg)}`;
+      waAnchor.href = `https://wa.me/995592043080?text=${encodeURIComponent(msg)}`;
     }
     if (emailAnchor) {
       emailAnchor.href = `mailto:beqa.gelashvili.2@gmail.com?subject=${encodeURIComponent(
