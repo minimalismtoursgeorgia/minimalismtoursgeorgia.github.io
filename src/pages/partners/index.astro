@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import ReviewsSection from '../../components/ReviewsSection.astro';
 import {
   SITE,
   B2B_PARTNER_TYPES,
@@ -7,6 +8,7 @@ import {
   VEHICLES,
   CERTIFICATIONS,
 } from '../../data/site';
+import { getPartnerProofReviews } from '../../data/reviews';
 import { withBase, absoluteUrl } from '../../lib/urls';
 
 const breadcrumbJsonLd = {
@@ -137,6 +139,18 @@ const breadcrumbJsonLd = {
       </div>
     </div>
   </section>
+
+  <!-- Proven B2B & Safety Track Record -->
+  <ReviewsSection
+    sectionId="partner-proof"
+    reviews={getPartnerProofReviews()}
+    variant="band"
+    surface="subtle"
+    eyebrow="Proven B2B & Safety Track Record"
+    heading="Partner Feedback & Weather-Safety Handling"
+    intro="Real feedback from an international tour operator and guests whose departures were cancelled honestly for mountain safety."
+    showPlatformBar={false}
+  />
 
   <!-- Request B2B Tariff / Partner Brief -->
   <section id="b2b-inquiry" class="section">

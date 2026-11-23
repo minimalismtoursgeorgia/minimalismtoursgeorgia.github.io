@@ -21,6 +21,7 @@ interface Props {
 const { tour } = Astro.props;
 const relatedTours = TOURS.filter((t) => t.slug !== tour.slug).slice(0, 3);
 const tourReviews = getReviewsByTourSlug(tour.slug);
+const hasSafetyCancellationReview = tourReviews.some((r) => r.category === 'safety-cancellation');
 
 const tourJsonLd = {
   '@type': 'TouristTrip',
@@ -224,6 +225,12 @@ const faqJsonLd = tour.faqs.length
           <div class="info-callout">
             <h3>Active Weather &amp; Rain Plan</h3>
             <p>{tour.weatherPlan}</p>
+            <p style="margin-bottom: 0; font-size: 0.9rem;">
+              <strong>Safety-first track record:</strong> When severe storms make trails unsafe, we cancel honestly and arrange full refunds —{' '}
+              <a href={hasSafetyCancellationReview ? '#tour-reviews' : withBase('/#reviews')}>
+                {hasSafetyCancellationReview ? 'read verified guest feedback below →' : 'see verified weather-cancellation reviews →'}
+              </a>
+            </p>
           </div>
           <div class="info-callout">
             <h3>What to Bring</h3>
@@ -257,10 +264,11 @@ const faqJsonLd = tour.faqs.length
         {
           tourReviews.length > 0 && (
             <ReviewsSection
+              sectionId="tour-reviews"
               reviews={tourReviews}
               variant="inline"
               heading="Verified Guest Reviews"
-              intro="Real feedback from travelers who experienced this route."
+              intro="Real feedback from travelers who experienced this route or our weather-safety refund handling."
               showTourLink={false}
             />
           )

@@ -1,11 +1,14 @@
 ---
 import { SITE } from '../data/site';
-import { type GuestReview } from '../data/reviews';
+import { type GuestReview, type ReviewCategory } from '../data/reviews';
 import { withBase } from '../lib/urls';
 
 export interface Props {
   reviews: GuestReview[];
   variant?: 'band' | 'inline';
+  sectionId?: string;
+  enableFilters?: boolean;
+  surface?: 'subtle' | 'white';
   eyebrow?: string;
   heading?: string;
   intro?: string;
@@ -16,18 +19,56 @@ export interface Props {
 const {
   reviews,
   variant = 'band',
+  sectionId,
+  enableFilters = false,
+  surface = 'subtle',
   eyebrow = 'Verified Traveler Feedback',
   heading = 'What Guests Say About Our Tours',
   intro = 'Real words from travelers who explored Batumi and Adjara with our guiding team.',
   showTourLink = true,
   showPlatformBar = true,
 } = Astro.props;
+
+const resolvedId = sectionId ?? (variant === 'band' ? 'reviews' : undefined);
+const sectionClass =
+  variant === 'band'
+    ? surface === 'white'
+      ? 'section section-surface reviews-section-root'
+      : 'section reviews-band reviews-section-root'
+    : 'detail-block reviews-inline reviews-section-root';
+
+const CATEGORY_META: Record<
+  ReviewCategory,
+  { badgeClass: string; badgeText: (platform: GuestReview['platform']) => string; filterLabel: string }
+> = {
+  tour: {
+    badgeClass: 'badge badge-forest',
+    badgeText: (platform) => `Verified ${platform} Review`,
+    filterLabel: 'Completed Tours',
+  },
+  'safety-cancellation': {
+    badgeClass: 'badge badge-sea',
+    badgeText: (platform) => `Safety-First Cancellation · ${platform}`,
+    filterLabel: 'Weather Safety & Refunds',
+  },
+  b2b: {
+    badgeClass: 'badge badge-coral',
+    badgeText: (platform) => `B2B Partner · ${platform}`,
+    filterLabel: 'B2B Partners',
+  },
+};
+
+const filterOptions = [
+  { id: 'all', label: 'All Feedback', count: reviews.length },
+  ...(['tour', 'safety-cancellation', 'b2b'] as ReviewCategory[]).map((cat) => ({
+    id: cat,
+    label: CATEGORY_META[cat].filterLabel,
+    count: reviews.filter((r) => r.category === cat).length,
+  })),
+].filter((opt) => opt.count > 0);
 ---
 
-<section
-  id={variant === 'band' ? 'reviews' : undefined}
-  class={variant === 'band' ? 'section reviews-band' : 'detail-block reviews-inline'}
->
+<section id={resolvedId} class={sectionClass}>
   <div class={variant === 'band' ? 'container' : undefined}>
     {
       variant === 'band' ? (
@@ -46,45 +87,89 @@ const {
       )
     }
 
+    {
+      enableFilters && filterOptions.length > 2 && (
+        <div class="review-filter-bar">
+          <div class="review-filters" role="group" aria-label="Filter reviews by category">
+            {filterOptions.map((opt, idx) => (
+              <button
+                type="button"
+                class={`review-filter-btn ${idx === 0 ? 'active' : ''}`}
+                data-review-filter={opt.id}
+                aria-pressed={idx === 0 ? 'true' : 'false'}
+              >
+                {opt.label} ({opt.count})
+              </button>
+            ))}
+          </div>
+          <p class="visually-hidden" aria-live="polite" data-filter-status />
+        </div>
+      )
+    }
+
     <ul class="reviews-grid" role="list">
       {
-        reviews.map((review) => (
-          <li>
-            <article class="review-card reveal-on-scroll">
-              <header class="review-head">
-                <div class="review-badge-row">
-                  <svg
-                    class="review-quote-mark"
-                    width="22"
-                    height="22"
-                    viewBox="0 0 24 24"
-                    fill="currentColor"
-                    aria-hidden="true"
-                  >
-                    <path d="M9.983 3v7.391c0 5.704-3.731 9.57-8.983 10.609l-.995-2.151c2.432-.917 3.995-3.638 3.995-5.849h-4v-10h9.983zm14.017 0v7.391c0 5.704-3.748 9.571-9 10.609l-.996-2.151c2.433-.917 3.996-3.638 3.996-5.849h-3.983v-10h9.983z" />
-                  </svg>
-                  <span class="badge badge-forest">Verified {review.platform} Review</span>
-                </div>
-                <h3>{review.title}</h3>
-              </header>
+        reviews.map((review) => {
+          const meta = CATEGORY_META[review.category];
+          return (
+            <li data-review-category={review.category}>
+              <article class="review-card reveal-on-scroll" data-category={review.category}>
+                <header class="review-head">
+                  <div class="review-badge-row">
+                    <div class="review-badge-left">
+                      <svg
+                        class="review-quote-mark"
+                        width="20"
+                        height="20"
+                        viewBox="0 0 24 24"
+                        fill="currentColor"
+                        aria-hidden="true"
+                      >
+                        <path d="M9.983 3v7.391c0 5.704-3.731 9.57-8.983 10.609l-.995-2.151c2.432-.917 3.995-3.638 3.995-5.849h-4v-10h9.983zm14.017 0v7.391c0 5.704-3.748 9.571-9 10.609l-.996-2.151c2.433-.917 3.996-3.638 3.996-5.849h-3.983v-10h9.983z" />
+                      </svg>
+                      <span class={meta.badgeClass}>{meta.badgeText(review.platform)}</span>
+                    </div>
+                    {review.country && review.countryFlag && (
+                      <span class="country-pill">
+                        <span aria-hidden="true">{review.countryFlag}</span> {review.country}
+                      </span>
+                    )}
+                  </div>
+                  <h3>{review.title}</h3>
+                  {review.contextNote && <p class="review-context">{review.contextNote}</p>}
+                </header>
 
-              <blockquote class="review-quote">
-                <p>“{review.quote}”</p>
-              </blockquote>
+                <blockquote class="review-quote">
+                  <p>“{review.quote}”</p>
+                  {review.originalQuote && (
+                    <p class="review-original" lang={review.originalLang}>
+                      Original: “{review.originalQuote}”
+                    </p>
+                  )}
+                </blockquote>
 
-              <footer class="review-foot">
-                <span class="review-meta">
-                  {review.authorLabel} · <time datetime={review.datePublished}>{review.dateLabel}</time>
-                </span>
-                {showTourLink && review.tourSlug && review.tourTitle && (
-                  <a class="review-tour-link" href={withBase(`/tours/${review.tourSlug}/`)}>
-                    {review.tourTitle} →
-                  </a>
-                )}
-              </footer>
-            </article>
-          </li>
-        ))
+                <footer class="review-foot">
+                  <span class="review-meta">
+                    {review.authorLabel}
+                    {review.country && review.countryFlag && (
+                      <>
+                        {' · '}
+                        <span aria-hidden="true">{review.countryFlag}</span> {review.country}
+                      </>
+                    )}
+                    {' · '}
+                    <time datetime={review.datePublished}>{review.dateLabel}</time>
+                  </span>
+                  {showTourLink && review.tourSlug && review.tourTitle && (
+                    <a class="review-tour-link" href={withBase(`/tours/${review.tourSlug}/`)}>
+                      {review.tourTitle} →
+                    </a>
+                  )}
+                </footer>
+              </article>
+            </li>
+          );
+        })
       }
     </ul>
 
@@ -124,6 +209,39 @@ const {
   </div>
 </section>
 
+<script>
+  document.querySelectorAll<HTMLElement>('.reviews-section-root').forEach((root) => {
+    const buttons = root.querySelectorAll<HTMLButtonElement>('[data-review-filter]');
+    const items = root.querySelectorAll<HTMLLIElement>('li[data-review-category]');
+    const statusEl = root.querySelector<HTMLElement>('[data-filter-status]');
+
+    if (!buttons.length || !items.length) return;
+
+    buttons.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const selected = btn.dataset.reviewFilter || 'all';
+        let visibleCount = 0;
+
+        buttons.forEach((other) => {
+          const isMatch = other === btn;
+          other.classList.toggle('active', isMatch);
+          other.setAttribute('aria-pressed', String(isMatch));
+        });
+
+        items.forEach((li) => {
+          const match = selected === 'all' || li.dataset.reviewCategory === selected;
+          li.hidden = !match;
+          if (match) visibleCount += 1;
+        });
+
+        if (statusEl) {
+          statusEl.textContent = `Showing ${visibleCount} ${visibleCount === 1 ? 'review' : 'reviews'}.`;
+        }
+      });
+    });
+  });
+</script>
+
 <style>
   .reviews-band {
     background-color: var(--bg-subtle);
@@ -143,6 +261,42 @@ const {
     margin-bottom: 0;
   }
 
+  .review-filter-bar {
+    margin-bottom: 1.5rem;
+  }
+
+  .review-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.55rem;
+  }
+
+  .review-filter-btn {
+    min-height: 2.45rem;
+    padding: 0.45rem 1rem;
+    border-radius: var(--radius-pill);
+    border: 1.5px solid var(--border-strong);
+    background-color: var(--bg-surface);
+    color: var(--ink-700);
+    font-family: var(--font-sans);
+    font-size: 0.86rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background-color 0.16s ease, color 0.16s ease, border-color 0.16s ease;
+  }
+
+  .review-filter-btn:hover {
+    border-color: var(--forest-800);
+    background-color: var(--forest-100);
+    color: var(--forest-900);
+  }
+
+  .review-filter-btn.active {
+    background-color: var(--forest-800);
+    border-color: var(--forest-800);
+    color: #ffffff;
+  }
+
   .reviews-grid {
     list-style: none;
     margin: 0;
@@ -154,6 +308,10 @@ const {
 
   .reviews-grid > li {
     display: flex;
+  }
+
+  .reviews-grid > li[hidden] {
+    display: none !important;
   }
 
   .review-card {
@@ -168,6 +326,14 @@ const {
     grid-template-rows: auto 1fr auto;
     gap: 1rem;
     transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  }
+
+  .review-card[data-category='safety-cancellation'] {
+    border-top: 3px solid var(--sea-600);
+  }
+
+  .review-card[data-category='b2b'] {
+    border-top: 3px solid var(--coral-500);
   }
 
   @supports (grid-template-rows: subgrid) {
@@ -197,7 +363,8 @@ const {
 
   .review-head {
     display: grid;
-    gap: 0.75rem;
+    gap: 0.65rem;
+    align-content: start;
   }
 
   .review-badge-row {
@@ -205,7 +372,14 @@ const {
     flex-wrap: wrap;
     align-items: center;
     justify-content: space-between;
-    gap: 0.65rem;
+    gap: 0.5rem 0.75rem;
+  }
+
+  .review-badge-left {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
   }
 
   .review-quote-mark {
@@ -214,21 +388,61 @@ const {
     flex-shrink: 0;
   }
 
+  .country-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.22rem 0.65rem;
+    border-radius: var(--radius-pill);
+    background-color: var(--bg-subtle);
+    border: 1px solid var(--border-subtle);
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--ink-700);
+    white-space: nowrap;
+  }
+
   .review-head h3 {
     margin: 0;
-    font-size: 1.25rem;
+    font-size: 1.22rem;
     color: var(--ink-900);
+  }
+
+  .review-context {
+    margin: 0;
+    font-size: 0.85rem;
+    line-height: 1.5;
+    color: var(--ink-600);
+    background-color: var(--bg-page);
+    border-inline-start: 3px solid var(--sea-600);
+    padding: 0.45rem 0.75rem;
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  }
+
+  .review-card[data-category='b2b'] .review-context {
+    border-inline-start-color: var(--coral-500);
   }
 
   .review-quote {
     margin: 0;
+    display: grid;
+    gap: 0.65rem;
+    align-content: start;
   }
 
   .review-quote p {
     margin: 0;
     color: var(--ink-700);
     font-size: 0.96rem;
-    line-height: 1.7;
+    line-height: 1.68;
+  }
+
+  .review-original {
+    font-size: 0.86rem !important;
+    font-style: italic;
+    color: var(--ink-600) !important;
+    padding-top: 0.55rem;
+    border-top: 1px dashed var(--border-subtle);
   }
 
   .review-foot {
