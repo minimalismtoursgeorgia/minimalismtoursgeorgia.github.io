@@ -71,6 +71,10 @@ export const SITE = {
     'https://www.google.com/maps/search/?api=1&query=Minimalism+Tours+Georgia+Batumi',
   googleReviewUrl: 'https://g.page/r/CVoYIo0JHrCdEBI/review',
   trustpilotUrl: 'https://www.trustpilot.com/review/minimalismtoursgeorgia.github.io',
+  tripadvisorUrl:
+    'https://www.tripadvisor.com/Attraction_Review-g297576-d26844789-Reviews-Minimalism_Tours_Georgia-Batumi_Adjara_Region.html',
+  tripadvisorReviewUrl:
+    'https://www.tripadvisor.com/AttractionProductReview-g297576-d27942060-From_Batumi_UNESCO_Mtirala_National_Park_Lake_Waterfall_Hike-Batumi_Adjara_Region.html#REVIEWS',
   youtubeUrl: 'https://www.youtube.com/@MinimalismToursGeorgia',
   getYourGuideSupplierUrl: 'https://www.getyourguide.com/minimalism-tours-georgia-s433573/',
   getYourGuideTourUrl: 'https://www.getyourguide.com/-t1525407/',

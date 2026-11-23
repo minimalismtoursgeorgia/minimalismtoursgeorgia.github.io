@@ -127,7 +127,20 @@ const filterOptions = [
                       >
                         <path d="M9.983 3v7.391c0 5.704-3.731 9.57-8.983 10.609l-.995-2.151c2.432-.917 3.995-3.638 3.995-5.849h-4v-10h9.983zm14.017 0v7.391c0 5.704-3.748 9.571-9 10.609l-.996-2.151c2.433-.917 3.996-3.638 3.996-5.849h-3.983v-10h9.983z" />
                       </svg>
-                      <span class={meta.badgeClass}>{meta.badgeText(review.platform)}</span>
+                      <span class={meta.badgeClass}>
+                        {review.sourceUrl ? (
+                          <a
+                            class="badge-link"
+                            href={review.sourceUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            {meta.badgeText(review.platform)} ↗
+                          </a>
+                        ) : (
+                          meta.badgeText(review.platform)
+                        )}
+                      </span>
                     </div>
                     {review.country && review.countryFlag && (
                       <span class="country-pill">
@@ -185,6 +198,14 @@ const filterOptions = [
               rel="noopener noreferrer"
             >
               Google Reviews ↗
+            </a>
+            <a
+              class="btn btn-outline btn-sm"
+              href={SITE.tripadvisorReviewUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Tripadvisor Reviews ↗
             </a>
             <a
               class="btn btn-outline btn-sm"
@@ -386,6 +407,18 @@ const filterOptions = [
     color: var(--coral-600);
     opacity: 0.85;
     flex-shrink: 0;
+  }
+
+  .badge-link {
+    display: inline-flex;
+    align-items: center;
+    min-height: 24px;
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .badge-link:hover {
+    text-decoration: underline;
   }
 
   .country-pill {

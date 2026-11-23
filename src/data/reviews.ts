@@ -10,6 +10,7 @@ export interface GuestReview {
   contextNote?: string;
   authorLabel: string;
   platform: 'Tripadvisor' | 'Google' | 'GetYourGuide' | 'Trustpilot' | 'Viator' | 'WhatsApp';
+  sourceUrl?: string;
   dateLabel: string;
   datePublished: string;
   country?: string;
@@ -27,6 +28,8 @@ export const GUEST_REVIEWS: GuestReview[] = [
       'We had a wonderful experience exploring the beautiful waterfalls near Batumi, and a big part of it was thanks to our excellent guide! He was friendly, knowledgeable, professional and always happy to share interesting information about the area. He made the whole trip enjoyable, comfortable and memorable. Highly recommended to anyone visiting Batumi. Thank you for such a fantastic experience!',
     authorLabel: 'Tripadvisor Reviewer',
     platform: 'Tripadvisor',
+    sourceUrl:
+      'https://www.tripadvisor.com/AttractionProductReview-g297576-d27942060-From_Batumi_UNESCO_Mtirala_National_Park_Lake_Waterfall_Hike-Batumi_Adjara_Region.html#REVIEWS',
     dateLabel: 'Nov 2026',
     datePublished: '2026-11',
     tourSlug: 'mtirala-lake-waterfall-hike',
@@ -60,6 +63,8 @@ export const GUEST_REVIEWS: GuestReview[] = [
       'We had super amazing time with our guide! There are no word that will explain the high care, kindness and proffesional person we gift with, with time for personal care, full info and safe',
     authorLabel: 'Tripadvisor Reviewer',
     platform: 'Tripadvisor',
+    sourceUrl:
+      'https://www.tripadvisor.com/AttractionProductReview-g297576-d27942060-From_Batumi_UNESCO_Mtirala_National_Park_Lake_Waterfall_Hike-Batumi_Adjara_Region.html#REVIEWS',
     dateLabel: 'Jul 2024',
     datePublished: '2024-07',
     tourSlug: 'mtirala-lake-waterfall-hike',

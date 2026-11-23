@@ -419,6 +419,19 @@ const faqJsonLd = tour.faqs.length
               )
             }
 
+            {
+              tour.tripadvisorUrl && (
+                <a
+                  class="btn btn-outline"
+                  href={tour.tripadvisorUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Read Reviews on Tripadvisor ↗
+                </a>
+              )
+            }
+
             <a
               id="sb-tg-book"
               class="btn btn-outline"

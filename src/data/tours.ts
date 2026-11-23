@@ -38,6 +38,7 @@ export interface Tour {
   pricingTiers: PricingTier[];
   gygTourId?: string;
   gygUrl?: string;
+  tripadvisorUrl?: string;
   heroImage: string;
   heroAlt: string;
   gallery: { src: string; alt: string }[];
@@ -80,6 +81,8 @@ export const TOURS: Tour[] = [
     ],
     gygTourId: '1525407',
     gygUrl: 'https://www.getyourguide.com/-t1525407/',
+    tripadvisorUrl:
+      'https://www.tripadvisor.com/AttractionProductReview-g297576-d27942060-From_Batumi_UNESCO_Mtirala_National_Park_Lake_Waterfall_Hike-Batumi_Adjara_Region.html#REVIEWS',
     heroImage: '/images/mtirala-hero.webp',
     heroAlt: 'Wooden footbridge crossing a clear mountain stream inside luminous green Mtirala National Park rainforest in Georgia',
     gallery: [
