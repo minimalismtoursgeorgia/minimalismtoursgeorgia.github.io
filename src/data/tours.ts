@@ -117,9 +117,10 @@ export const TOURS: Tour[] = [
     minAge: 'Ages 6+',
     startingPriceEur: 38,
     pricingTiers: [
-      { minPax: 1, maxPax: 1, label: '1 person (Private)', adultEur: 78, childEur: 59 },
-      { minPax: 2, maxPax: 2, label: '2 people', adultEur: 39, childEur: 29 },
-      { minPax: 3, maxPax: 4, label: '3–4 people', adultEur: 39, childEur: 29 },
+      { minPax: 1, maxPax: 1, label: '1 person (Private)', adultEur: 95, childEur: 71 },
+      { minPax: 2, maxPax: 2, label: '2 people', adultEur: 48, childEur: 36 },
+      { minPax: 3, maxPax: 3, label: '3 people', adultEur: 48, childEur: 36 },
+      { minPax: 4, maxPax: 4, label: '4 people', adultEur: 42, childEur: 32 },
       { minPax: 5, maxPax: 16, label: '5–16 people', adultEur: 38, childEur: 29 },
     ],
     gygTourId: '1525407',
