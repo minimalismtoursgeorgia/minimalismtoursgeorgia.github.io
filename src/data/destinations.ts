@@ -75,7 +75,7 @@ export const DESTINATIONS: Destination[] = [
       'Tucked along Georgia’s southwestern ridge, Machakhela combines quiet forest trails, cascading gorge waterfalls, centuries-old gunmaking and agricultural heritage, and warm village hospitality.',
     highlights: [
       'Archangel & gorge forest hiking trails',
-      'Waterfalls and medieval Queen Tamar arched bridge',
+      'Mirveti Waterfall and medieval Queen Tamar arched bridge',
       'Authentic Adjarian rural heritage away from crowded coaches',
     ],
     mapCoords: { x: 18, y: 83 },

@@ -504,10 +504,10 @@ export const TOURS: Tour[] = [
       },
     ],
     summary:
-      'Leave crowded bus stops behind for a genuine hiking day in Machakhela National Park. Walk the forested Archangel ridge trail, cross medieval stone-arched bridges over rushing mountain rivers, spot hidden waterfalls, and hear the borderland crafts and history of the Machakhela gorge.',
+      'Leave crowded bus stops behind for a genuine hiking day in Machakhela National Park. Walk the forested Archangel ridge trail, visit the mossy Mirveti Waterfall and medieval Queen Tamar stone-arched bridge over rushing mountain rivers, and hear the borderland crafts and history of the Machakhela gorge.',
     highlights: [
       'Real guided forest trekking (Archangel / gorge trails) rather than hurried coach stops',
-      'Medieval Queen Tamar stone-arch bridge & gorge waterfall views',
+      'Mirveti Waterfall in mossy Colchic boxwood forest & medieval Queen Tamar stone-arch bridge',
       'Insights into traditional Machakhela craftsmanship and borderland history',
       'UNESCO heritage & Red Cross First Aid certified hiking leader',
     ],
@@ -524,8 +524,8 @@ export const TOURS: Tour[] = [
       },
       {
         timeOrDuration: '4:00 – 5:05',
-        title: 'Stone Bridge, Waterfall & Craft Heritage',
-        detail: 'Pause at a historic arched bridge and cascading waterfall before visiting valley craft heritage.',
+        title: 'Mirveti Waterfall, Queen Tamar Stone Bridge & Craft Heritage',
+        detail: 'Walk the mossy boxwood path to Mirveti Waterfall and the medieval Queen Tamar arched stone bridge, then explore traditional Machakhela valley craft heritage.',
       },
       {
         timeOrDuration: '5:05 – 6:00',
@@ -536,14 +536,14 @@ export const TOURS: Tour[] = [
     included: [
       'Certified trekking & First Aid guide',
       'Round-trip AC transport from Batumi with Wi-Fi',
-      'Guided park trail walk & bridge/waterfall stops',
+      'Guided park trail walk, Mirveti Waterfall & medieval stone bridge stops',
     ],
     excluded: [
       'Meals/wine tasting (optional local family lunch stop can be arranged on request)',
       'Personal snacks & water',
     ],
     weatherPlan:
-      'Lower gorge waterfall bridges and sheltered forest trails stay accessible in passing showers; steep sections are adapted when slick.',
+      'Lower gorge Mirveti Waterfall path, stone bridges, and sheltered forest trails stay accessible in passing showers; steep sections are adapted when slick.',
     packingList: [
       'Sturdy hiking or trail shoes',
       'Breathable layers + light rain jacket',
@@ -557,11 +557,12 @@ export const TOURS: Tour[] = [
       },
     ],
     seoDescription:
-      'Guided hiking tour in Machakhela National Park from Batumi. Real forest trails, stone bridges, waterfalls, and local history with certified local guides from Minimalism Tours Georgia.',
+      'Guided hiking tour in Machakhela National Park & Mirveti Waterfall from Batumi. Real forest trails, Queen Tamar stone bridge, waterfalls, and local history with certified local guides from Minimalism Tours Georgia.',
     keywords: [
       'Machakhela National Park hiking tour',
       'Batumi Machakhela guided hike',
       'Adjara waterfalls and bridges tour',
+      'Mirveti Waterfall tour from Batumi',
     ],
   },
   {
