@@ -247,9 +247,14 @@ export const TOURS: Tour[] = [
           'Yes — reach out directly via WhatsApp for same-morning availability on Shared or Private departures before heading out.',
       },
       {
-        question: 'Can I pay with a bank card, or is cash easier? Where is the best exchange rate?',
+        question: 'Can I pay with a bank card, or is cash easier?',
         answer:
-          'Bank cards are accepted in Batumi and at many restaurants, but it is much easier to carry cash (GEL) in the mountains, villages, and for optional on-site activities (zipline, ATV ride, honey, propolis, or lunch). Local guide tip: for the best cash exchange rates in Batumi, look for Rico Credit exchange offices.',
+          'Bank cards are accepted in Batumi and at many restaurants, but it is much easier to carry cash (GEL) in the mountains, villages, and for optional on-site activities (zipline 80 GEL, ATV ride 150 GEL, honey 50 GEL, propolis 40 GEL, or lunch with your guide).',
+      },
+      {
+        question: 'Where can I find the best cash exchange rates in Batumi?',
+        answer:
+          'Local guide tip: for the best cash exchange rates in Batumi, look for Rico Credit exchange offices.',
       },
     ],
     seoDescription:

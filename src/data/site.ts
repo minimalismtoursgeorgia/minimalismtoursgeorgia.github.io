@@ -316,9 +316,14 @@ export const GENERAL_FAQS = [
       'Choose your group size and date in any tour’s calculator and click Book via WhatsApp or Telegram directly — or book on GetYourGuide. No middleman booking fees apply on direct reservations.',
   },
   {
-    question: 'Can I pay with a bank card, or is cash easier? Where can I find the best cash rates?',
+    question: 'Can I pay with a bank card, or is cash easier?',
     answer:
-      'Bank cards work in Batumi and at many restaurants, but it is much easier to have cash (GEL) in the mountains, villages, and for optional extras on site (zipline 80 GEL, ATV 150 GEL, honey 50 GEL, propolis 40 GEL, or lunch arranged with your guide). Local guide tip: for the best cash exchange rates, look for Rico Credit exchange offices.',
+      'Bank cards work in Batumi and at many restaurants, but it is much easier to have cash (GEL) in the mountains, villages, and for optional extras on site (zipline 80 GEL, ATV 150 GEL, honey 50 GEL, propolis 40 GEL, or lunch arranged with your guide).',
+  },
+  {
+    question: 'Where can I find the best cash exchange rates in Batumi?',
+    answer:
+      'Local guide tip: for the best cash exchange rates in Batumi, look for Rico Credit exchange offices.',
   },
 ];
 

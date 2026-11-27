@@ -152,9 +152,14 @@ export const PL_GENERAL_FAQS = [
       'Wybierz liczbę osób i datę w kalkulatorze dowolnej wycieczki i kliknij Rezerwuj bezpośrednio przez WhatsApp lub Telegram — albo zarezerwuj na GetYourGuide. Przy rezerwacji bezpośredniej nie pobieramy żadnych opłat pośredników.',
   },
   {
-    question: 'Czy można płacić kartą bankową, czy lepiej mieć gotówkę? Gdzie najlepiej wymienić walutę?',
+    question: 'Czy można płacić kartą bankową, czy lepiej mieć gotówkę?',
     answer:
-      'Karty płatnicze są akceptowane w Batumi i wielu restauracjach, ale w górach, wioskach oraz przy opcjonalnych atrakcjach na miejscu (tyrolka 80 GEL, quad ATV 150 GEL, miód 50 GEL, propolis 40 GEL lub obiad ustalany z przewodnikiem) znacznie wygodniej jest mieć gotówkę (GEL). Wskazówka lokalnych przewodników: najlepsze kursy wymiany gotówki znajdziesz w kantorach Rico Credit.',
+      'Karty płatnicze są akceptowane w Batumi i wielu restauracjach, ale w górach, wioskach oraz przy opcjonalnych atrakcjach na miejscu (tyrolka 80 GEL, quad ATV 150 GEL, miód 50 GEL, propolis 40 GEL lub obiad ustalany z przewodnikiem) znacznie wygodniej jest mieć gotówkę (GEL).',
+  },
+  {
+    question: 'Gdzie w Batumi znaleźć najlepsze kursy wymiany gotówki?',
+    answer:
+      'Wskazówka lokalnego przewodnika: najlepsze kursy wymiany gotówki w Batumi znajdziesz w kantorach Rico Credit.',
   },
 ];
 
@@ -541,9 +546,14 @@ const PL_TOURS_MAP: Record<string, TourOverride> = {
           'Latem (czerwiec–wrzesień) woda w jeziorze górskim i przy wodospadzie jest orzeźwiająco chłodna i krystalicznie czysta — chętni mogą zażyć kąpieli.',
       },
       {
-        question: 'Czy można płacić kartą bankową, czy lepiej mieć gotówkę? Gdzie wymienić walutę?',
+        question: 'Czy można płacić kartą bankową, czy lepiej mieć gotówkę?',
         answer:
-          'W Batumi i wielu restauracjach zapłacisz kartą, ale w górach, wioskach i za opcjonalne atrakcje na miejscu (tyrolka 80 GEL, quad ATV 150 GEL, miód 50 GEL, propolis 40 GEL, obiad z przewodnikiem) znacznie łatwiej płacić gotówką (GEL). Wskazówka lokalnych przewodników: najlepsze kursy wymiany gotówki oferują kantory Rico Credit.',
+          'W Batumi i wielu restauracjach zapłacisz kartą, ale w górach, wioskach i za opcjonalne atrakcje na miejscu (tyrolka 80 GEL, quad ATV 150 GEL, miód 50 GEL, propolis 40 GEL, obiad z przewodnikiem) znacznie łatwiej płacić gotówką (GEL).',
+      },
+      {
+        question: 'Gdzie w Batumi znaleźć najlepsze kursy wymiany gotówki?',
+        answer:
+          'Wskazówka lokalnego przewodnika: najlepsze kursy wymiany gotówki w Batumi znajdziesz w kantorach Rico Credit.',
       },
     ],
     seoDescription:
