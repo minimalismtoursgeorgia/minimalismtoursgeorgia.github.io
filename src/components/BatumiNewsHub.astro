@@ -12,6 +12,12 @@ import {
   type BatumiNewsCategory,
   type BatumiNewsStatus,
 } from '../data/batumi-news';
+import {
+  PL_BATUMI_CALENDAR,
+  PL_BATUMI_FACTS,
+  PL_BATUMI_FAQS,
+  PL_BATUMI_NEWS_ITEMS,
+} from '../data/batumi-news-pl';
 import { withBase } from '../lib/urls';
 import { localizePath, type Lang } from '../lib/i18n';
 
@@ -222,6 +228,27 @@ const ticketingPlatforms = isKa
         url: 'https://mta.ski',
       },
     ]
+  : isPl
+  ? [
+      {
+        name: 'TKT.ge i Biletebi.ge',
+        role: 'Koncerty, STAR Circus, Teatr i imprezy sylwestrowe',
+        detail: 'Główne oficjalne kasy biletowe online w Gruzji: Teatr Dramatyczny w Batumi, Centrum Muzyczne, STAR Circus Georgia, Teatro i stand-up.',
+        url: 'https://tkt.ge',
+      },
+      {
+        name: 'GoBatumi.com',
+        role: 'Oficjalny portal Departamentu Turystyki Adżarii',
+        detail: 'Oficjalne komunikaty miejskie dotyczące świąt Batumoba, Letniego Festiwalu, Gandagany i wydarzeń folklorystycznych.',
+        url: 'https://gobatumi.com',
+      },
+      {
+        name: 'MTA.ski',
+        role: 'Aktualny status wyciągów i tras w Goderdzi',
+        detail: 'Codzienne informacje o pracy gondoli i wyciągów, pokrywie śnieżnej oraz karnetach narciarskich na sezon 2026–2027.',
+        url: 'https://mta.ski',
+      },
+    ]
   : [
       {
         name: 'TKT.ge & Biletebi.ge',
@@ -242,6 +269,67 @@ const ticketingPlatforms = isKa
         url: 'https://mta.ski',
       },
     ];
+
+const factsList = isPl
+  ? BATUMI_ESSENTIAL_FACTS.map((f) => {
+      const ov = PL_BATUMI_FACTS[f.id];
+      return ov
+        ? {
+            ...f,
+            kicker: { ...f.kicker, pl: ov.kicker },
+            headline: { ...f.headline, pl: ov.headline },
+            detail: { ...f.detail, pl: ov.detail },
+          }
+        : f;
+    })
+  : BATUMI_ESSENTIAL_FACTS;
+
+const newsList = isPl
+  ? BATUMI_NEWS_ITEMS.map((item) => {
+      const ov = PL_BATUMI_NEWS_ITEMS[item.slug];
+      return ov
+        ? {
+            ...item,
+            dateRange: { ...item.dateRange, pl: ov.dateRange },
+            title: { ...item.title, pl: ov.title },
+            summary: { ...item.summary, pl: ov.summary },
+            keyDetails: { ...item.keyDetails, pl: ov.keyDetails },
+            venue: { ...item.venue, pl: ov.venue },
+            admission: { ...item.admission, pl: ov.admission },
+            localTip: { ...item.localTip, pl: ov.localTip },
+            whatsappTopic: { ...item.whatsappTopic, pl: ov.whatsappTopic },
+            imageAlt: item.imageAlt && ov.imageAlt ? { ...item.imageAlt, pl: ov.imageAlt } : item.imageAlt,
+          }
+        : item;
+    })
+  : BATUMI_NEWS_ITEMS;
+
+const calendarList = isPl
+  ? BATUMI_ANNUAL_CALENDAR.map((block) => {
+      const ov = PL_BATUMI_CALENDAR[block.id];
+      return ov
+        ? {
+            ...block,
+            months: { ...block.months, pl: ov.months },
+            title: { ...block.title, pl: ov.title },
+            highlights: { ...block.highlights, pl: ov.highlights },
+            pairWithTourLabel: { ...block.pairWithTourLabel, pl: ov.pairWithTourLabel },
+          }
+        : block;
+    })
+  : BATUMI_ANNUAL_CALENDAR;
+
+const faqList = isPl
+  ? BATUMI_NEWS_FAQS.map((faq, idx) => {
+      const ov = PL_BATUMI_FAQS[idx];
+      return ov
+        ? {
+            question: { ...faq.question, pl: ov.question },
+            answer: { ...faq.answer, pl: ov.answer },
+          }
+        : faq;
+    })
+  : BATUMI_NEWS_FAQS;
 ---
 
 <section class="page-banner">
@@ -276,7 +364,7 @@ const ticketingPlatforms = isKa
   <div class="container">
     <div class="facts-snapshot-grid">
       {
-        BATUMI_ESSENTIAL_FACTS.map((fact) => (
+        factsList.map((fact) => (
           <a href={`#${fact.targetSlug}`} class="fact-tile">
             <article class={`fact-tile-inner fact-tone-${fact.tone}`}>
               <span class="fact-kicker">{l(fact.kicker)}</span>
@@ -340,7 +428,7 @@ const ticketingPlatforms = isKa
 
     <ul id="news-list" class="news-grid" role="list">
       {
-        BATUMI_NEWS_ITEMS.map((item) => {
+        newsList.map((item) => {
           const catMeta = BATUMI_CATEGORY_LABELS[item.category];
           const statusText = l(BATUMI_STATUS_LABELS[item.status]);
           const relatedTour = item.relatedTourSlug
@@ -495,7 +583,7 @@ const ticketingPlatforms = isKa
 
     <div class="calendar-grid">
       {
-        BATUMI_ANNUAL_CALENDAR.map((block) => (
+        calendarList.map((block) => (
           <article class="calendar-card reveal-on-scroll">
             <span class="badge badge-sea">{l(block.months)}</span>
             <h3>{l(block.title)}</h3>
@@ -599,7 +687,7 @@ const ticketingPlatforms = isKa
       </div>
 
       {
-        BATUMI_NEWS_FAQS.map((faq) => (
+        faqList.map((faq) => (
           <details>
             <summary>{l(faq.question)}</summary>
             <div class="accordion-panel">

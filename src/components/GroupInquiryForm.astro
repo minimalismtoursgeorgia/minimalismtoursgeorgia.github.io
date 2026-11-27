@@ -1,20 +1,29 @@
 ---
 import { SITE } from '../data/site';
 import { TOURS } from '../data/tours';
+import { getToursForLang } from '../data/i18n-pl';
+import type { Lang } from '../lib/i18n';
 
 export interface Props {
   selectedSlug?: string;
   heading?: string;
   intro?: string;
+  lang?: Lang;
 }
 
 const {
   selectedSlug = '',
-  heading = 'Custom Group Trip Inquiry & Planning Form',
-  intro = 'Configure your group trip details below. On submit, you’ll see a complete summary with one-click WhatsApp and Email sending — zero backend wait.',
+  lang = 'en',
+  heading = lang === 'pl'
+    ? 'Formularz zapytania i planowania wyjazdu grupowego'
+    : 'Custom Group Trip Inquiry & Planning Form',
+  intro = lang === 'pl'
+    ? 'Skonfiguruj szczegóły wyjazdu grupowego poniżej. Po zatwierdzeniu zobaczysz pełne podsumowanie z wysyłką jednym kliknięciem na WhatsApp lub e-mail.'
+    : 'Configure your group trip details below. On submit, you’ll see a complete summary with one-click WhatsApp and Email sending — zero backend wait.',
 } = Astro.props;
 
-const groupTours = TOURS.filter((t) => t.isGroupProgram);
+const isPl = lang === 'pl';
+const groupTours = (isPl ? getToursForLang('pl') : TOURS).filter((t) => t.isGroupProgram);
 const currentTour = groupTours.find((t) => t.slug === selectedSlug);
 const defaultGroupSizeValue = currentTour?.defaultGroupSize || '';
 const showRouteInitially = selectedSlug === 'jorunners-mountain-lodge-program';
@@ -23,7 +32,9 @@ const showRouteInitially = selectedSlug === 'jorunners-mountain-lodge-program';
 <section id="group-inquiry" class="group-inquiry-section" aria-labelledby="group-inquiry-heading">
   <div class="group-inquiry-card">
     <div class="group-inquiry-head">
-      <span class="badge badge-forest">8 Days / 7 Nights · Full Board (3 Meals/Day)</span>
+      <span class="badge badge-forest">
+        {isPl ? '8 Dni / 7 Nocy · Pełne wyżywienie (3 posiłki/dzień)' : '8 Days / 7 Nights · Full Board (3 Meals/Day)'}
+      </span>
       <h2 id="group-inquiry-heading">{heading}</h2>
       <p>{intro}</p>
     </div>
@@ -31,8 +42,10 @@ const showRouteInitially = selectedSlug === 'jorunners-mountain-lodge-program';
     <form id="group-inquiry-form" class="form-grid" data-enhanced-validation novalidate>
       <div class="form-grid form-grid-2">
         <div class="field">
-          <label for="gi-trip">Trip Selection <span aria-hidden="true">*</span></label>
-          <span id="gi-trip-hint" class="field-hint">Pre-selected to the current trip, or switch to another group program</span>
+          <label for="gi-trip">{isPl ? 'Wybór programu' : 'Trip Selection'} <span aria-hidden="true">*</span></label>
+          <span id="gi-trip-hint" class="field-hint">
+            {isPl ? 'Wstępnie wybrany bieżący program lub przełącz na inny wyjazd grupowy' : 'Pre-selected to the current trip, or switch to another group program'}
+          </span>
           <select
             id="gi-trip"
             name="trip"
@@ -40,7 +53,7 @@ const showRouteInitially = selectedSlug === 'jorunners-mountain-lodge-program';
             aria-describedby="gi-trip-hint"
             data-error="gi-trip-error"
           >
-            <option value="">Choose a group trip...</option>
+            <option value="">{isPl ? 'Wybierz wyjazd grupowy...' : 'Choose a group trip...'}</option>
             {
               groupTours.map((t) => (
                 <option
@@ -53,18 +66,21 @@ const showRouteInitially = selectedSlug === 'jorunners-mountain-lodge-program';
                 </option>
               ))
             }
-            <option value="Custom Multi-Day Group Program in Georgia" data-slug="custom">
-              Custom Multi-Day Group Program in Georgia
+            <option value={isPl ? 'Indywidualny program grupowy w Gruzji' : 'Custom Multi-Day Group Program in Georgia'} data-slug="custom">
+              {isPl ? 'Indywidualny program grupowy w Gruzji' : 'Custom Multi-Day Group Program in Georgia'}
             </option>
           </select>
           <div id="gi-trip-error" class="error-msg">
-            <span role="img" aria-label="Error">⚠</span> Please select a group trip.
+            <span role="img" aria-label={isPl ? 'Błąd' : 'Error'}>⚠</span>{' '}
+            {isPl ? 'Wybierz program grupowy.' : 'Please select a group trip.'}
           </div>
         </div>
 
         <div class="field">
-          <label for="gi-dates">Preferred Month / Dates <span aria-hidden="true">*</span></label>
-          <span id="gi-dates-hint" class="field-hint">e.g., January 2027, February 10–17, or July 2027</span>
+          <label for="gi-dates">{isPl ? 'Preferowany miesiąc / daty' : 'Preferred Month / Dates'} <span aria-hidden="true">*</span></label>
+          <span id="gi-dates-hint" class="field-hint">
+            {isPl ? 'np. styczeń 2027, 10–17 lutego lub lipiec 2027' : 'e.g., January 2027, February 10–17, or July 2027'}
+          </span>
           <input
             id="gi-dates"
             name="dates"
@@ -73,44 +89,55 @@ const showRouteInitially = selectedSlug === 'jorunners-mountain-lodge-program';
             minlength="3"
             aria-describedby="gi-dates-hint"
             data-error="gi-dates-error"
-            placeholder="e.g., January or February"
+            placeholder={isPl ? 'np. styczeń lub luty' : 'e.g., January or February'}
           />
           <div id="gi-dates-error" class="error-msg">
-            <span role="img" aria-label="Error">⚠</span> Please enter your preferred month or travel dates.
+            <span role="img" aria-label={isPl ? 'Błąd' : 'Error'}>⚠</span>{' '}
+            {isPl ? 'Podaj preferowany miesiąc lub daty wyjazdu.' : 'Please enter your preferred month or travel dates.'}
           </div>
         </div>
       </div>
 
       <!-- Trip 2 Route Option Selector (shown for Jorunners) -->
       <fieldset id="gi-route-fieldset" class="gi-route-fieldset" hidden={!showRouteInitially}>
-        <legend>Jorunners Route Option</legend>
+        <legend>{isPl ? 'Opcja trasy Jorunners' : 'Jorunners Route Option'}</legend>
         <p class="field-hint" style="margin-bottom: 0.65rem;">
-          Choose between our recommended Stepantsminda valley basecamp or the summer Mestia–Ushguli lodge trek.
+          {isPl
+            ? 'Wybierz między rekomendowaną bazą w dolinie Stepancmindy a letnim trekkingiem Mestia–Uszguli.'
+            : 'Choose between our recommended Stepantsminda valley basecamp or the summer Mestia–Ushguli lodge trek.'}
         </p>
         <div class="gi-route-options">
           <label class="gi-radio-card">
             <input
               type="radio"
               name="routeOption"
-              value="Option A (Recommended): Kazbegi / Stepantsminda Valley Basecamp"
+              value={isPl ? 'Opcja A (Rekomendowana): Baza w Kazbegi / Stepancminda' : 'Option A (Recommended): Kazbegi / Stepantsminda Valley Basecamp'}
               checked
               disabled={!showRouteInitially}
             />
             <span>
-              <strong>Option A (Recommended): Kazbegi / Stepantsminda</strong>
-              <small>6 nights mountain lodges + 1 night Tbilisi · Truso &amp; Juta day trails · ~3h transfer</small>
+              <strong>{isPl ? 'Opcja A (Rekomendowana): Kazbegi / Stepancminda' : 'Option A (Recommended): Kazbegi / Stepantsminda'}</strong>
+              <small>
+                {isPl
+                  ? '6 nocy w górskich pensjonatach + 1 noc w Tbilisi · Szlaki Truso i Juta · ~3 godz. transferu'
+                  : '6 nights mountain lodges + 1 night Tbilisi · Truso & Juta day trails · ~3h transfer'}
+              </small>
             </span>
           </label>
           <label class="gi-radio-card">
             <input
               type="radio"
               name="routeOption"
-              value="Option B: Svaneti (Mestia to Ushguli) Point-to-Point Lodges"
+              value={isPl ? 'Opcja B: Swanetia (Mestia do Uszguli) od schroniska do schroniska' : 'Option B: Svaneti (Mestia to Ushguli) Point-to-Point Lodges'}
               disabled={!showRouteInitially}
             />
             <span>
-              <strong>Option B: Svaneti (Mestia to Ushguli)</strong>
-              <small>June–September only · Family-run lodges · 4x4 luggage support &amp; vehicle skips</small>
+              <strong>{isPl ? 'Opcja B: Swanetia (Mestia – Uszguli)' : 'Option B: Svaneti (Mestia to Ushguli)'}</strong>
+              <small>
+                {isPl
+                  ? 'Tylko czerwiec–wrzesień · Rodzinne pensjonaty · Transport bagażu 4x4 i wsparcie na podjazdach'
+                  : 'June–September only · Family-run lodges · 4x4 luggage support & vehicle skips'}
+              </small>
             </span>
           </label>
         </div>
@@ -118,8 +145,10 @@ const showRouteInitially = selectedSlug === 'jorunners-mountain-lodge-program';
 
       <div class="form-grid form-grid-2">
         <div class="field">
-          <label for="gi-group-size">Group Size <span aria-hidden="true">*</span></label>
-          <span id="gi-group-size-hint" class="field-hint">Approximate number of participants (e.g., 20–25 students)</span>
+          <label for="gi-group-size">{isPl ? 'Wielkość grupy' : 'Group Size'} <span aria-hidden="true">*</span></label>
+          <span id="gi-group-size-hint" class="field-hint">
+            {isPl ? 'Przybliżona liczba uczestników (np. 20–25 studentów)' : 'Approximate number of participants (e.g., 20–25 students)'}
+          </span>
           <input
             id="gi-group-size"
             name="groupSize"
@@ -128,32 +157,35 @@ const showRouteInitially = selectedSlug === 'jorunners-mountain-lodge-program';
             value={defaultGroupSizeValue}
             aria-describedby="gi-group-size-hint"
             data-error="gi-group-size-error"
-            placeholder="e.g., 20–25 students"
+            placeholder={isPl ? 'np. 20–25 osób' : 'e.g., 20–25 students'}
           />
           <div id="gi-group-size-error" class="error-msg">
-            <span role="img" aria-label="Error">⚠</span> Please enter your estimated group size.
+            <span role="img" aria-label={isPl ? 'Błąd' : 'Error'}>⚠</span>{' '}
+            {isPl ? 'Podaj szacowaną wielkość grupy.' : 'Please enter your estimated group size.'}
           </div>
         </div>
 
         <div class="field">
-          <label for="gi-meals">Meal / Dietary Requirements</label>
+          <label for="gi-meals">{isPl ? 'Wymagania żywieniowe / diety' : 'Meal / Dietary Requirements'}</label>
           <span id="gi-meals-hint" class="field-hint">
-            3 meals/day Full Board is included — note vegetarian, vegan, halal, gluten-free, or allergies
+            {isPl
+              ? 'Pełne wyżywienie (3 posiłki/dzień) jest w cenie — podaj diety wegetariańskie, wegańskie, bezglutenowe lub alergie'
+              : '3 meals/day Full Board is included — note vegetarian, vegan, halal, gluten-free, or allergies'}
           </span>
           <input
             id="gi-meals"
             name="meals"
             type="text"
             aria-describedby="gi-meals-hint"
-            placeholder="Full Board (3 meals/day) — e.g., 2 vegetarian, no nuts"
+            placeholder={isPl ? 'Pełne wyżywienie (3 posiłki/dzień) — np. 2 wegetariańskie' : 'Full Board (3 meals/day) — e.g., 2 vegetarian, no nuts'}
           />
         </div>
       </div>
 
       <div class="form-grid form-grid-3">
         <div class="field">
-          <label for="gi-name">Contact Name <span aria-hidden="true">*</span></label>
-          <span id="gi-name-hint" class="field-hint">Group leader or coordinator</span>
+          <label for="gi-name">{isPl ? 'Osoba kontaktowa' : 'Contact Name'} <span aria-hidden="true">*</span></label>
+          <span id="gi-name-hint" class="field-hint">{isPl ? 'Lider grupy lub koordynator' : 'Group leader or coordinator'}</span>
           <input
             id="gi-name"
             name="contactName"
@@ -163,16 +195,17 @@ const showRouteInitially = selectedSlug === 'jorunners-mountain-lodge-program';
             autocomplete="name"
             aria-describedby="gi-name-hint"
             data-error="gi-name-error"
-            placeholder="Your full name"
+            placeholder={isPl ? 'Twoje imię i nazwisko' : 'Your full name'}
           />
           <div id="gi-name-error" class="error-msg">
-            <span role="img" aria-label="Error">⚠</span> Please enter at least 2 characters.
+            <span role="img" aria-label={isPl ? 'Błąd' : 'Error'}>⚠</span>{' '}
+            {isPl ? 'Wpisz co najmniej 2 znaki.' : 'Please enter at least 2 characters.'}
           </div>
         </div>
 
         <div class="field">
-          <label for="gi-email">Email Address <span aria-hidden="true">*</span></label>
-          <span id="gi-email-hint" class="field-hint">Format: you@example.com</span>
+          <label for="gi-email">{isPl ? 'Adres e-mail' : 'Email Address'} <span aria-hidden="true">*</span></label>
+          <span id="gi-email-hint" class="field-hint">{isPl ? 'Format: imie@example.com' : 'Format: you@example.com'}</span>
           <input
             id="gi-email"
             name="email"
@@ -184,16 +217,17 @@ const showRouteInitially = selectedSlug === 'jorunners-mountain-lodge-program';
             spellcheck="false"
             aria-describedby="gi-email-hint"
             data-error="gi-email-error"
-            placeholder="you@example.com"
+            placeholder={isPl ? 'imie@example.com' : 'you@example.com'}
           />
           <div id="gi-email-error" class="error-msg">
-            <span role="img" aria-label="Error">⚠</span> Enter an email address in the format you@example.com.
+            <span role="img" aria-label={isPl ? 'Błąd' : 'Error'}>⚠</span>{' '}
+            {isPl ? 'Podaj poprawny adres e-mail.' : 'Enter an email address in the format you@example.com.'}
           </div>
         </div>
 
         <div class="field">
-          <label for="gi-phone">WhatsApp / Phone Number <span aria-hidden="true">*</span></label>
-          <span id="gi-phone-hint" class="field-hint">Include country code (e.g., +995...)</span>
+          <label for="gi-phone">{isPl ? 'Numer WhatsApp / Telefon' : 'WhatsApp / Phone Number'} <span aria-hidden="true">*</span></label>
+          <span id="gi-phone-hint" class="field-hint">{isPl ? 'Z kodem kraju (np. +48...)' : 'Include country code (e.g., +995...)'}</span>
           <input
             id="gi-phone"
             name="phone"
@@ -203,31 +237,36 @@ const showRouteInitially = selectedSlug === 'jorunners-mountain-lodge-program';
             autocomplete="tel"
             aria-describedby="gi-phone-hint"
             data-error="gi-phone-error"
-            placeholder="+995 592 00 00 00"
+            placeholder="+48 600 000 000"
           />
           <div id="gi-phone-error" class="error-msg">
-            <span role="img" aria-label="Error">⚠</span> Please enter a valid WhatsApp or phone number.
+            <span role="img" aria-label={isPl ? 'Błąd' : 'Error'}>⚠</span>{' '}
+            {isPl ? 'Podaj poprawny numer telefonu lub WhatsApp.' : 'Please enter a valid WhatsApp or phone number.'}
           </div>
         </div>
       </div>
 
       <div class="field">
-        <label for="gi-notes">Additional Notes</label>
+        <label for="gi-notes">{isPl ? 'Dodatkowe uwagi' : 'Additional Notes'}</label>
         <span id="gi-notes-hint" class="field-hint">
-          Optional: flight arrival times, ski rental sizes, pacing preferences, or special requests
+          {isPl
+            ? 'Opcjonalnie: godziny przylotów, rozmiary sprzętu narciarskiego, preferowane tempo lub prośby specjalne'
+            : 'Optional: flight arrival times, ski rental sizes, pacing preferences, or special requests'}
         </span>
         <textarea
           id="gi-notes"
           name="notes"
           rows="3"
           aria-describedby="gi-notes-hint"
-          placeholder="Tell us about your group's goals, experience level, or schedule..."
+          placeholder={isPl
+            ? 'Opowiedz o celach grupy, poziomie zaawansowania lub harmonogramie...'
+            : "Tell us about your group's goals, experience level, or schedule..."}
         ></textarea>
       </div>
 
       <div class="gi-submit-row">
         <button type="submit" class="btn btn-coral">
-          Review &amp; Prepare Inquiry →
+          {isPl ? 'Sprawdź i przygotuj zapytanie →' : 'Review & Prepare Inquiry →'}
         </button>
       </div>
     </form>
@@ -241,10 +280,13 @@ const showRouteInitially = selectedSlug === 'jorunners-mountain-lodge-program';
       hidden
     >
       <div class="gi-confirmation-head">
-        <span class="badge badge-forest">✓ Inquiry Ready to Send</span>
-        <h3>Your Group Trip Summary</h3>
+        <span class="badge badge-forest">{isPl ? '✓ Zapytanie gotowe do wysyłki' : '✓ Inquiry Ready to Send'}</span>
+        <h3>{isPl ? 'Podsumowanie wyjazdu grupowego' : 'Your Group Trip Summary'}</h3>
         <p>
-          Review your details below and click <strong>Send via WhatsApp</strong> or <strong>Send via Email</strong> to deliver your inquiry directly to {SITE.brandName}.
+          {isPl
+            ? 'Sprawdź dane poniżej i kliknij Wyślij przez WhatsApp lub Wyślij przez E-mail, aby przesłać zapytanie bezpośrednio do '
+            : 'Review your details below and click Send via WhatsApp or Send via Email to deliver your inquiry directly to '}
+          {SITE.brandName}.
         </p>
       </div>
 
@@ -258,20 +300,20 @@ const showRouteInitially = selectedSlug === 'jorunners-mountain-lodge-program';
           target="_blank"
           rel="noopener noreferrer"
         >
-          Send via WhatsApp →
+          {isPl ? 'Wyślij przez WhatsApp →' : 'Send via WhatsApp →'}
         </a>
         <a
           id="gi-email-link"
           class="btn btn-forest"
           href={`mailto:${SITE.email}`}
         >
-          Send via Email →
+          {isPl ? 'Wyślij przez E-mail →' : 'Send via Email →'}
         </a>
         <button id="gi-copy-btn" type="button" class="btn btn-outline">
-          Copy Summary
+          {isPl ? 'Kopiuj podsumowanie' : 'Copy Summary'}
         </button>
         <button id="gi-edit-btn" type="button" class="btn btn-outline">
-          Edit Details
+          {isPl ? 'Edytuj dane' : 'Edit Details'}
         </button>
       </div>
       <p id="gi-copy-feedback" class="gi-copy-feedback" aria-live="polite"></p>

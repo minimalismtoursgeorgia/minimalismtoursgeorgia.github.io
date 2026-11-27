@@ -911,7 +911,7 @@ const PL_TOURS_MAP: Record<string, TourOverride> = {
     ],
     seoDescription:
       '5-dniowa wyprawa z przewodnikiem na Górę Kazbek (5 054 m) w Gruzji. Bezpieczna aklimatyzacja, lodowiec Gergeti i certyfikowani przewodnicy GMGA.',
-    keywords: ['Kazbek wyprawa z przewodnikiem', 'weście na Kazbek 5054'],
+    keywords: ['Kazbek wyprawa z przewodnikiem', 'wejście na Kazbek 5054'],
   },
   'student-beginner-ski-bakuriani': {
     title: 'Program dla grup studenckich i początkujących: Narty w Bakuriani i Kultura Batumi (8 Dni / 7 Nocy)',

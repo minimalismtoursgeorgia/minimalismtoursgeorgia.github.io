@@ -217,7 +217,7 @@ const videoJsonLd = (tour.videos || []).map((v) => ({
           }
         </dl>
 
-        {tour.hasRouteOptions && <JorunnersRouteTabs />}
+        {tour.hasRouteOptions && <JorunnersRouteTabs lang="pl" />}
 
         {
           tour.videos && tour.videos.length > 0 && (
@@ -415,7 +415,7 @@ const videoJsonLd = (tour.videos || []).map((v) => ({
         }
 
         {
-          tour.isGroupProgram && <GroupInquiryForm selectedSlug={tour.slug} />
+          tour.isGroupProgram && <GroupInquiryForm selectedSlug={tour.slug} lang="pl" />
         }
 
         <!-- Verified Tour Reviews -->
