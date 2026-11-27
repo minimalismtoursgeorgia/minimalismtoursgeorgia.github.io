@@ -33,27 +33,33 @@ export const PL_DIFFICULTY_LABELS: Record<Tour['difficulty'], string> = {
 export const PL_MTIRALA_OPTIONAL_EXTRAS: Record<OptionalExtra['id'], OptionalExtra> = {
   zipline: {
     id: 'zipline',
-    label: 'Tyrolka (Zipline)',
-    shortLabel: 'Tyrolka',
-    detail: 'Opcjonalny zjazd tyrolką nad kanionem w Mtirali (sezonowo, płatne na miejscu tylko na życzenie).',
+    label: 'Tyrolka / Zipline (80 GEL)',
+    shortLabel: 'Tyrolka · 80 GEL',
+    detail: 'Opcjonalny zjazd tyrolką nad kanionem w Mtirali — 80 GEL (sezonowo, płatne na miejscu tylko na życzenie).',
   },
   atv: {
     id: 'atv',
-    label: 'Jazda quadem ATV',
-    shortLabel: 'Quad ATV',
-    detail: 'Opcjonalna przejażdżka górskim quadem ATV po wyznaczonych trasach w dolinie na życzenie gości.',
+    label: 'Jazda quadem ATV (300 GEL)',
+    shortLabel: 'Quad ATV · 300 GEL',
+    detail: 'Opcjonalna przejażdżka górskim quadem ATV po wyznaczonych trasach w dolinie — 300 GEL, na życzenie gości.',
   },
   honey: {
     id: 'honey',
-    label: 'Lokalny miód górski',
-    shortLabel: 'Miód górski',
-    detail: 'Opcjonalny przystanek na degustację i zakup autentycznego kasztanowego miodu z Adżarii od lokalnych pszczelarzy.',
+    label: 'Lokalny miód górski — z plastrem lub płynny (50 GEL)',
+    shortLabel: 'Miód · 50 GEL',
+    detail: 'Opcjonalny autentyczny miód górski z Adżarii: z plastrem miodu lub odwirowany (ფიჭიანი / უფიჭო) — 50 GEL.',
+  },
+  propolis: {
+    id: 'propolis',
+    label: 'Propolis / დინდგელი (40 GEL)',
+    shortLabel: 'Propolis · 40 GEL',
+    detail: 'Opcjonalny naturalny propolis pszczeli (დინდგელი) od lokalnych pszczelarzy z Adżarii — 40 GEL.',
   },
   lunch: {
     id: 'lunch',
-    label: 'Gruziński obiad',
-    shortLabel: 'Obiad',
-    detail: 'Opcjonalny domowy obiad adżarski w wiosce lub w nadrzecznej restauracji dopasowany do grupy.',
+    label: 'Gruziński obiad (150 GEL)',
+    shortLabel: 'Obiad · 150 GEL',
+    detail: 'Opcjonalny domowy obiad adżarski w wiosce lub w nadrzecznej restauracji — 150 GEL.',
   },
 };
 
@@ -509,7 +515,7 @@ const PL_TOURS_MAP: Record<string, TourOverride> = {
       'Opcjonalne atrakcje (tyrolka, quad ATV, degustacja miodu, obiad — tylko na życzenie)',
       'Wydatki osobiste i napiwki',
     ],
-    optionalExtraIds: ['zipline', 'atv', 'honey', 'lunch'],
+    optionalExtraIds: ['zipline', 'atv', 'honey', 'propolis', 'lunch'],
     weatherPlan:
       'Mtirala jest lasem deszczowym — lekkie opady tworzą niepowtarzalną mglistą atmosferę. Zapewniamy trasy pod gęstą koroną drzew i suchy transport w pobliżu; przy silnych burzach szlak przekładamy lub zwracamy 100% wpłaty.',
     packingList: [
@@ -586,7 +592,7 @@ const PL_TOURS_MAP: Record<string, TourOverride> = {
       'Meleks elektryczny wewnątrz Ogrodu Botanicznego (opcjonalnie na miejscu)',
       'Obiad i opcjonalne atrakcje w Mtirali (tyrolka, ATV, miód)',
     ],
-    optionalExtraIds: ['zipline', 'atv', 'honey', 'lunch'],
+    optionalExtraIds: ['zipline', 'atv', 'honey', 'propolis', 'lunch'],
     weatherPlan:
       'Oba miejsca znajdują się blisko siebie i oferują naturalne osłony. Przy większym deszczu skracamy pętlę w górach na rzecz osłoniętych alejek Ogrodu Botanicznego.',
     packingList: [
@@ -656,7 +662,7 @@ const PL_TOURS_MAP: Record<string, TourOverride> = {
       'Opcjonalne atrakcje dodatkowe (tyrolka, quad ATV)',
       'Wydatki osobiste',
     ],
-    optionalExtraIds: ['zipline', 'atv', 'honey'],
+    optionalExtraIds: ['zipline', 'atv', 'honey', 'propolis'],
     weatherPlan:
       'Obiad odbywa się pod zadaszoną, przytulną werandą lub w domu gospodarzy — nawet deszczowy dzień w górach kończy się przy ciepłym stole.',
     packingList: [

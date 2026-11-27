@@ -27,7 +27,7 @@ export interface TourVideo {
 }
 
 export interface OptionalExtra {
-  id: 'zipline' | 'atv' | 'honey' | 'lunch';
+  id: 'zipline' | 'atv' | 'honey' | 'propolis' | 'lunch';
   label: string;
   shortLabel: string;
   detail: string;
@@ -81,27 +81,33 @@ export interface Tour {
 const MTIRALA_OPTIONAL_EXTRAS: Record<OptionalExtra['id'], OptionalExtra> = {
   zipline: {
     id: 'zipline',
-    label: 'Zipline',
-    shortLabel: 'Zipline',
-    detail: 'Optional rainforest zipline across the Mtirala canyon (seasonal, paid on site only if desired).',
+    label: 'Zipline (80 GEL)',
+    shortLabel: 'Zipline · 80 GEL',
+    detail: 'Optional rainforest zipline across the Mtirala canyon — 80 GEL (seasonal, paid on site only if desired).',
   },
   atv: {
     id: 'atv',
-    label: 'ATV Quad Ride',
-    shortLabel: 'ATV Ride',
-    detail: 'Optional ATV mountain ride along designated valley tracks arranged on guest request.',
+    label: 'ATV Quad Ride (300 GEL)',
+    shortLabel: 'ATV Ride · 300 GEL',
+    detail: 'Optional ATV mountain ride along designated valley tracks — 300 GEL, arranged on guest request.',
   },
   honey: {
     id: 'honey',
-    label: 'Local Mountain Honey',
-    shortLabel: 'Local Honey',
-    detail: 'Optional stop to taste and purchase authentic Adjarian chestnut and mountain honey from local beekeepers.',
+    label: 'Local Mountain Honey — Comb or Strained (50 GEL)',
+    shortLabel: 'Honey · 50 GEL',
+    detail: 'Optional authentic Adjarian mountain honey, available with honeycomb or strained (ფიჭიანი / უფიჭო) — 50 GEL.',
+  },
+  propolis: {
+    id: 'propolis',
+    label: 'Propolis / დინდგელი (40 GEL)',
+    shortLabel: 'Propolis · 40 GEL',
+    detail: 'Optional natural mountain bee propolis (დინდგელი) from local Adjarian beekeepers — 40 GEL.',
   },
   lunch: {
     id: 'lunch',
-    label: 'Georgian Lunch',
-    shortLabel: 'Lunch',
-    detail: 'Optional homemade Adjarian village lunch or riverside café stop tailored to your group’s preferences.',
+    label: 'Georgian Lunch (150 GEL)',
+    shortLabel: 'Lunch · 150 GEL',
+    detail: 'Optional homemade Adjarian village lunch or riverside café spread tailored to your group — 150 GEL.',
   },
 };
 
@@ -218,6 +224,7 @@ export const TOURS: Tour[] = [
       MTIRALA_OPTIONAL_EXTRAS.zipline,
       MTIRALA_OPTIONAL_EXTRAS.atv,
       MTIRALA_OPTIONAL_EXTRAS.honey,
+      MTIRALA_OPTIONAL_EXTRAS.propolis,
       MTIRALA_OPTIONAL_EXTRAS.lunch,
     ],
     weatherPlan:
@@ -340,6 +347,7 @@ export const TOURS: Tour[] = [
       MTIRALA_OPTIONAL_EXTRAS.zipline,
       MTIRALA_OPTIONAL_EXTRAS.atv,
       MTIRALA_OPTIONAL_EXTRAS.honey,
+      MTIRALA_OPTIONAL_EXTRAS.propolis,
       MTIRALA_OPTIONAL_EXTRAS.lunch,
     ],
     weatherPlan:
@@ -451,6 +459,7 @@ export const TOURS: Tour[] = [
       MTIRALA_OPTIONAL_EXTRAS.zipline,
       MTIRALA_OPTIONAL_EXTRAS.atv,
       MTIRALA_OPTIONAL_EXTRAS.honey,
+      MTIRALA_OPTIONAL_EXTRAS.propolis,
     ],
     weatherPlan:
       'Covered wooden veranda dining ensures the homemade culinary stop runs smoothly in all weather conditions.',
@@ -729,6 +738,7 @@ export const TOURS: Tour[] = [
       MTIRALA_OPTIONAL_EXTRAS.zipline,
       MTIRALA_OPTIONAL_EXTRAS.atv,
       MTIRALA_OPTIONAL_EXTRAS.honey,
+      MTIRALA_OPTIONAL_EXTRAS.propolis,
       MTIRALA_OPTIONAL_EXTRAS.lunch,
     ],
     weatherPlan:
