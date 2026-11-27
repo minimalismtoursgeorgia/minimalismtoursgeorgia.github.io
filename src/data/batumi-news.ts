@@ -7,6 +7,7 @@ export interface LocalizedText {
   ka: string;
   pl?: string;
   uk?: string;
+  he?: string;
 }
 
 export interface BatumiNewsItem {
@@ -24,6 +25,7 @@ export interface BatumiNewsItem {
     ka: string[];
     pl?: string[];
     uk?: string[];
+    he?: string[];
   };
   venue: LocalizedText;
   mapsUrl?: string;
@@ -53,6 +55,7 @@ export interface BatumiSeasonCalendarBlock {
     ka: string[];
     pl?: string[];
     uk?: string[];
+    he?: string[];
   };
   pairWithTourSlug: string;
   pairWithTourLabel: LocalizedText;
@@ -69,17 +72,19 @@ export const BATUMI_NEWS_META = {
   lastVerifiedKa: '24 ნოემბერი, 2026',
   lastVerifiedPl: '24 listopada 2026',
   lastVerifiedUk: '24 листопада 2026',
+  lastVerifiedHe: '24 בנובמבר 2026',
 } as const;
 
 export const BATUMI_CATEGORY_LABELS: Record<
   BatumiNewsCategory,
-  { en: string; ka: string; pl: string; uk: string; badgeClass: string }
+  { en: string; ka: string; pl: string; uk: string; he: string; badgeClass: string }
 > = {
   events: {
     en: 'Events & Festivals',
     ka: 'ღონისძიებები და ფესტივალები',
     pl: 'Wydarzenia i festiwale',
     uk: 'Події та фестивалі',
+    he: 'אירועים ופסטיבלים',
     badgeClass: 'badge-coral',
   },
   projects: {
@@ -87,6 +92,7 @@ export const BATUMI_CATEGORY_LABELS: Record<
     ka: 'ქალაქის და სანაპიროს პროექტები',
     pl: 'Projekty miejskie i wybrzeże',
     uk: 'Міські та прибережні проєкти',
+    he: 'פרויקטים בעיר ובחוף',
     badgeClass: 'badge-sea',
   },
   'travel-rules': {
@@ -94,6 +100,7 @@ export const BATUMI_CATEGORY_LABELS: Record<
     ka: 'მგზავრობის წესები და ტრანსპორტი',
     pl: 'Zasady wjazdu i transport',
     uk: 'Правила в’їзду та транспорт',
+    he: 'חוקי כניסה ותחבורה',
     badgeClass: 'badge-forest',
   },
   seasonal: {
@@ -101,6 +108,7 @@ export const BATUMI_CATEGORY_LABELS: Record<
     ka: 'სეზონი და ლოკაციები',
     pl: 'Atrakcje i sezony',
     uk: 'Локації та сезони',
+    he: 'אטרקציות ועונות',
     badgeClass: 'badge-sea',
   },
 };
@@ -111,24 +119,28 @@ export const BATUMI_STATUS_LABELS: Record<BatumiNewsStatus, LocalizedText> = {
     ka: 'უახლოესი',
     pl: 'Wkrótce',
     uk: 'Незабаром',
+    he: 'בקרוב',
   },
   'active-2026': {
     en: 'Active in 2026',
     ka: 'მოქმედი 2026',
     pl: 'Aktywne 2026',
     uk: 'Діє у 2026',
+    he: 'פעיל ב-2026',
   },
   'planned-2027': {
     en: 'Planned 2027',
     ka: 'დაგეგმილი 2027',
     pl: 'Planowane 2027',
     uk: 'Заплановано 2027',
+    he: 'מתוכנן ל-2027',
   },
   'annual-highlight': {
     en: 'Annual Highlight',
     ka: 'ყოველწლიური',
     pl: 'Coroczne',
     uk: 'Щорічна подія',
+    he: 'אירוע שנתי',
   },
 };
 

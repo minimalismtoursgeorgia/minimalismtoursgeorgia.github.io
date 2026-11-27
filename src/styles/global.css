@@ -530,6 +530,8 @@ a:hover {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  gap: 0.25rem;
+  white-space: nowrap;
   padding: 0.28rem 0.52rem;
   border-radius: var(--radius-pill);
   font-size: 0.76rem;

@@ -101,6 +101,19 @@ export const GUEST_REVIEWS: GuestReview[] = [
     countryFlag: '🇮🇱',
   },
   {
+    id: 'whatsapp-2026-11-israel-guest-fun-day',
+    category: 'tour',
+    title: 'So Glad You Were Our Guide',
+    quote:
+      'Glad to hear it! Thank you so much—it was really fun with you, especially on a day like today. I’m so glad you were our guide; we enjoyed ourselves immensely and will happily recommend you to friends and family.',
+    authorLabel: 'Private Tour Guest',
+    platform: 'WhatsApp',
+    dateLabel: 'Nov 2026',
+    datePublished: '2026-11',
+    country: 'Israel',
+    countryFlag: '🇮🇱',
+  },
+  {
     id: 'whatsapp-2026-10-rahhalah-b2b',
     category: 'b2b',
     title: 'Professionalism & Guest Care in the Greater Caucasus',

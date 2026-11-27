@@ -15,29 +15,31 @@ const currentPath = Astro.url.pathname;
 const isPl = lang === 'pl';
 const isKa = lang === 'ka';
 const isUk = lang === 'uk';
+const isHe = lang === 'he';
 const lp = (path: string) => withBase(localizePath(path, lang));
 
 const enSwitchHref = withBase(props.alternateEnPath || localizePath(props.canonicalPath || '/', 'en'));
 const plSwitchHref = withBase(props.alternatePlPath || localizePath(props.canonicalPath || '/', 'pl'));
 const ukSwitchHref = withBase(props.alternateUkPath || localizePath(props.canonicalPath || '/', 'uk'));
+const heSwitchHref = withBase(props.alternateHePath || localizePath(props.canonicalPath || '/', 'he'));
 const kaSwitchHref = withBase(props.alternateKaPath || '/ka/');
 
 const navLinks = [
-  { label: isKa ? 'მთავარი' : isPl ? 'Start' : isUk ? 'Головна' : 'Home', href: lp('/') },
-  { label: isKa ? 'ტურები' : isPl ? 'Wycieczki' : isUk ? 'Екскурсії' : 'Tours', href: lp('/tours/') },
+  { label: isKa ? 'მთავარი' : isPl ? 'Start' : isUk ? 'Головна' : isHe ? 'ראשי' : 'Home', href: lp('/') },
+  { label: isKa ? 'ტურები' : isPl ? 'Wycieczki' : isUk ? 'Екскурсії' : isHe ? 'סיורים' : 'Tours', href: lp('/tours/') },
   {
-    label: isKa ? 'ბათუმის სიახლეები' : isPl ? 'Batumi News' : isUk ? 'Новини Батумі' : 'Batumi News',
+    label: isKa ? 'ბათუმის სიახლეები' : isPl ? 'Batumi News' : isUk ? 'Новини Батумі' : isHe ? 'חדשות בטומי' : 'Batumi News',
     href: lp('/batumi-news/'),
   },
-  { label: isKa ? 'მიმართულებები' : isPl ? 'Kierunki' : isUk ? 'Напрямки' : 'Destinations', href: lp('/destinations/') },
-  { label: isKa ? 'პარტნიორები' : isPl ? 'B2B i Partnerzy' : isUk ? 'B2B та Партнери' : 'B2B & Partners', href: lp('/partners/') },
-  { label: isKa ? 'ჩვენ შესახებ' : isPl ? 'O nas' : isUk ? 'Про нас' : 'About', href: lp('/about/') },
-  { label: isKa ? 'კონტაქტი' : isPl ? 'Kontakt' : isUk ? 'Контакти' : 'Contact', href: lp('/contact/') },
+  { label: isKa ? 'მიმართულებები' : isPl ? 'Kierunki' : isUk ? 'Напрямки' : isHe ? 'יעדים' : 'Destinations', href: lp('/destinations/') },
+  { label: isKa ? 'პარტნიორები' : isPl ? 'B2B i Partnerzy' : isUk ? 'B2B та Партнери' : isHe ? 'B2B ושותפים' : 'B2B & Partners', href: lp('/partners/') },
+  { label: isKa ? 'ჩვენ შესახებ' : isPl ? 'O nas' : isUk ? 'Про нас' : isHe ? 'אודות' : 'About', href: lp('/about/') },
+  { label: isKa ? 'კონტაქტი' : isPl ? 'Kontakt' : isUk ? 'Контакти' : isHe ? 'צור קשר' : 'Contact', href: lp('/contact/') },
 ];
 ---
 
 <!doctype html>
-<html lang={lang}>
+<html lang={lang} dir={isHe ? 'rtl' : 'ltr'}>
   <head>
     <!-- Google tag (gtag.js) -->
     <script is:inline async src="https://www.googletagmanager.com/gtag/js?id=G-840PCHKNH4"></script>
@@ -51,7 +53,7 @@ const navLinks = [
   </head>
   <body>
     <a class="skip-link" href="#main-content">
-      {isKa ? 'გადასვლა მთავარ შინაარსზე' : isPl ? 'Przejdź do treści głównej' : isUk ? 'Перейти до основного вмісту' : 'Skip to main content'}
+      {isKa ? 'გადასვლა მთავარ შინაარსზე' : isPl ? 'Przejdź do treści głównej' : isUk ? 'Перейти до основного вмісту' : isHe ? 'דלג לתוכן הראשי' : 'Skip to main content'}
     </a>
 
     <header class="site-header">
@@ -71,7 +73,7 @@ const navLinks = [
           </span>
         </a>
 
-        <nav class="primary-nav" aria-label={isPl ? 'Nawigacja główna' : isUk ? 'Головна навігація' : 'Main navigation'}>
+        <nav class="primary-nav" aria-label={isPl ? 'Nawigacja główna' : isUk ? 'Головна навігація' : isHe ? 'ניווט ראשי' : 'Main navigation'}>
           {
             navLinks.map((item) => (
               <a
@@ -85,14 +87,14 @@ const navLinks = [
         </nav>
 
         <div class="header-actions">
-          <div class="lang-switcher" role="navigation" aria-label={isPl ? 'Wybierz język' : isUk ? 'Оберіть мову' : 'Language selector'}>
+          <div class="lang-switcher" role="navigation" aria-label={isPl ? 'Wybierz język' : isUk ? 'Оберіть мову' : isHe ? 'בחירת שפה' : 'Language selector'}>
             <a
               href={enSwitchHref}
               hreflang="en"
               aria-current={lang === 'en' ? 'true' : undefined}
               aria-label="English"
             >
-              EN
+              🇬🇧 EN
             </a>
             <a
               href={plSwitchHref}
@@ -100,7 +102,7 @@ const navLinks = [
               aria-current={lang === 'pl' ? 'true' : undefined}
               aria-label="Polski"
             >
-              PL
+              🇵🇱 PL
             </a>
             <a
               href={ukSwitchHref}
@@ -108,7 +110,15 @@ const navLinks = [
               aria-current={lang === 'uk' ? 'true' : undefined}
               aria-label="Українська"
             >
-              UA
+              🇺🇦 UA
+            </a>
+            <a
+              href={heSwitchHref}
+              hreflang="he"
+              aria-current={lang === 'he' ? 'true' : undefined}
+              aria-label="עברית"
+            >
+              🇮🇱 HE
             </a>
             <a
               href={kaSwitchHref}
@@ -116,7 +126,7 @@ const navLinks = [
               aria-current={lang === 'ka' ? 'true' : undefined}
               aria-label="ქართული"
             >
-              ქარ
+              🇬🇪 ქარ
             </a>
           </div>
 
@@ -126,7 +136,7 @@ const navLinks = [
             command="show-modal"
             commandfor="quick-inquiry-dialog"
           >
-            {isKa ? 'დაგეგმე ტური' : isPl ? 'Zaplanuj wycieczkę' : isUk ? 'Запланувати тур' : 'Plan a Tour'}
+            {isKa ? 'დაგეგმე ტური' : isPl ? 'Zaplanuj wycieczkę' : isUk ? 'Запланувати тур' : isHe ? 'תכננו סיור' : 'Plan a Tour'}
           </button>
 
           <button
@@ -174,14 +184,18 @@ const navLinks = [
                 ? 'Kameralne i prywatne wycieczki przyrodnicze, trekkingowe i kulturowe z Batumi po Adżarii oraz Wysokim Kaukazie.'
                 : isUk
                 ? 'Камерні та приватні природні, трекінгові й культурні тури з Батумі по Аджарії та Великому Кавказу.'
+                : isHe
+                ? 'סיורי טבע, טיולים רגליים וסיורי תרבות בקבוצות קטנות ובאופן פרטי מבטומי ברחבי אג׳רה והקווקז הגדול.'
                 : 'Small-group and private nature, hiking, and cultural tours from Batumi across Adjara and the Greater Caucasus.'}
             </p>
             <p style="margin-bottom: 0;">
-              <strong>{isPl ? 'Operacje i bezpieczeństwo:' : isUk ? 'Операції та безпека:' : 'Operations & Safety:'}</strong>{' '}
+              <strong>{isPl ? 'Operacje i bezpieczeństwo:' : isUk ? 'Операції та безпека:' : isHe ? 'תפעול ובטיחות:' : 'Operations & Safety:'}</strong>{' '}
               {isPl
                 ? 'Zespół z certyfikatami GMGA/FMGA, UNESCO Heritage i Pierwszej Pomocy Czerwonego Krzyża'
                 : isUk
                 ? 'Команда з сертифікатами GMGA/FMGA, UNESCO Heritage та Першої допомоги Червоного Хреста'
+                : isHe
+                ? 'צוות מוסמך GMGA/FMGA, מורשת אונסק״ו ועזרה ראשונה של הצלב האדום'
                 : 'GMGA/FMGA, UNESCO Heritage & Red Cross First Aid Certified Team'}
             </p>
           </div>
@@ -204,43 +218,43 @@ const navLinks = [
           </nav>
         </div>
 
-        <nav class="footer-directory-grid" aria-label={isPl ? 'Mapa strony w stopce' : isUk ? 'Мапа сайту у футері' : 'Footer site directory'}>
+        <nav class="footer-directory-grid" aria-label={isPl ? 'Mapa strony w stopce' : isUk ? 'Мапа сайту у футері' : isHe ? 'מפת האתר בתחתית העמוד' : 'Footer site directory'}>
           <div>
-            <h3>{isPl ? 'Atrakcje Gruzji' : isUk ? 'Локації Грузії' : 'Georgia Attractions'}</h3>
+            <h3>{isPl ? 'Atrakcje Gruzji' : isUk ? 'Локації Грузії' : isHe ? 'אתרים בגאורגיה' : 'Georgia Attractions'}</h3>
             <ul class="footer-links">
-              <li><a href={lp('/destinations/#mtirala')}>{isPl ? 'Park Narodowy Mtirala (UNESCO)' : isUk ? 'Національний парк Мтірала (UNESCO)' : 'Mtirala National Park (UNESCO)'}</a></li>
-              <li><a href={lp('/destinations/#batumi')}>{isPl ? 'Batumi i Ogród Botaniczny' : isUk ? 'Батумі та Ботанічний сад' : 'Batumi & Botanical Garden'}</a></li>
-              <li><a href={lp('/destinations/#machakhela')}>{isPl ? 'Park Narodowy Machakhela' : isUk ? 'Національний парк Мачахела' : 'Machakhela National Park'}</a></li>
-              <li><a href={lp('/destinations/#green-lake')}>{isPl ? 'Zielone Jezioro (Przełęcz Goderdzi)' : isUk ? 'Зелене озеро (Перевал Годердзі)' : 'Green Lake (Goderdzi Pass)'}</a></li>
-              <li><a href={lp('/destinations/#kolkheti')}>{isPl ? 'Mokradła Kolchidy (UNESCO)' : isUk ? 'Водно-болотні угіддя Колхіди (UNESCO)' : 'Kolkheti Wetlands (UNESCO)'}</a></li>
-              <li><a href={lp('/destinations/#kazbegi-svaneti')}>{isPl ? 'Kazbegi i Górna Swanetia' : isUk ? 'Казбегі та Верхня Сванетія' : 'Kazbegi & Upper Svaneti'}</a></li>
+              <li><a href={lp('/destinations/#mtirala')}>{isPl ? 'Park Narodowy Mtirala (UNESCO)' : isUk ? 'Національний парк Мтірала (UNESCO)' : isHe ? 'הפארק הלאומי מטירלה (UNESCO)' : 'Mtirala National Park (UNESCO)'}</a></li>
+              <li><a href={lp('/destinations/#batumi')}>{isPl ? 'Batumi i Ogród Botaniczny' : isUk ? 'Батумі та Ботанічний сад' : isHe ? 'בטומי והגן הבוטני' : 'Batumi & Botanical Garden'}</a></li>
+              <li><a href={lp('/destinations/#machakhela')}>{isPl ? 'Park Narodowy Machakhela' : isUk ? 'Національний парк Мачахела' : isHe ? 'הפארק הלאומי מצ׳אחלה' : 'Machakhela National Park'}</a></li>
+              <li><a href={lp('/destinations/#green-lake')}>{isPl ? 'Zielone Jezioro (Przełęcz Goderdzi)' : isUk ? 'Зелене озеро (Перевал Годердзі)' : isHe ? 'האגם הירוק (מעבר גודרדזי)' : 'Green Lake (Goderdzi Pass)'}</a></li>
+              <li><a href={lp('/destinations/#kolkheti')}>{isPl ? 'Mokradła Kolchidy (UNESCO)' : isUk ? 'Водно-болотні угіддя Колхіди (UNESCO)' : isHe ? 'ביצות קולחתי (UNESCO)' : 'Kolkheti Wetlands (UNESCO)'}</a></li>
+              <li><a href={lp('/destinations/#kazbegi-svaneti')}>{isPl ? 'Kazbegi i Górna Swanetia' : isUk ? 'Казбегі та Верхня Сванетія' : isHe ? 'קזבגי וסוואנתי העליונה' : 'Kazbegi & Upper Svaneti'}</a></li>
             </ul>
           </div>
 
           <div>
-            <h3>{isPl ? 'Przydatne linki' : isUk ? 'Корисні посилання' : 'Useful Links'}</h3>
+            <h3>{isPl ? 'Przydatne linki' : isUk ? 'Корисні посилання' : isHe ? 'קישורים שימושיים' : 'Useful Links'}</h3>
             <ul class="footer-links">
               <li>
                 <a href={lp('/batumi-news/')}>
-                  {isKa ? 'ბათუმის სიახლეები (2026–2027)' : isPl ? 'Batumi News i wydarzenia (2026–2027)' : isUk ? 'Новини та події Батумі (2026–2027)' : 'Batumi News & Events (2026–2027)'}
+                  {isKa ? 'ბათუმის სიახლეები (2026–2027)' : isPl ? 'Batumi News i wydarzenia (2026–2027)' : isUk ? 'Новини та події Батумі (2026–2027)' : isHe ? 'חדשות ואירועים בבטומי (2026–2027)' : 'Batumi News & Events (2026–2027)'}
                 </a>
               </li>
               <li>
                 <a href={lp('/guest-registration/')}>
-                  {isKa ? 'სტუმრის რეგისტრაცია და სამედიცინო ფორმა' : isPl ? 'Rejestracja gościa i formularz medyczny' : isUk ? 'Реєстрація гостя та медична форма' : 'Guest Registration & Medical Form'}
+                  {isKa ? 'სტუმრის რეგისტრაცია და სამედიცინო ფორმა' : isPl ? 'Rejestracja gościa i formularz medyczny' : isUk ? 'Реєстрація гостя та медична форма' : isHe ? 'רישום אורחים וטופס רפואי' : 'Guest Registration & Medical Form'}
                 </a>
               </li>
-              <li><a href={lp('/contact/')}>{isPl ? 'Zapytaj o wycieczkę' : isUk ? 'Замовити тур' : 'Request a Tour'}</a></li>
-              <li><a href={lp('/tours/')}>{isPl ? 'Zobacz wszystkie wycieczki' : isUk ? 'Переглянути всі тури' : 'View All 7 Tours'}</a></li>
-              <li><a href={lp('/#price-estimator')}>{isPl ? 'Kalkulator ceny grupowej' : isUk ? 'Калькулятор вартості групи' : 'Group Price Estimator'}</a></li>
-              <li><a href={lp('/#seasons')}>{isPl ? 'Kalendarz sezonowy (Sty–Gru)' : isUk ? 'Сезонний календар (Січ–Гру)' : 'Seasonal Calendar (Jan–Dec)'}</a></li>
-              <li><a href={lp('/#pickups')}>{isPl ? 'Miejsca zbiórki w Batumi' : isUk ? 'Точки збору в Батумі' : 'Batumi Pickup Points'}</a></li>
-              <li><a href={lp('/#home-faq')}>{isPl ? 'FAQ podróży i wycieczek' : isUk ? 'Поширені запитання (FAQ)' : 'Travel & Tour FAQs'}</a></li>
+              <li><a href={lp('/contact/')}>{isPl ? 'Zapytaj o wycieczkę' : isUk ? 'Замовити тур' : isHe ? 'הזמנת סיור' : 'Request a Tour'}</a></li>
+              <li><a href={lp('/tours/')}>{isPl ? 'Zobacz wszystkie wycieczki' : isUk ? 'Переглянути всі тури' : isHe ? 'כל 7 הסיורים' : 'View All 7 Tours'}</a></li>
+              <li><a href={lp('/#price-estimator')}>{isPl ? 'Kalkulator ceny grupowej' : isUk ? 'Калькулятор вартості групи' : isHe ? 'מחשבון מחיר לקבוצה' : 'Group Price Estimator'}</a></li>
+              <li><a href={lp('/#seasons')}>{isPl ? 'Kalendarz sezonowy (Sty–Gru)' : isUk ? 'Сезонний календар (Січ–Гру)' : isHe ? 'לוח עונות (ינואר–דצמבר)' : 'Seasonal Calendar (Jan–Dec)'}</a></li>
+              <li><a href={lp('/#pickups')}>{isPl ? 'Miejsca zbiórki w Batumi' : isUk ? 'Точки збору в Батумі' : isHe ? 'נקודות איסוף בבטומי' : 'Batumi Pickup Points'}</a></li>
+              <li><a href={lp('/#home-faq')}>{isPl ? 'FAQ podróży i wycieczek' : isUk ? 'Поширені запитання (FAQ)' : isHe ? 'שאלות נפוצות (FAQ)' : 'Travel & Tour FAQs'}</a></li>
             </ul>
           </div>
 
           <div>
-            <h3>{isPl ? 'Flagowe wycieczki' : isUk ? 'Популярні тури' : 'Signature Tours'}</h3>
+            <h3>{isPl ? 'Flagowe wycieczki' : isUk ? 'Популярні тури' : isHe ? 'סיורים מובילים' : 'Signature Tours'}</h3>
             <ul class="footer-links">
               {
                 TOURS.map((tour) => (
@@ -253,12 +267,12 @@ const navLinks = [
           </div>
 
           <div>
-            <h3>{isPl ? 'Usługi i B2B' : isUk ? 'Послуги та B2B' : 'Services & B2B'}</h3>
+            <h3>{isPl ? 'Usługi i B2B' : isUk ? 'Послуги та B2B' : isHe ? 'שירותים ו-B2B' : 'Services & B2B'}</h3>
             <ul class="footer-links">
-              <li><a href={lp('/partners/')}>{isPl ? 'B2B i obsługa DMC w Adżarii' : isUk ? 'B2B та DMC обслуговування в Аджарії' : 'B2B & Adjara DMC Handling'}</a></li>
-              <li><a href={lp('/partners/#partner-types')}>{isPl ? 'Wycieczki dla hoteli i rejsów' : isUk ? 'Екскурсії для готелів і круїзів' : 'Hotel & Cruise Excursions'}</a></li>
-              <li><a href={lp('/partners/#b2b-inquiry')}>{isPl ? 'Wyjazdy firmowe i integracyjne' : isUk ? 'Корпоративні та командні виїзди' : 'Corporate & Team Retreats'}</a></li>
-              <li><a href={lp('/about/#fleet')}>{isPl ? 'Flota turystyczna i auta 4x4' : isUk ? 'Туристичний транспорт та авто 4x4' : 'Tour Vehicles & 4x4 Fleet'}</a></li>
+              <li><a href={lp('/partners/')}>{isPl ? 'B2B i obsługa DMC w Adżarii' : isUk ? 'B2B та DMC обслуговування в Аджарії' : isHe ? 'שירותי B2B ו-DMC באג׳רה' : 'B2B & Adjara DMC Handling'}</a></li>
+              <li><a href={lp('/partners/#partner-types')}>{isPl ? 'Wycieczki dla hoteli i rejsów' : isUk ? 'Екскурсії для готелів і круїзів' : isHe ? 'סיורים למלונות ולקרוזים' : 'Hotel & Cruise Excursions'}</a></li>
+              <li><a href={lp('/partners/#b2b-inquiry')}>{isPl ? 'Wyjazdy firmowe i integracyjne' : isUk ? 'Корпоративні та командні виїзди' : isHe ? 'ימי גיבוש וטיולי חברות' : 'Corporate & Team Retreats'}</a></li>
+              <li><a href={lp('/about/#fleet')}>{isPl ? 'Flota turystyczna i auta 4x4' : isUk ? 'Туристичний транспорт та авто 4x4' : isHe ? 'רכבי תיור וצי 4x4' : 'Tour Vehicles & 4x4 Fleet'}</a></li>
               <li>
                 <a href={SITE.whatsappUrl} target="_blank" rel="noopener noreferrer">
                   WhatsApp: {SITE.phoneDisplay}
@@ -273,30 +287,30 @@ const navLinks = [
           </div>
 
           <div>
-            <h3>{isPl ? 'O nas' : isUk ? 'Про нас' : 'About Us'}</h3>
+            <h3>{isPl ? 'O nas' : isUk ? 'Про нас' : isHe ? 'אודותינו' : 'About Us'}</h3>
             <ul class="footer-links">
-              <li><a href={lp('/about/')}>{isPl ? 'Profil firmy' : isUk ? 'Про компанію' : 'Company Profile'}</a></li>
-              <li><a href={lp('/about/#certifications')}>{isPl ? 'Certyfikaty GMGA i UNESCO' : isUk ? 'Сертифікати GMGA та UNESCO' : 'GMGA & UNESCO Certifications'}</a></li>
-              <li><a href={lp('/partners/#guarantees')}>{isPl ? 'Bezpieczeństwo i polityka pogodowa' : isUk ? 'Безпека та погодна політика' : 'Safety & Weather Policy'}</a></li>
-              <li><a href={lp('/about/#standards')}>{isPl ? 'Standardy odpowiedzialnego przewodnictwa' : isUk ? 'Стандарти відповідального гідування' : 'Responsible Guiding Standards'}</a></li>
+              <li><a href={lp('/about/')}>{isPl ? 'Profil firmy' : isUk ? 'Про компанію' : isHe ? 'פרופיל החברה' : 'Company Profile'}</a></li>
+              <li><a href={lp('/about/#certifications')}>{isPl ? 'Certyfikaty GMGA i UNESCO' : isUk ? 'Сертифікати GMGA та UNESCO' : isHe ? 'הסמכות GMGA ו-UNESCO' : 'GMGA & UNESCO Certifications'}</a></li>
+              <li><a href={lp('/partners/#guarantees')}>{isPl ? 'Bezpieczeństwo i polityka pogodowa' : isUk ? 'Безпека та погодна політика' : isHe ? 'בטיחות ומדיניות מזג אוויר' : 'Safety & Weather Policy'}</a></li>
+              <li><a href={lp('/about/#standards')}>{isPl ? 'Standardy odpowiedzialnego przewodnictwa' : isUk ? 'Стандарти відповідального гідування' : isHe ? 'סטנדרטים של הדרכה אחראית' : 'Responsible Guiding Standards'}</a></li>
               <li>
                 <a href={SITE.getYourGuideSupplierUrl} target="_blank" rel="noopener noreferrer">
-                  {isPl ? 'Wszystkie wycieczki na GetYourGuide ↗' : isUk ? 'Усі тури на GetYourGuide ↗' : 'All Tours on GetYourGuide ↗'}
+                  {isPl ? 'Wszystkie wycieczki na GetYourGuide ↗' : isUk ? 'Усі тури на GetYourGuide ↗' : isHe ? 'כל הסיורים ב-GetYourGuide ↗' : 'All Tours on GetYourGuide ↗'}
                 </a>
               </li>
               <li>
                 <a href={SITE.tripadvisorReviewUrl} target="_blank" rel="noopener noreferrer">
-                  {isPl ? 'Opinie na Tripadvisor ↗' : isUk ? 'Відгуки на Tripadvisor ↗' : 'Tripadvisor Reviews ↗'}
+                  {isPl ? 'Opinie na Tripadvisor ↗' : isUk ? 'Відгуки на Tripadvisor ↗' : isHe ? 'ביקורות ב-Tripadvisor ↗' : 'Tripadvisor Reviews ↗'}
                 </a>
               </li>
               <li>
                 <a href={SITE.googleReviewUrl} target="_blank" rel="noopener noreferrer">
-                  {isPl ? 'Opinie Google ↗' : isUk ? 'Відгуки Google ↗' : 'Google Reviews ↗'}
+                  {isPl ? 'Opinie Google ↗' : isUk ? 'Відгуки Google ↗' : isHe ? 'ביקורות Google ↗' : 'Google Reviews ↗'}
                 </a>
               </li>
               <li>
                 <a href={SITE.trustpilotUrl} target="_blank" rel="noopener noreferrer">
-                  {isPl ? 'Opinie Trustpilot ↗' : isUk ? 'Відгуки Trustpilot ↗' : 'Trustpilot Reviews ↗'}
+                  {isPl ? 'Opinie Trustpilot ↗' : isUk ? 'Відгуки Trustpilot ↗' : isHe ? 'ביקורות Trustpilot ↗' : 'Trustpilot Reviews ↗'}
                 </a>
               </li>
             </ul>
@@ -304,19 +318,21 @@ const navLinks = [
         </nav>
 
         <div class="footer-bottom">
-          <span>© 2026 {SITE.brandName}. {isPl ? 'Batumi, Adżaria, Gruzja.' : isUk ? 'Батумі, Аджарія, Грузія.' : 'Batumi, Adjara, Georgia.'}</span>
+          <span>© 2026 {SITE.brandName}. {isPl ? 'Batumi, Adżaria, Gruzja.' : isUk ? 'Батумі, Аджарія, Грузія.' : isHe ? 'בטומי, אג׳רה, גאורגיה.' : 'Batumi, Adjara, Georgia.'}</span>
           <div class="footer-bottom-meta">
-            <a href={`tel:${SITE.phoneRaw}`}>{isPl ? 'Telefon:' : isUk ? 'Телефон:' : 'Call:'} {SITE.phoneDisplay}</a>
+            <a href={`tel:${SITE.phoneRaw}`}>{isPl ? 'Telefon:' : isUk ? 'Телефон:' : isHe ? 'טלפון:' : 'Call:'} {SITE.phoneDisplay}</a>
             <span aria-hidden="true">·</span>
-            <a href={enSwitchHref} hreflang="en">EN</a>
+            <a href={enSwitchHref} hreflang="en">🇬🇧 EN</a>
             <span aria-hidden="true">/</span>
-            <a href={plSwitchHref} hreflang="pl">PL</a>
+            <a href={plSwitchHref} hreflang="pl">🇵🇱 PL</a>
             <span aria-hidden="true">/</span>
-            <a href={ukSwitchHref} hreflang="uk">UA</a>
+            <a href={ukSwitchHref} hreflang="uk">🇺🇦 UA</a>
             <span aria-hidden="true">/</span>
-            <a href={kaSwitchHref} hreflang="ka">ქარ</a>
+            <a href={heSwitchHref} hreflang="he">🇮🇱 HE</a>
+            <span aria-hidden="true">/</span>
+            <a href={kaSwitchHref} hreflang="ka">🇬🇪 ქარ</a>
             <span aria-hidden="true">·</span>
-            <span>{isPl ? 'Bezpłatne anulowanie 24h · Przejrzyste ceny' : isUk ? 'Безкоштовне скасування за 24 год · Прозорі ціни' : '24-hour free cancellation · Transparent pricing'}</span>
+            <span>{isPl ? 'Bezpłatne anulowanie 24h · Przejrzyste ceny' : isUk ? 'Безкоштовне скасування за 24 год · Прозорі ціни' : isHe ? 'ביטול חינם עד 24 שעות מראש · מחירים שקופים' : '24-hour free cancellation · Transparent pricing'}</span>
           </div>
         </div>
       </div>
@@ -330,16 +346,18 @@ const navLinks = [
           ? 'Dzień dobry Minimalism Tours Georgia! Chciałbym zapytać o wycieczki z Batumi.'
           : isUk
           ? 'Вітаю, Minimalism Tours Georgia! Хотів би дізнатися про екскурсії з Батумі.'
+          : isHe
+          ? 'שלום Minimalism Tours Georgia! אשמח לקבל פרטים על סיורים מבטומי.'
           : 'Hello Minimalism Tours Georgia! I would like to ask about tours from Batumi.'
       )}`}
       target="_blank"
       rel="noopener noreferrer"
-      aria-label={isPl ? 'Napisz bezpośrednio na WhatsApp do Minimalism Tours Georgia' : isUk ? 'Написати у WhatsApp команді Minimalism Tours Georgia' : 'Chat directly on WhatsApp with Minimalism Tours Georgia'}
+      aria-label={isPl ? 'Napisz bezpośrednio na WhatsApp do Minimalism Tours Georgia' : isUk ? 'Написати у WhatsApp команді Minimalism Tours Georgia' : isHe ? 'כתבו לנו ישירות ב-WhatsApp ל-Minimalism Tours Georgia' : 'Chat directly on WhatsApp with Minimalism Tours Georgia'}
     >
       <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
         <path d="M12.03 2a9.94 9.94 0 0 0-8.48 15.16L2 22l4.98-1.48A9.95 9.95 0 1 0 12.03 2Zm5.82 14.12c-.25.7-1.43 1.34-1.99 1.41-.51.07-1.15.1-1.85-.12-.43-.14-.98-.32-1.69-.63-2.97-1.29-4.91-4.32-5.06-4.52-.15-.2-1.21-1.61-1.21-3.07 0-1.46.76-2.18 1.03-2.48.27-.3.59-.37.79-.37h.57c.18 0 .43-.07.67.51.25.59.84 2.05.91 2.2.07.15.12.33.02.53-.1.2-.15.32-.3.5-.15.18-.32.4-.45.54-.15.15-.3.32-.13.62.18.3.78 1.29 1.68 2.09 1.15 1.02 2.13 1.34 2.43 1.49.3.15.48.13.66-.08.18-.2.75-.88.95-1.18.2-.3.4-.25.67-.15.27.1 1.73.82 2.03.97.3.15.5.22.57.34.08.12.08.7-.17 1.4Z" />
       </svg>
-      <span>{isPl ? 'WhatsApp Kontakt' : isUk ? 'WhatsApp Чат' : 'WhatsApp Desk'}</span>
+      <span>{isPl ? 'WhatsApp Kontakt' : isUk ? 'WhatsApp Чат' : isHe ? 'WhatsApp צ׳אט' : 'WhatsApp Desk'}</span>
     </a>
 
     <!-- Mobile Navigation Drawer (<dialog closedby="any">) -->
@@ -351,13 +369,13 @@ const navLinks = [
           class="dialog-close"
           command="close"
           commandfor="mobile-nav-dialog"
-          aria-label={isPl ? 'Zamknij menu nawigacji' : isUk ? 'Закрити меню навігації' : 'Close navigation menu'}
+          aria-label={isPl ? 'Zamknij menu nawigacji' : isUk ? 'Закрити меню навігації' : isHe ? 'סגור תפריט ניווט' : 'Close navigation menu'}
         >
           ✕
         </button>
       </div>
       <div class="dialog-body">
-        <nav aria-label={isPl ? 'Nawigacja mobilna' : isUk ? 'Мобільна навігація' : 'Mobile navigation'} style="display: grid; gap: 0.6rem; margin-bottom: 1.5rem;">
+        <nav aria-label={isPl ? 'Nawigacja mobilna' : isUk ? 'Мобільна навігація' : isHe ? 'ניווט בנייד' : 'Mobile navigation'} style="display: grid; gap: 0.6rem; margin-bottom: 1.5rem;">
           {
             navLinks.map((item) => (
               <a
@@ -369,18 +387,21 @@ const navLinks = [
               </a>
             ))
           }
-          <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.45rem;">
-            <a href={enSwitchHref} hreflang="en" class="btn btn-outline btn-sm" style="border-radius: var(--radius-md);">
-              EN
+          <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 0.4rem;">
+            <a href={enSwitchHref} hreflang="en" class="btn btn-outline btn-sm" style="border-radius: var(--radius-md); white-space: nowrap;">
+              🇬🇧 EN
             </a>
-            <a href={plSwitchHref} hreflang="pl" class="btn btn-outline btn-sm" style="border-radius: var(--radius-md);">
-              PL
+            <a href={plSwitchHref} hreflang="pl" class="btn btn-outline btn-sm" style="border-radius: var(--radius-md); white-space: nowrap;">
+              🇵🇱 PL
             </a>
-            <a href={ukSwitchHref} hreflang="uk" class="btn btn-outline btn-sm" style="border-radius: var(--radius-md);">
-              UA
+            <a href={ukSwitchHref} hreflang="uk" class="btn btn-outline btn-sm" style="border-radius: var(--radius-md); white-space: nowrap;">
+              🇺🇦 UA
             </a>
-            <a href={kaSwitchHref} hreflang="ka" class="btn btn-outline btn-sm" style="border-radius: var(--radius-md);">
-              ქარ
+            <a href={heSwitchHref} hreflang="he" class="btn btn-outline btn-sm" style="border-radius: var(--radius-md); white-space: nowrap;">
+              🇮🇱 HE
+            </a>
+            <a href={kaSwitchHref} hreflang="ka" class="btn btn-outline btn-sm" style="border-radius: var(--radius-md); white-space: nowrap;">
+              🇬🇪 ქარ
             </a>
           </div>
         </nav>
@@ -392,7 +413,7 @@ const navLinks = [
           commandfor="quick-inquiry-dialog"
           onclick="document.getElementById('mobile-nav-dialog')?.close()"
         >
-          {isPl ? 'Zaplanuj prywatną wycieczkę' : isUk ? 'Запланувати індивідуальний тур' : 'Plan a Custom Tour'}
+          {isPl ? 'Zaplanuj prywatną wycieczkę' : isUk ? 'Запланувати індивідуальний тур' : isHe ? 'תכננו סיור פרטי' : 'Plan a Custom Tour'}
         </button>
       </div>
     </dialog>
@@ -400,13 +421,13 @@ const navLinks = [
     <!-- Quick Inquiry Modal (<dialog closedby="any">) -->
     <dialog id="quick-inquiry-dialog" closedby="any" aria-labelledby="quick-inquiry-title">
       <div class="dialog-head">
-        <h2 id="quick-inquiry-title">{isPl ? 'Zaplanuj wycieczkę lub zapytanie B2B' : isUk ? 'Запланувати тур або B2B запит' : 'Plan a Tour or B2B Inquiry'}</h2>
+        <h2 id="quick-inquiry-title">{isPl ? 'Zaplanuj wycieczkę lub zapytanie B2B' : isUk ? 'Запланувати тур або B2B запит' : isHe ? 'תכנון סיור או פניית B2B' : 'Plan a Tour or B2B Inquiry'}</h2>
         <button
           type="button"
           class="dialog-close"
           command="close"
           commandfor="quick-inquiry-dialog"
-          aria-label={isPl ? 'Zamknij okno zapytania' : isUk ? 'Закрити вікно запиту' : 'Close inquiry modal'}
+          aria-label={isPl ? 'Zamknij okno zapytania' : isUk ? 'Закрити вікно запиту' : isHe ? 'סגור חלון פנייה' : 'Close inquiry modal'}
         >
           ✕
         </button>
@@ -417,12 +438,14 @@ const navLinks = [
             ? 'Napisz bezpośrednio bez opłat pośredników. Bezpłatne anulowanie do 24 godzin przed wyjazdem.'
             : isUk
             ? 'Пишіть напряму без комісій посередників. Безкоштовне скасування за 24 години до виїзду.'
+            : isHe
+            ? 'פנו אלינו ישירות ללא עמלות תיווך. ביטול חינם עד 24 שעות לפני היציאה.'
             : 'Message directly with zero booking middleman fees. Free cancellation up to 24 hours before departure.'}
         </p>
         <form id="quick-inquiry-form" class="form-grid" data-enhanced-validation novalidate>
           <div class="field">
-            <label for="quick-name">{isPl ? 'Twoje imię' : isUk ? 'Ваше ім’я' : 'Your Name'}</label>
-            <span id="quick-name-hint" class="field-hint">{isPl ? 'Abyśmy wiedzieli, jak się do Ciebie zwrócić' : isUk ? 'Щоб ми знали, як до вас звертатися' : 'So we know how to greet you'}</span>
+            <label for="quick-name">{isPl ? 'Twoje imię' : isUk ? 'Ваше ім’я' : isHe ? 'השם שלכם' : 'Your Name'}</label>
+            <span id="quick-name-hint" class="field-hint">{isPl ? 'Abyśmy wiedzieli, jak się do Ciebie zwrócić' : isUk ? 'Щоб ми знали, як до вас звертатися' : isHe ? 'כדי שנדע איך לפנות אליכם' : 'So we know how to greet you'}</span>
             <input
               id="quick-name"
               name="name"
@@ -433,41 +456,41 @@ const navLinks = [
               autofocus
               aria-describedby="quick-name-hint"
               data-error="quick-name-error"
-              placeholder={isPl ? 'np. Anna i Marek' : isUk ? 'напр., Олена та Андрій' : 'e.g. Elena & Lukas'}
+              placeholder={isPl ? 'np. Anna i Marek' : isUk ? 'напр., Олена та Андрій' : isHe ? 'לדוגמה: נועה ודניאל' : 'e.g. Elena & Lukas'}
             />
             <div id="quick-name-error" class="error-msg">
-              <span role="img" aria-label={isPl ? 'Błąd' : isUk ? 'Помилка' : 'Error'}>⚠</span>{' '}
-              {isPl ? 'Wpisz co najmniej 2 znaki dla imienia.' : isUk ? 'Введіть щонайменше 2 символи для імені.' : 'Please enter at least 2 characters for your name.'}
+              <span role="img" aria-label={isPl ? 'Błąd' : isUk ? 'Помилка' : isHe ? 'שגיאה' : 'Error'}>⚠</span>{' '}
+              {isPl ? 'Wpisz co najmniej 2 znaki dla imienia.' : isUk ? 'Введіть щонайменше 2 символи для імені.' : isHe ? 'אנא הזינו לפחות 2 תווים לשם.' : 'Please enter at least 2 characters for your name.'}
             </div>
           </div>
 
           <div class="field">
-            <label for="quick-tour">{isPl ? 'Wycieczka lub kierunek' : isUk ? 'Екскурсія або напрямок' : 'Tour or Destination'}</label>
+            <label for="quick-tour">{isPl ? 'Wycieczka lub kierunek' : isUk ? 'Екскурсія або напрямок' : isHe ? 'סיור או יעד' : 'Tour or Destination'}</label>
             <select id="quick-tour" name="tour">
               {
                 TOURS.map((t) => (
                   <option value={t.shortTitle}>{t.shortTitle} ({t.duration})</option>
                 ))
               }
-              <option value={isPl ? 'Indywidualna trasa po Adżarii / Gruzji' : isUk ? 'Індивідуальний маршрут по Аджарії / Грузії' : 'Custom Adjara / Georgia Private Route'}>
-                {isPl ? 'Indywidualna trasa po Adżarii / Gruzji' : isUk ? 'Індивідуальний маршрут по Аджарії / Грузії' : 'Custom Adjara / Georgia Private Route'}
+              <option value={isPl ? 'Indywidualna trasa po Adżarii / Gruzji' : isUk ? 'Індивідуальний маршрут по Аджарії / Грузії' : isHe ? 'מסלול פרטי מותאם באג׳רה / גאורגיה' : 'Custom Adjara / Georgia Private Route'}>
+                {isPl ? 'Indywidualna trasa po Adżarii / Gruzji' : isUk ? 'Індивідуальний маршрут по Аджарії / Грузії' : isHe ? 'מסלול פרטי מותאם באג׳רה / גאורגיה' : 'Custom Adjara / Georgia Private Route'}
               </option>
             </select>
           </div>
 
           <div class="form-grid form-grid-2">
             <div class="field">
-              <label for="quick-date">{isPl ? 'Preferowana data' : isUk ? 'Бажана дата' : 'Preferred Date'}</label>
+              <label for="quick-date">{isPl ? 'Preferowana data' : isUk ? 'Бажана дата' : isHe ? 'תאריך מועדף' : 'Preferred Date'}</label>
               <input id="quick-date" name="date" type="date" />
             </div>
             <div class="field">
-              <label for="quick-guests">{isPl ? 'Liczba osób (1–16)' : isUk ? 'Кількість гостей (1–16)' : 'Travelers (1–16)'}</label>
+              <label for="quick-guests">{isPl ? 'Liczba osób (1–16)' : isUk ? 'Кількість гостей (1–16)' : isHe ? 'מספר מטיילים (1–16)' : 'Travelers (1–16)'}</label>
               <input id="quick-guests" name="guests" type="number" min="1" max="16" value="2" />
             </div>
           </div>
 
           <div class="field">
-            <label for="quick-notes">{isPl ? 'Miejsce odbioru lub pytania' : isUk ? 'Місце збору або запитання' : 'Pickup Location or Questions'}</label>
+            <label for="quick-notes">{isPl ? 'Miejsce odbioru lub pytania' : isUk ? 'Місце збору або запитання' : isHe ? 'נקודת איסוף או שאלות' : 'Pickup Location or Questions'}</label>
             <textarea
               id="quick-notes"
               name="notes"
@@ -475,6 +498,8 @@ const navLinks = [
                 ? 'Odbiór z Placu Europy, lunch wegetariański lub pytania o sprzęt na Kazbek...'
                 : isUk
                 ? 'Збір на Площі Європи, вегетаріанський обід або запитання щодо спорядження на Казбек...'
+                : isHe
+                ? 'איסוף מכיכר אירופה, ארוחת צהריים צמחונית או שאלות על ציוד לקזבק...'
                 : 'Europe Square pickup, vegetarian lunch, or Kazbek gear questions...'}
             ></textarea>
           </div>
@@ -488,7 +513,7 @@ const navLinks = [
               target="_blank"
               rel="noopener noreferrer"
             >
-              {isPl ? 'Wyślij przez WhatsApp' : isUk ? 'Надіслати у WhatsApp' : 'Send via WhatsApp'}
+              {isPl ? 'Wyślij przez WhatsApp' : isUk ? 'Надіслати у WhatsApp' : isHe ? 'שליחה ב-WhatsApp' : 'Send via WhatsApp'}
             </a>
             <a
               id="quick-tg-send"
@@ -498,7 +523,7 @@ const navLinks = [
               target="_blank"
               rel="noopener noreferrer"
             >
-              {isPl ? 'Wyślij przez Telegram' : isUk ? 'Надіслати у Telegram' : 'Send via Telegram'}
+              {isPl ? 'Wyślij przez Telegram' : isUk ? 'Надіслати у Telegram' : isHe ? 'שליחה ב-Telegram' : 'Send via Telegram'}
             </a>
           </div>
         </form>

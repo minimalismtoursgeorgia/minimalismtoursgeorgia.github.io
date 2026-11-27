@@ -12,6 +12,7 @@ export interface Props {
 const { tour, priority = false, lang = 'en' } = Astro.props;
 const isPl = lang === 'pl';
 const isUk = lang === 'uk';
+const isHe = lang === 'he';
 ---
 
 <article
@@ -67,15 +68,15 @@ const isUk = lang === 'uk';
     <div class="tour-price-block">
       <span class="tour-price-kicker">
         {tour.startingPriceEur !== null
-          ? (isPl ? 'Cena grupowa już od' : isUk ? 'Групова ціна від' : 'Direct Group Rate From')
-          : (tour.quoteLabel || (isPl ? 'Wyprawa sezonowa' : isUk ? 'Сезонна експедиція' : 'Seasonal Expedition'))}
+          ? (isPl ? 'Cena grupowa już od' : isUk ? 'Групова ціна від' : isHe ? 'מחיר קבוצתי החל מ-' : 'Direct Group Rate From')
+          : (tour.quoteLabel || (isPl ? 'Wyprawa sezonowa' : isUk ? 'Сезонна експедиція' : isHe ? 'משלחת עונתית' : 'Seasonal Expedition'))}
       </span>
       <span class="tour-price-value">
         {tour.startingPriceEur !== null
-          ? `€${tour.startingPriceEur} / ${isPl ? 'os.' : isUk ? 'ос.' : 'guest'}`
-          : (isPl ? 'Wycena indywidualna' : isUk ? 'Індивідуальний розрахунок' : 'Custom Quote')}
+          ? `€${tour.startingPriceEur} / ${isPl ? 'os.' : isUk ? 'ос.' : isHe ? 'אדם' : 'guest'}`
+          : (isPl ? 'Wycena indywidualna' : isUk ? 'Індивідуальний розрахунок' : isHe ? 'הצעת מחיר מותאמת' : 'Custom Quote')}
       </span>
     </div>
-    <span class="btn btn-outline btn-sm" aria-hidden="true">{isPl ? 'Zobacz →' : isUk ? 'Детальніше →' : 'Explore →'}</span>
+    <span class="btn btn-outline btn-sm" aria-hidden="true">{isPl ? 'Zobacz →' : isUk ? 'Детальніше →' : isHe ? 'לפרטים →' : 'Explore →'}</span>
   </footer>
 </article>

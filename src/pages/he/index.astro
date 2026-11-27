@@ -1,0 +1,1194 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import HeroShowcase, { type FeaturedTourSlide } from '../../components/HeroShowcase.astro';
+import TourCard from '../../components/TourCard.astro';
+import ReviewsSection from '../../components/ReviewsSection.astro';
+import { SITE, PICKUP_POINTS } from '../../data/site';
+import {
+  HE_SITE,
+  HE_CONTENT_PILLARS,
+  HE_SEASONS,
+  HE_GENERAL_FAQS,
+  HE_PICKUP_POINTS,
+  getToursForLangHe,
+  getDestinationsForLangHe,
+  getReviewsForLangHe,
+} from '../../data/i18n-he';
+import { withBase, absoluteUrl } from '../../lib/urls';
+
+const heTours = getToursForLangHe('he');
+const heDestinations = getDestinationsForLangHe('he');
+const heReviews = getReviewsForLangHe('he');
+
+const pricedTours = heTours.filter((t) => t.pricingTiers.length > 0);
+const defaultDestination = heDestinations[0];
+
+const heroFeaturedTours: FeaturedTourSlide[] = [
+  {
+    titleLines: ['מטירלה 9 ק״מ', 'שביל המפל'],
+    location: 'פארק מטירלה, גאורגיה',
+    badgeText: 'UNESCO',
+    image: withBase('/images/mtirala-waterfall-hiker.webp'),
+    imageAlt:
+      'מטייל עם תרמיל ליד מפל נסתר במסלול היער של 9 ק״מ בפארק הלאומי מטירלה, גאורגיה',
+    href: withBase('/he/tours/?region=mtirala'),
+  },
+  {
+    titleLines: ['מטירלה יומיים', 'לינה בבקתה'],
+    location: 'אג׳רה, גאורגיה',
+    badgeText: 'יומיים',
+    image: withBase('/images/mtirala-2day.webp'),
+    imageAlt:
+      'בקתת הרים מעץ בתוך יער האשור הערפילי של קולחתי בפארק הלאומי מטירלה',
+    href: withBase('/he/tours/mtirala-2-day-shelter-hike/'),
+  },
+  {
+    titleLines: ['הר קזבק', 'פסגה אלפינית'],
+    location: 'קזבגי, גאורגיה',
+    badgeText: '5,054 מ׳',
+    image: withBase('/images/kazbegi-peak.webp'),
+    imageAlt: 'הפסגה המושלגת של הר קזבק מעל העמק בסטפנצמינדה, גאורגיה',
+    href: withBase('/he/tours/kazbegi-mount-kazbek-expedition/'),
+  },
+];
+
+const faqJsonLd = {
+  '@type': 'FAQPage',
+  mainEntity: HE_GENERAL_FAQS.map((item) => ({
+    '@type': 'Question',
+    name: item.question,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: item.answer,
+    },
+  })),
+};
+
+const breadcrumbJsonLd = {
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    {
+      '@type': 'ListItem',
+      position: 1,
+      name: 'ראשי',
+      item: absoluteUrl('/he/', Astro.site),
+    },
+  ],
+};
+
+const destinationsClientData = heDestinations.map((d) => ({
+  ...d,
+  imageResolved: withBase(d.image),
+  toursResolved: d.tourSlugs
+    .map((slug) => heTours.find((t) => t.slug === slug))
+    .filter((t): t is NonNullable<typeof t> => Boolean(t))
+    .map((t) => ({ title: t.shortTitle, href: withBase(`/he/tours/${t.slug}/`) })),
+}));
+---
+
+<BaseLayout
+  title={`${SITE.brandName} | סיורים מבטומי ואג׳רה, טיולי הרים ומשלחות בקווקז`}
+  description={HE_SITE.description}
+  canonicalPath="/he/"
+  alternateEnPath="/"
+  alternateKaPath="/ka/"
+  alternatePlPath="/pl/"
+  alternateUkPath="/uk/"
+  alternateHePath="/he/"
+  lang="he"
+  jsonLd={[breadcrumbJsonLd, faqJsonLd]}
+>
+  <!-- Hero Showcase Section -->
+  <HeroShowcase
+    watermarkText="MINIMALISM"
+    headlineLines={['גאורגיה,', 'מעבר', 'לגלויות.']}
+    ctaLabel="לכל הסיורים"
+    ctaHref={withBase('/he/tours/')}
+    subcopy="גלו את יערות הגשם של קולחתי (UNESCO), שבילים נסתרים באג׳רה ומסלולים אותנטיים בקווקז עם מדריכים מקומיים מוסמכים."
+    bgImage={withBase('/images/mestia-svaneti.webp')}
+    bgAlt="מטייל צועד על רכס אלפיני שטוף שמש מול הפסגות המושלגות של הקווקז הגדול בגאורגיה"
+    featuredTours={heroFeaturedTours}
+    trustStat={`${SITE.experienceYears}+ שנים`}
+    trustCopy="אמון של מטיילים פרטיים ושותפי B2B ברחבי גאורגיה בזכות תפעול בטוח ואמין."
+    trustLinkLabel="קראו ביקורות מאומתות ↓"
+    trustLinkHref="#reviews"
+    switcherLabel="החליפו בין הסיורים המומלצים בגאורגיה"
+  />
+
+  <!-- Quick Tour Finder & Verified Credentials Strip -->
+  <section class="section-surface section-tight" aria-label="חיפוש מהיר ותקני בטיחות">
+    <div class="container">
+      <form class="hero-finder" action={withBase('/he/tours/')} method="get" aria-label="חיפוש מהיר לסיורים">
+        <div class="finder-field">
+          <label for="finder-region">אזור</label>
+          <select id="finder-region" name="region">
+            <option value="">כל האזורים</option>
+            <option value="mtirala">הפארק הלאומי מטירלה</option>
+            <option value="machakhela">עמק מצ׳אחלה</option>
+            <option value="batumi">בטומי העתיקה</option>
+            <option value="kazbegi-svaneti">קזבגי (הר קזבק)</option>
+          </select>
+        </div>
+        <div class="finder-field">
+          <label for="finder-duration">משך זמן</label>
+          <select id="finder-duration" name="duration">
+            <option value="">הכול</option>
+            <option value="half-day">חצי יום (~3 שעות)</option>
+            <option value="full-day">יום מלא (6–7 שעות)</option>
+            <option value="multi-day">רב-יומי (2–8 ימים)</option>
+          </select>
+        </div>
+        <div class="finder-field">
+          <label for="finder-difficulty">קצב ושטח</label>
+          <select id="finder-difficulty" name="difficulty">
+            <option value="">כל הרמות</option>
+            <option value="Easy">קל</option>
+            <option value="Easy–Moderate">קל–בינוני</option>
+            <option value="Moderate">בינוני</option>
+            <option value="Moderate–Challenging">בינוני–מאתגר</option>
+            <option value="Challenging">אתגרי אלפיני</option>
+          </select>
+        </div>
+        <button type="submit" class="btn btn-forest" style="width: 100%;">
+          מצאו סיורים →
+        </button>
+      </form>
+
+      <ul class="trust-strip">
+        <li>
+          <strong>GMGA / FMGA ו-UNESCO</strong>
+          <span>צוות מדריכים מוסמך</span>
+        </li>
+        <li>
+          <strong>עזרה ראשונה של הצלב האדום</strong>
+          <span>הבטיחות במקום הראשון</span>
+        </li>
+        <li>
+          <strong>{SITE.experienceYears}+ שנים בגאורגיה</strong>
+          <span>DMC בטומי · 4 נקודות איסוף</span>
+        </li>
+        <li>
+          <strong>B2B ומטיילים פרטיים</strong>
+          <span>אפס עמלות נסתרות · ביטול 24 שעות</span>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Signature Tours Grid -->
+  <section class="section">
+    <div class="container">
+      <div class="section-header">
+        <div>
+          <span class="eyebrow">קבוצות קטנות וסיורים פרטיים</span>
+          <h2>סיורים מובילים מבטומי ומעבר לה</h2>
+        </div>
+        <div>
+          <p>
+            בכל מסלול מופיעים מראש זמן ההליכה האמיתי, נקודות האיסוף, כל מה שכלול במחיר ותמחור קבוצתי שקוף.
+          </p>
+        </div>
+      </div>
+
+      <div class="tours-grid">
+        {heTours.slice(0, 6).map((tour) => <TourCard tour={tour} lang="he" />)}
+      </div>
+
+      <aside class="optional-banner reveal-on-scroll" aria-label="אטרקציות אופציונליות במטירלה">
+        <div class="optional-banner-copy">
+          <span class="badge badge-sea">אופציונלי · לפי בחירה</span>
+          <p>
+            <strong>סיורי מטירלה</strong> יכולים לכלול גם אומגה / Zipline (80 GEL), טרקטורון ATV (150 GEL), דבש הרים (עם חלת דבש או מסונן, 50 GEL), פרופוליס / დინდგელი (40 GEL) וארוחת צהריים גאורגית (בתיאום עם המדריך) — אופציונלי לחלוטין, רק אם תרצו.
+          </p>
+        </div>
+        <div class="optional-banner-pills" aria-hidden="true">
+          <span class="badge badge-forest">אומגה · 80 GEL</span>
+          <span class="badge badge-forest">ATV · 150 GEL</span>
+          <span class="badge badge-forest">דבש · 50 GEL</span>
+          <span class="badge badge-forest">פרופוליס · 40 GEL</span>
+          <span class="badge badge-forest">ארוחת צהריים · עם המדריך</span>
+        </div>
+      </aside>
+
+      <div style="margin-top: 2.25rem; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1rem;">
+        <p style="margin: 0; font-size: 0.95rem;">
+          מחפשים משלחת קיץ של <strong>5 ימים להר קזבק (5,054 מ׳)</strong> או מסלול פרטי רב-אזורי?
+        </p>
+        <a class="btn btn-outline" href={withBase('/he/tours/')}>
+          לקטלוג המלא והסינון ({heTours.length} סיורים) →
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Verified Guest Reviews -->
+  <ReviewsSection
+    reviews={heReviews}
+    variant="band"
+    enableFilters={true}
+    eyebrow="ביקורות מאומתות של מטיילים"
+    heading="מה המטיילים מספרים על הסיורים שלנו"
+    intro="ביקורות אמיתיות מטיולים שהתקיימו, ביטולים כנים עקב סערות עם החזר מלא ומשובים משותפי B2B בינלאומיים."
+    lang="he"
+  />
+
+  <!-- Interactive Group Price Estimator -->
+  <section id="price-estimator" class="section section-surface">
+    <div class="container">
+      <div class="estimator-shell reveal-on-scroll">
+        <div class="estimator-intro">
+          <span class="eyebrow">תמחור שקוף · ללא הפתעות במקום</span>
+          <h2>מחשבון קבוצה ומטבעות</h2>
+          <p>
+            מטיילים בודדים לא צריכים לנחש מחירים, ומשפחות לא משלמות תוספות מיותרות. בחרו סיור, הזינו מבוגרים וילדים (גילאי 0–17 ב-75% מתעריף מבוגר) וראו את המחיר ב-EUR, USD או GEL.
+          </p>
+          <ul class="check-list">
+            <li>ביטול חינם עד 24 שעות מראש בסיורי היום</li>
+            <li>כרטיס הגן הבוטני כלול בסיור המשולב</li>
+            <li>4 נקודות איסוף מאומתות במרכז בטומי כלולות</li>
+          </ul>
+        </div>
+
+        <div class="estimator-card" id="home-estimator">
+          <div class="estimator-controls">
+            <div class="field">
+              <label for="est-tour">בחרו סיור</label>
+              <select id="est-tour">
+                {
+                  pricedTours.map((t, idx) => (
+                    <option value={t.slug} selected={idx === 1}>
+                      {t.shortTitle} ({t.duration})
+                    </option>
+                  ))
+                }
+              </select>
+            </div>
+
+            <div class="form-grid form-grid-2">
+              <div class="field">
+                <label for="est-adults">מבוגרים: <strong id="est-adults-val">2</strong></label>
+                <input id="est-adults" type="range" min="1" max="16" value="2" />
+              </div>
+              <div class="field">
+                <label for="est-children">ילדים (0–17, 75%): <strong id="est-children-val">0</strong></label>
+                <input id="est-children" type="range" min="0" max="8" value="0" />
+              </div>
+            </div>
+
+            <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.75rem;">
+              <span style="font-size: 0.85rem; font-weight: 700; color: var(--ink-700);">מטבע לתצוגה:</span>
+              <div class="currency-pills" role="group" aria-label="בחרו מטבע">
+                <button type="button" class="currency-btn active" data-currency="EUR" aria-pressed="true">EUR €</button>
+                <button type="button" class="currency-btn" data-currency="USD" aria-pressed="false">USD $</button>
+                <button type="button" class="currency-btn" data-currency="GEL" aria-pressed="false">GEL ₾</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="estimator-output">
+            <div class="est-metrics">
+              <div>
+                <span class="est-label">למבוגר</span>
+                <strong id="est-per-adult" class="est-num">€63</strong>
+              </div>
+              <div>
+                <span class="est-label">לילד (0–17)</span>
+                <strong id="est-per-child" class="est-num">€47</strong>
+              </div>
+              <div>
+                <span class="est-label">סה״כ קבוצה (<span id="est-total-pax">2</span>)</span>
+                <strong id="est-total" class="est-num est-highlight">€126</strong>
+              </div>
+            </div>
+            <p id="est-note" class="est-footnote">
+              תעריף מאומת ב-5 מדרגות · המרה ל-USD ו-GEL היא הערכה משוערת.
+            </p>
+            <div style="display: flex; flex-wrap: wrap; gap: 0.65rem; margin-top: 1rem;">
+              <a
+                id="est-wa-link"
+                class="btn btn-coral"
+                style="flex: 1 1 13rem;"
+                href={SITE.whatsappUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                הזמנה ב-WhatsApp
+              </a>
+              <a
+                id="est-tour-link"
+                class="btn btn-outline"
+                href={withBase(`/he/tours/${pricedTours[1]?.slug || pricedTours[0].slug}/`)}
+              >
+                מסלול הסיור
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Interactive Georgia Destinations Explorer -->
+  <section class="section">
+    <div class="container">
+      <div class="section-header">
+        <div>
+          <span class="eyebrow">מפת מסלולים אינטראקטיבית</span>
+          <h2>לאן מובילים השבילים שלנו בגאורגיה</h2>
+        </div>
+        <p>לחצו על כל נקודה במפת גאורגיה כדי לראות זמן נסיעה מבטומי, גובה, חודשים מומלצים וסיורים זמינים.</p>
+      </div>
+
+      <div class="map-explorer reveal-on-scroll">
+        <div class="map-stage" aria-label="מפה אינטראקטיבית של יעדי גאורגיה">
+          <svg
+            viewBox="0 0 600 320"
+            class="georgia-svg"
+            role="img"
+            aria-label="מפה סכמטית של גאורגיה: בטומי, עמקי אג׳רה, ביצות קולחתי, סוואנתי וקזבגי"
+          >
+            <path d="M0,0 L118,0 C112,75 110,165 88,245 L72,320 L0,320 Z" fill="#D5E7F0" />
+            <text x="16" y="160" fill="#1D4E68" font-size="12" font-weight="700" letter-spacing="1.8">BLACK SEA</text>
+
+            <path
+              d="M116,42 C170,22 250,35 335,44 C415,52 505,78 566,144 C578,186 558,236 512,262 C448,266 376,274 295,286 C215,288 148,284 92,260 C98,215 114,165 116,105 Z"
+              fill="#EDF4F0"
+              stroke="#2D6A4F"
+              stroke-width="2.5"
+            />
+            <path
+              d="M148,54 Q260,36 390,60 T535,134"
+              fill="none"
+              stroke="#2D6A4F"
+              stroke-width="2"
+              stroke-dasharray="5 5"
+              opacity="0.65"
+            />
+            <text x="270" y="34" fill="#1B4332" font-size="11" font-weight="700" letter-spacing="1.4">
+              GREATER CAUCASUS RIDGE
+            </text>
+            <text x="145" y="218" fill="#4A5952" font-size="11" font-weight="600">ADJARA</text>
+          </svg>
+
+          {
+            destinationsClientData.map((dest, idx) => (
+              <button
+                type="button"
+                class={`map-pin ${idx === 0 ? 'active' : ''}`}
+                style={`left: ${dest.mapCoords.x}%; top: ${dest.mapCoords.y}%;`}
+                data-dest-slug={dest.slug}
+                aria-pressed={idx === 0 ? 'true' : 'false'}
+              >
+                <span class="pin-dot" aria-hidden="true"></span>
+                <span class="pin-label">{dest.name}</span>
+              </button>
+            ))
+          }
+        </div>
+
+        <article class="destination-spotlight" id="destination-spotlight" aria-live="polite">
+          <img
+            id="dest-img"
+            src={withBase(defaultDestination.image)}
+            alt={defaultDestination.imageAlt}
+            width="1200"
+            height="800"
+            loading="lazy"
+          />
+          <div class="dest-content">
+            <span id="dest-region-label" class="eyebrow">{defaultDestination.regionLabel}</span>
+            <h3 id="dest-title">{defaultDestination.name}</h3>
+            <p id="dest-desc">{defaultDestination.description}</p>
+            <dl class="dest-meta-grid">
+              <div>
+                <dt>מבטומי</dt>
+                <dd id="dest-drive">{defaultDestination.driveTimeFromBatumi}</dd>
+              </div>
+              <div>
+                <dt>גובה</dt>
+                <dd id="dest-elev">{defaultDestination.elevation}</dd>
+              </div>
+              <div>
+                <dt>עונה מומלצת</dt>
+                <dd id="dest-season">{defaultDestination.bestSeason}</dd>
+              </div>
+            </dl>
+            <div id="dest-tours-links" style="display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1rem;">
+              {
+                destinationsClientData[0].toursResolved.map((tl) => (
+                  <a class="btn btn-forest btn-sm" href={tl.href}>
+                    {tl.title} →
+                  </a>
+                ))
+              }
+            </div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- Four Seasons in Georgia Planner -->
+  <section id="seasons" class="section section-surface">
+    <div class="container">
+      <div class="section-header">
+        <div>
+          <span class="eyebrow">תכנון עונתי</span>
+          <h2>מתי לבקר בבטומי ובשבילי גאורגיה</h2>
+        </div>
+        <p>ציפיות מציאותיות לפי עונה — מטיולי חורף רגועים לאורך החוף ועד פריחת האביב בקולחתי ומעברי הקיץ בהרים.</p>
+      </div>
+
+      <div class="seasons-grid">
+        {
+          HE_SEASONS.map((s) => (
+            <article class="season-card reveal-on-scroll">
+              <span class="badge badge-sea">{s.months}</span>
+              <h3>{s.title}</h3>
+              <p>{s.focus}</p>
+              <p class="season-tip">
+                <strong>טיפ מהשטח:</strong> {s.practicalNote}
+              </p>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- Company Operations + Brand Pillars -->
+  <section class="section section-forest">
+    <div class="container">
+      <div class="guide-feature reveal-on-scroll">
+        <div class="guide-photo-frame">
+          <img
+            src={withBase('/images/mestia-svaneti.webp')}
+            alt="עמק אלפיני בקווקז ופסגות מושלגות בגאורגיה בהובלת Minimalism Tours Georgia"
+            width="1200"
+            height="800"
+            loading="lazy"
+          />
+        </div>
+        <div class="guide-copy">
+          <span class="eyebrow">מפעילי סיורים בבטומי ו-DMC אג׳רה · {SITE.experienceYears}+ שנות ניסיון</span>
+          <h2>לוגיסטיקה אמינה. קצב נעים. מוכנים ל-B2B ולסיורים פרטיים.</h2>
+          <p>
+            Minimalism Tours Georgia נבנתה סביב סטנדרט ברור: לחבר מטיילים ושותפים אל הטבע של גאורגיה והתרבות החיה בכפרים באמצעות לוגיסטיקה מדויקת, מדריכים מוסמכים ומחירים שקופים ללא תנאים נסתרים.
+          </p>
+
+          <div class="pillars-grid">
+            {
+              HE_CONTENT_PILLARS.map((pillar) => (
+                <div class="pillar-item">
+                  <h3>{pillar.name}</h3>
+                  <p>{pillar.summary}</p>
+                </div>
+              ))
+            }
+          </div>
+
+          <div style="display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1.75rem;">
+            <a class="btn btn-coral" href={withBase('/he/partners/')}>B2B וסוכנויות</a>
+            <a class="btn btn-outline-light" href={withBase('/he/about/')}>סטנדרטים וצי רכבים</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Verified Pickup Points -->
+  <section id="pickups" class="section">
+    <div class="container">
+      <div class="section-header">
+        <div>
+          <span class="eyebrow">יציאה נוחה בשעה {SITE.defaultStartTime}</span>
+          <h2>4 נקודות איסוף מרכזיות בבטומי</h2>
+        </div>
+        <p>כל סיור יום מחזיר אתכם לאותה נקודת איסוף נוחה — לחצו לפתיחת המיקום המדויק במפות Google.</p>
+      </div>
+
+      <div class="pickup-grid">
+        {
+          PICKUP_POINTS.map((p, i) => {
+            const heP = HE_PICKUP_POINTS[p.id];
+            return (
+              <article class="pickup-card reveal-on-scroll">
+                <span class="badge badge-forest">תחנה 0{i + 1}</span>
+                <h3>{heP ? heP.name : p.name}</h3>
+                <p class="pickup-district">{heP ? heP.district : p.district}</p>
+                <p class="pickup-address">{heP ? heP.address : p.address}</p>
+                <a href={p.mapsUrl} target="_blank" rel="noopener noreferrer">
+                  פתיחה במפות Google ↗
+                </a>
+              </article>
+            );
+          })
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ Accordion -->
+  <section class="section section-surface">
+    <div class="container" style="max-width: 56rem;">
+      <div class="section-header">
+        <div>
+          <span class="eyebrow">תשובות מעשיות</span>
+          <h2>שאלות נפוצות</h2>
+        </div>
+      </div>
+
+      <section class="accordion" id="home-faq" aria-label="שאלות נפוצות">
+        <div class="accordion-toolbar">
+          <button
+            type="button"
+            class="btn btn-outline btn-sm"
+            commandfor="home-faq"
+            command="--toggle-all"
+            aria-expanded="false"
+          >
+            <span class="expand-label">הרחב הכול</span>
+            <span class="collapse-label">כווץ הכול</span>
+          </button>
+        </div>
+
+        {
+          HE_GENERAL_FAQS.map((item) => (
+            <details>
+              <summary>{item.question}</summary>
+              <div class="accordion-panel">
+                <p>{item.answer}</p>
+              </div>
+            </details>
+          ))
+        }
+      </section>
+    </div>
+  </section>
+
+  <script
+    id="home-interactive-data"
+    type="application/json"
+    set:html={JSON.stringify({
+      tours: pricedTours.map((t) => ({
+        slug: t.slug,
+        shortTitle: t.shortTitle,
+        pricingNote: t.pricingNote,
+        pricingTiers: t.pricingTiers,
+        href: withBase(`/he/tours/${t.slug}/`),
+      })),
+      destinations: destinationsClientData,
+      currencyRates: SITE.currencyRates,
+      whatsappUrl: SITE.whatsappUrl,
+    })}
+  />
+
+  <script>
+    const payloadEl = document.getElementById('home-interactive-data');
+    if (payloadEl?.textContent) {
+      const data = JSON.parse(payloadEl.textContent);
+
+      const tourSelect = document.getElementById('est-tour') as HTMLSelectElement | null;
+      const adultsRange = document.getElementById('est-adults') as HTMLInputElement | null;
+      const childrenRange = document.getElementById('est-children') as HTMLInputElement | null;
+      const adultsVal = document.getElementById('est-adults-val');
+      const childrenVal = document.getElementById('est-children-val');
+      const perAdultEl = document.getElementById('est-per-adult');
+      const perChildEl = document.getElementById('est-per-child');
+      const totalPaxEl = document.getElementById('est-total-pax');
+      const totalEl = document.getElementById('est-total');
+      const noteEl = document.getElementById('est-note');
+      const waLinkEl = document.getElementById('est-wa-link') as HTMLAnchorElement | null;
+      const tourLinkEl = document.getElementById('est-tour-link') as HTMLAnchorElement | null;
+      const currencyBtns = document.querySelectorAll<HTMLButtonElement>('.currency-btn');
+
+      let activeCurrency: 'EUR' | 'USD' | 'GEL' = 'EUR';
+
+      const formatAmt = (eur: number) => {
+        const cfg = data.currencyRates[activeCurrency] || data.currencyRates.EUR;
+        const val = Math.round(eur * cfg.rate);
+        return `${cfg.symbol}${val}`;
+      };
+
+      const renderEstimator = () => {
+        if (!tourSelect || !adultsRange || !childrenRange) return;
+        const tour = data.tours.find((t: any) => t.slug === tourSelect.value) || data.tours[0];
+        if (!tour) return;
+
+        const maxCap = tour.pricingTiers[tour.pricingTiers.length - 1]?.maxPax || 16;
+        const adults = Number(adultsRange.value);
+        const children = Number(childrenRange.value);
+        const totalPax = Math.min(maxCap, Math.max(1, adults + children));
+
+        if (adultsVal) adultsVal.textContent = String(adults);
+        if (childrenVal) childrenVal.textContent = String(children);
+        if (totalPaxEl) totalPaxEl.textContent = String(adults + children);
+
+        const tier =
+          tour.pricingTiers.find((tierItem: any) => totalPax >= tierItem.minPax && totalPax <= tierItem.maxPax) ||
+          tour.pricingTiers[tour.pricingTiers.length - 1];
+
+        const totalEur = adults * tier.adultEur + children * tier.childEur;
+        if (perAdultEl) perAdultEl.textContent = formatAmt(tier.adultEur);
+        if (perChildEl) perChildEl.textContent = formatAmt(tier.childEur);
+        if (totalEl) totalEl.textContent = formatAmt(totalEur);
+        if (noteEl) {
+          noteEl.textContent = `${tour.pricingNote}. ${
+            activeCurrency === 'EUR'
+              ? 'מוצג במטבע הבסיס EUR.'
+              : 'הסכומים ב-USD וב-GEL הם הערכה משוערת מ-EUR.'
+          }`;
+        }
+        if (tourLinkEl) tourLinkEl.href = tour.href;
+        if (waLinkEl) {
+          const msg = `שלום Minimalism Tours Georgia! אשמח להזמין את "${tour.shortTitle}" עבור ${adults} מבוגרים ו-${children} ילדים. הערכת מחיר: €${totalEur} (${formatAmt(totalEur)}).`;
+          waLinkEl.href = `${data.whatsappUrl}?text=${encodeURIComponent(msg)}`;
+        }
+      };
+
+      currencyBtns.forEach((btn) => {
+        btn.addEventListener('click', () => {
+          activeCurrency = (btn.dataset.currency as 'EUR' | 'USD' | 'GEL') || 'EUR';
+          currencyBtns.forEach((b) => {
+            const active = b === btn;
+            b.classList.toggle('active', active);
+            b.setAttribute('aria-pressed', String(active));
+          });
+          renderEstimator();
+        });
+      });
+
+      tourSelect?.addEventListener('change', renderEstimator);
+      adultsRange?.addEventListener('input', renderEstimator);
+      childrenRange?.addEventListener('input', renderEstimator);
+      renderEstimator();
+
+      const mapPins = document.querySelectorAll<HTMLButtonElement>('.map-pin');
+      const destImg = document.getElementById('dest-img') as HTMLImageElement | null;
+      const destRegion = document.getElementById('dest-region-label');
+      const destTitle = document.getElementById('dest-title');
+      const destDesc = document.getElementById('dest-desc');
+      const destDrive = document.getElementById('dest-drive');
+      const destElev = document.getElementById('dest-elev');
+      const destSeason = document.getElementById('dest-season');
+      const destLinks = document.getElementById('dest-tours-links');
+
+      mapPins.forEach((pin) => {
+        pin.addEventListener('click', () => {
+          const slug = pin.dataset.destSlug;
+          const dest = data.destinations.find((d: any) => d.slug === slug);
+          if (!dest) return;
+
+          mapPins.forEach((p) => {
+            const isMatch = p === pin;
+            p.classList.toggle('active', isMatch);
+            p.setAttribute('aria-pressed', String(isMatch));
+          });
+
+          if (destImg) {
+            destImg.src = dest.imageResolved;
+            destImg.alt = dest.imageAlt;
+          }
+          if (destRegion) destRegion.textContent = dest.regionLabel;
+          if (destTitle) destTitle.textContent = dest.name;
+          if (destDesc) destDesc.textContent = dest.description;
+          if (destDrive) destDrive.textContent = dest.driveTimeFromBatumi;
+          if (destElev) destElev.textContent = dest.elevation;
+          if (destSeason) destSeason.textContent = dest.bestSeason;
+
+          if (destLinks) {
+            destLinks.replaceChildren();
+            if (dest.toursResolved.length) {
+              dest.toursResolved.forEach((tl: any) => {
+                const a = document.createElement('a');
+                a.className = 'btn btn-forest btn-sm';
+                a.href = tl.href;
+                a.textContent = `${tl.title} →`;
+                destLinks.appendChild(a);
+              });
+            } else {
+              const a = document.createElement('a');
+              a.className = 'btn btn-coral btn-sm';
+              a.href = `${data.whatsappUrl}?text=${encodeURIComponent(`שלום Minimalism Tours Georgia! אשמח לתכנן סיור פרטי אל: ${dest.name}.`)}`;
+              a.target = '_blank';
+              a.rel = 'noopener noreferrer';
+              a.textContent = `תכננו סיור אל: ${dest.name} ↗`;
+              destLinks.appendChild(a);
+            }
+          }
+        });
+      });
+    }
+  </script>
+</BaseLayout>
+
+<style>
+  .hero-finder {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.85rem;
+    align-items: end;
+    background-color: var(--bg-page);
+    color: var(--ink-900);
+    padding: 1.1rem;
+    margin-bottom: 1.75rem;
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+  }
+
+  @media (min-width: 52rem) {
+    .hero-finder {
+      grid-template-columns: repeat(3, 1fr) auto;
+      padding: 1.15rem 1.35rem;
+    }
+  }
+
+  .finder-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .finder-field label {
+    font-size: 0.76rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--ink-600);
+  }
+
+  .finder-field select {
+    padding: 0.62rem 0.75rem;
+    border-radius: var(--radius-sm);
+    border: 1.5px solid var(--border-strong);
+    background-color: var(--bg-page);
+    color: var(--ink-900);
+    font-family: var(--font-sans);
+    font-size: 0.92rem;
+    font-weight: 600;
+  }
+
+  .trust-strip {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 1rem 1.75rem;
+    grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
+  }
+
+  .trust-strip li {
+    display: flex;
+    flex-direction: column;
+    border-inline-start: 3px solid var(--coral-500);
+    padding-inline-start: 0.85rem;
+  }
+
+  .trust-strip strong {
+    font-size: 0.95rem;
+    color: var(--ink-900);
+  }
+
+  .trust-strip span {
+    font-size: 0.84rem;
+    color: var(--ink-600);
+  }
+
+  /* Price Estimator */
+  .estimator-shell {
+    display: grid;
+    gap: 2.25rem;
+    align-items: center;
+  }
+
+  @media (min-width: 58rem) {
+    .estimator-shell {
+      grid-template-columns: 1fr 1.12fr;
+    }
+  }
+
+  .check-list {
+    list-style: none;
+    margin: 1.25rem 0 0;
+    padding: 0;
+    display: grid;
+    gap: 0.55rem;
+  }
+
+  .check-list li::before {
+    content: '✓';
+    display: inline-block;
+    margin-inline-end: 0.55rem;
+    font-weight: 700;
+    color: var(--forest-700);
+  }
+
+  .estimator-card {
+    background-color: var(--bg-page);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-xl);
+    padding: clamp(1.35rem, 3vw, 2rem);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .estimator-controls {
+    display: grid;
+    gap: 1.1rem;
+    padding-bottom: 1.35rem;
+    border-bottom: 1px solid var(--border-subtle);
+  }
+
+  .estimator-controls input[type='range'] {
+    accent-color: var(--coral-600);
+    padding: 0;
+    border: none;
+    box-shadow: none;
+    background: transparent;
+  }
+
+  .currency-pills {
+    display: inline-flex;
+    border: 1.5px solid var(--border-strong);
+    border-radius: var(--radius-pill);
+    padding: 0.2rem;
+    background: var(--bg-surface);
+  }
+
+  .currency-btn {
+    border: none;
+    background: transparent;
+    padding: 0.35rem 0.78rem;
+    border-radius: var(--radius-pill);
+    font-family: var(--font-sans);
+    font-size: 0.83rem;
+    font-weight: 700;
+    color: var(--ink-700);
+    cursor: pointer;
+  }
+
+  .currency-btn.active {
+    background: var(--forest-800);
+    color: #ffffff;
+  }
+
+  .estimator-output {
+    padding-top: 1.35rem;
+  }
+
+  .est-metrics {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(7.5rem, 1fr));
+    gap: 1rem;
+    margin-bottom: 0.9rem;
+  }
+
+  .est-label {
+    display: block;
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--ink-600);
+  }
+
+  .est-num {
+    font-family: var(--font-display);
+    font-size: 1.65rem;
+    color: var(--ink-900);
+  }
+
+  .est-highlight {
+    color: var(--coral-600);
+  }
+
+  .est-footnote {
+    font-size: 0.82rem;
+    color: var(--ink-600);
+    margin: 0;
+  }
+
+  /* Interactive Map Explorer */
+  .map-explorer {
+    display: grid;
+    gap: 1.5rem;
+    align-items: stretch;
+  }
+
+  @media (min-width: 58rem) {
+    .map-explorer {
+      grid-template-columns: 1.12fr 0.95fr;
+    }
+  }
+
+  .map-stage {
+    position: relative;
+    background-color: var(--sea-100);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    min-height: 19rem;
+    display: flex;
+    align-items: center;
+  }
+
+  .georgia-svg {
+    width: 100%;
+    height: auto;
+  }
+
+  .map-pin {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.32rem 0.65rem;
+    border-radius: var(--radius-pill);
+    border: 1.5px solid var(--forest-800);
+    background-color: #ffffff;
+    color: var(--ink-900);
+    font-family: var(--font-sans);
+    font-size: 0.75rem;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: var(--shadow-sm);
+    white-space: nowrap;
+    transition: transform 0.16s ease, background-color 0.16s ease, color 0.16s ease;
+  }
+
+  .map-pin:hover {
+    transform: translate(-50%, -56%);
+    background-color: var(--forest-100);
+  }
+
+  .map-pin.active {
+    background-color: var(--coral-600);
+    border-color: #ffffff;
+    color: #ffffff;
+    z-index: 4;
+  }
+
+  .pin-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: var(--coral-600);
+  }
+
+  .map-pin.active .pin-dot {
+    background-color: #ffffff;
+  }
+
+  @media (max-width: 34rem) {
+    .pin-label {
+      display: none;
+    }
+    .map-pin.active .pin-label {
+      display: inline;
+    }
+  }
+
+  .destination-spotlight {
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    box-shadow: var(--shadow-xs);
+    display: flex;
+    flex-direction: column;
+  }
+
+  .destination-spotlight img {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+  }
+
+  .dest-content {
+    padding: 1.4rem 1.5rem 1.6rem;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+  }
+
+  .dest-content h3 {
+    margin-bottom: 0.55rem;
+  }
+
+  .dest-meta-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(8rem, 1fr));
+    gap: 0.75rem;
+    margin: 0.75rem 0 0;
+    padding-top: 0.85rem;
+    border-top: 1px solid var(--border-subtle);
+  }
+
+  .dest-meta-grid dt {
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--ink-600);
+  }
+
+  .dest-meta-grid dd {
+    margin: 0;
+    font-size: 0.86rem;
+    font-weight: 600;
+    color: var(--ink-900);
+  }
+
+  /* Seasons */
+  .seasons-grid {
+    display: grid;
+    gap: 1.25rem;
+    grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+  }
+
+  .season-card {
+    background-color: var(--bg-page);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    padding: 1.35rem;
+  }
+
+  .season-card h3 {
+    margin-top: 0.85rem;
+    margin-bottom: 0.55rem;
+    font-size: 1.18rem;
+  }
+
+  .season-tip {
+    font-size: 0.86rem;
+    color: var(--ink-600);
+    margin-bottom: 0;
+  }
+
+  /* Guide Feature */
+  .guide-feature {
+    display: grid;
+    gap: 2.5rem;
+    align-items: center;
+  }
+
+  @media (min-width: 54rem) {
+    .guide-feature {
+      grid-template-columns: minmax(17rem, 23rem) 1fr;
+    }
+  }
+
+  .guide-photo-frame {
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    border: 2px solid rgba(255, 255, 255, 0.22);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .guide-photo-frame img {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    object-position: center;
+  }
+
+  .pillars-grid {
+    display: grid;
+    gap: 1rem;
+    margin-top: 1.5rem;
+    grid-template-columns: repeat(auto-fit, minmax(12.5rem, 1fr));
+  }
+
+  .pillar-item {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    border-radius: var(--radius-md);
+    padding: 1rem 1.1rem;
+  }
+
+  .pillar-item h3 {
+    font-size: 1.08rem;
+    margin-bottom: 0.35rem;
+    color: #f4b69f;
+  }
+
+  .pillar-item p {
+    font-size: 0.88rem;
+    margin-bottom: 0;
+  }
+
+  /* Pickups */
+  .pickup-grid {
+    display: grid;
+    gap: 1.25rem;
+    grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+  }
+
+  .pickup-card {
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    padding: 1.35rem;
+    box-shadow: var(--shadow-xs);
+  }
+
+  .pickup-card h3 {
+    margin-top: 0.7rem;
+    margin-bottom: 0.25rem;
+    font-size: 1.15rem;
+  }
+
+  .pickup-district {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--sea-800);
+    margin-bottom: 0.35rem;
+  }
+
+  .pickup-address {
+    font-size: 0.9rem;
+    color: var(--ink-600);
+    margin-bottom: 0.85rem;
+  }
+
+  .pickup-card a {
+    font-size: 0.88rem;
+    font-weight: 700;
+  }
+
+  .optional-banner {
+    margin-top: 1.5rem;
+    padding: 1.1rem 1.3rem;
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-inline-start: 4px solid var(--sea-600);
+    border-radius: var(--radius-lg);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.85rem 1.25rem;
+    box-shadow: var(--shadow-xs);
+  }
+
+  .optional-banner-copy {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.6rem 0.9rem;
+    max-width: 44rem;
+  }
+
+  .optional-banner-copy p {
+    margin: 0;
+    font-size: 0.92rem;
+    color: var(--ink-700);
+  }
+
+  .optional-banner-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+</style>

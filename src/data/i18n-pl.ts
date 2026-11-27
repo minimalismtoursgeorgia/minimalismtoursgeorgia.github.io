@@ -451,6 +451,14 @@ const PL_REVIEWS_MAP: Record<string, Partial<GuestReview>> = {
     dateLabel: 'Cze 2026',
     country: 'Izrael',
   },
+  'whatsapp-2026-11-israel-guest-fun-day': {
+    title: 'Bardzo się cieszymy, że byłeś naszym przewodnikiem',
+    quote:
+      'Miło to słyszeć! Bardzo dziękujemy — było z tobą naprawdę świetnie, szczególnie w taki dzień jak dzisiaj. Bardzo się cieszę, że byłeś naszym przewodnikiem; bawiliśmy się wspaniale i z przyjemnością polecimy was znajomym i rodzinie.',
+    authorLabel: 'Gość wycieczki prywatnej',
+    dateLabel: 'Lis 2026',
+    country: 'Izrael',
+  },
   'whatsapp-2026-10-rahhalah-b2b': {
     title: 'Profesjonalizm i opieka nad gośćmi w Wysokim Kaukazie',
     contextNote:

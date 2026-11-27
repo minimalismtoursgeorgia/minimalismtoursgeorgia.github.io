@@ -24,6 +24,12 @@ import {
   UK_BATUMI_FAQS,
   UK_BATUMI_NEWS_ITEMS,
 } from '../data/batumi-news-uk';
+import {
+  HE_BATUMI_CALENDAR,
+  HE_BATUMI_FACTS,
+  HE_BATUMI_FAQS,
+  HE_BATUMI_NEWS_ITEMS,
+} from '../data/batumi-news-he';
 import { withBase } from '../lib/urls';
 import { localizePath, type Lang } from '../lib/i18n';
 
@@ -35,12 +41,13 @@ const { lang = 'en' } = Astro.props;
 const isKa = lang === 'ka';
 const isPl = lang === 'pl';
 const isUk = lang === 'uk';
+const isHe = lang === 'he';
 const homePath = withBase(localizePath('/', lang));
-const l = (field: { en: string; ka: string; pl?: string; uk?: string }) => field[lang] || field.en;
-const la = (field: { en: string[]; ka: string[]; pl?: string[]; uk?: string[] }) => field[lang] || field.en;
+const l = (field: { en: string; ka: string; pl?: string; uk?: string; he?: string }) => field[lang] || field.en;
+const la = (field: { en: string[]; ka: string[]; pl?: string[]; uk?: string[]; he?: string[] }) => field[lang] || field.en;
 
 const categoryFilters: { id: 'all' | BatumiNewsCategory; label: string; count: number }[] = [
-  { id: 'all', label: isKa ? 'ყველა' : isPl ? 'Wszystkie' : isUk ? 'Усі новини' : 'All Updates', count: BATUMI_NEWS_ITEMS.length },
+  { id: 'all', label: isKa ? 'ყველა' : isPl ? 'Wszystkie' : isUk ? 'Усі новини' : isHe ? 'כל העדכונים' : 'All Updates', count: BATUMI_NEWS_ITEMS.length },
   ...(['events', 'projects', 'travel-rules', 'seasonal'] as BatumiNewsCategory[]).map((cat) => ({
     id: cat,
     label: l(BATUMI_CATEGORY_LABELS[cat]),
@@ -49,7 +56,7 @@ const categoryFilters: { id: 'all' | BatumiNewsCategory; label: string; count: n
 ];
 
 const statusOptions: { id: 'all' | BatumiNewsStatus; label: string }[] = [
-  { id: 'all', label: isKa ? 'ყველა სტატუსი' : isPl ? 'Dowolny termin' : isUk ? 'Будь-який термін' : 'Any Timeline' },
+  { id: 'all', label: isKa ? 'ყველა სტატუსი' : isPl ? 'Dowolny termin' : isUk ? 'Будь-який термін' : isHe ? 'כל המועדים' : 'Any Timeline' },
   ...(['happening-soon', 'active-2026', 'planned-2027', 'annual-highlight'] as BatumiNewsStatus[]).map((st) => ({
     id: st,
     label: l(BATUMI_STATUS_LABELS[st]),
@@ -214,6 +221,59 @@ const copy = isKa
       expandAll: 'Розгорнути все',
       collapseAll: 'Згорнути все',
     }
+  : isHe
+  ? {
+      breadcrumbHome: 'ראשי',
+      breadcrumbCurrent: 'חדשות ואירועים בבטומי',
+      eyebrow: 'מדריך מקומי מקיף · 2026–2027',
+      h1: 'חדשות בטומי, אירועים מתוכננים ונהלי כניסה',
+      heroDesc:
+        'כל מה שקורה בבטומי ובאג׳רה במקום אחד: לוח זמנים של כפר השנה החדשה, פסטיבלים, פרויקטי חוף, חובת ביטוח נסיעות 2026, פתיחת אתר הסקי בגודרדזי ומחירי כרטיסים מעודכנים.',
+      verifiedLabel: 'עודכן לאחרונה:',
+      verifiedDate: BATUMI_NEWS_META.lastVerifiedHe,
+      jumpUpdates: 'עדכונים ואירועים',
+      jumpCalendar: 'לוח אירועים שנתי',
+      jumpResources: 'כרטיסים וסיוע מקומי',
+      jumpFaq: 'שאלות נפוצות',
+      snapshotHeading: 'עובדות מפתח 2026–2027 במבט מהיר',
+      searchLandmarkLabel: 'חיפוש וסינון חדשות ואירועים בבטומי',
+      searchLabel: 'חיפוש לפי מילת מפתח',
+      searchPlaceholder: 'כיכר אירופה, גודרדזי, ביטוח, ג׳אז, גן בוטני...',
+      statusLabel: 'תקופה / סטטוס',
+      showingPrefix: 'מציג',
+      showingOf: 'מתוך',
+      clearFilters: 'נקה סינון',
+      emptyTitle: 'לא נמצאו עדכונים תואמים',
+      emptyDesc:
+        'נסו מילת מפתח אחרת או נקו את הסינון — או כתבו ישירות לצוות שלנו בבטומי ב-WhatsApp.',
+      emptyReset: 'הצג את כל העדכונים',
+      emptyAsk: 'שאלו מדריך ב-WhatsApp',
+      venueLabel: 'מיקום',
+      mapsLinkLabel: 'מפה ↗',
+      admissionLabel: 'כניסה / מחיר',
+      detailsSummary: 'פירוט מלא, תאריכים וטיפ של מדריך',
+      guideTipLabel: 'טיפ של מדריך מקומי',
+      askAboutTopic: 'שאלו ב-WhatsApp ↗',
+      relatedTourPrefix: 'שלבו עם סיור:',
+      calendarEyebrow: 'מינואר עד דצמבר',
+      calendarHeading: 'לוח אירועים ועונות שנתי בבטומי ובאג׳רה',
+      calendarIntro:
+        'בכל חודש שתגיעו לבטומי, בדקו את הפסטיבלים המרכזיים, עונות ההרים והסיורים המתאימים ביותר.',
+      pairLabel: 'סיור מומלץ:',
+      resourcesEyebrow: 'כרטיסים רשמיים ותמיכה בשטח',
+      resourcesHeading: 'איפה קונים כרטיסים ואיך מתכננים יום בבטומי',
+      resourcesIntro:
+        'חסכו זמן: בדקו היכן נמכרים כרטיסים רשמיים ופנו לצוות המקומי שלנו בבטומי למידע חי.',
+      conciergeTitle: 'Minimalism Tours Georgia — קונסיירז׳ ישיר בבטומי',
+      conciergeDesc:
+        'צריכים לבדוק אם רכבל ארגו פועל ביום עם רוח, לברר שעות הופעות בכיכר אירופה או להזמין רכב 4x4 לגודרדזי או מטירלה? כתבו לנו ישירות.',
+      conciergeWa: 'הודעה ב-WhatsApp',
+      conciergeTg: 'הודעה ב-Telegram',
+      faqEyebrow: 'תשובות מהירות',
+      faqHeading: 'שאלות נפוצות: אירועי בטומי ונהלים למבקרים',
+      expandAll: 'הרחב הכול',
+      collapseAll: 'כווץ הכול',
+    }
   : {
       breadcrumbHome: 'Home',
       breadcrumbCurrent: 'Batumi News & Events',
@@ -330,6 +390,27 @@ const ticketingPlatforms = isKa
         url: 'https://mta.ski',
       },
     ]
+  : isHe
+  ? [
+      {
+        name: 'TKT.ge ו-Biletebi.ge',
+        role: 'קונצרטים, STAR Circus, תיאטרון ואירועי סילבסטר',
+        detail: 'קופות הכרטיסים הרשמיות בגאורגיה לתיאטרון הדרמטי של בטומי, מרכז המוזיקה, STAR Circus, Teatro ומופעי סטנד-אפ.',
+        url: 'https://tkt.ge',
+      },
+      {
+        name: 'GoBatumi.com',
+        role: 'הפורטל הרשמי של מחלקת התיירות של אג׳רה',
+        detail: 'הודעות רשמיות על בטומובה, פסטיבל הקיץ, גנדגאנה ואירועי תרבות אזוריים.',
+        url: 'https://gobatumi.com',
+      },
+      {
+        name: 'MTA.ski',
+        role: 'מצב רכבלים ומסלולים בגודרדזי בזמן אמת',
+        detail: 'עדכונים יומיים על פעילות גונדולות, עומק השלג וסקי-פס לעונת 2026–2027.',
+        url: 'https://mta.ski',
+      },
+    ]
   : [
       {
         name: 'TKT.ge & Biletebi.ge',
@@ -375,6 +456,18 @@ const factsList = isPl
           }
         : f;
     })
+  : isHe
+  ? BATUMI_ESSENTIAL_FACTS.map((f) => {
+      const ov = HE_BATUMI_FACTS[f.id];
+      return ov
+        ? {
+            ...f,
+            kicker: { ...f.kicker, he: ov.kicker },
+            headline: { ...f.headline, he: ov.headline },
+            detail: { ...f.detail, he: ov.detail },
+          }
+        : f;
+    })
   : BATUMI_ESSENTIAL_FACTS;
 
 const newsList = isPl
@@ -413,6 +506,24 @@ const newsList = isPl
           }
         : item;
     })
+  : isHe
+  ? BATUMI_NEWS_ITEMS.map((item) => {
+      const ov = HE_BATUMI_NEWS_ITEMS[item.slug];
+      return ov
+        ? {
+            ...item,
+            dateRange: { ...item.dateRange, he: ov.dateRange },
+            title: { ...item.title, he: ov.title },
+            summary: { ...item.summary, he: ov.summary },
+            keyDetails: { ...item.keyDetails, he: ov.keyDetails },
+            venue: { ...item.venue, he: ov.venue },
+            admission: { ...item.admission, he: ov.admission },
+            localTip: { ...item.localTip, he: ov.localTip },
+            whatsappTopic: { ...item.whatsappTopic, he: ov.whatsappTopic },
+            imageAlt: item.imageAlt && ov.imageAlt ? { ...item.imageAlt, he: ov.imageAlt } : item.imageAlt,
+          }
+        : item;
+    })
   : BATUMI_NEWS_ITEMS;
 
 const calendarList = isPl
@@ -441,6 +552,19 @@ const calendarList = isPl
           }
         : block;
     })
+  : isHe
+  ? BATUMI_ANNUAL_CALENDAR.map((block) => {
+      const ov = HE_BATUMI_CALENDAR[block.id];
+      return ov
+        ? {
+            ...block,
+            months: { ...block.months, he: ov.months },
+            title: { ...block.title, he: ov.title },
+            highlights: { ...block.highlights, he: ov.highlights },
+            pairWithTourLabel: { ...block.pairWithTourLabel, he: ov.pairWithTourLabel },
+          }
+        : block;
+    })
   : BATUMI_ANNUAL_CALENDAR;
 
 const faqList = isPl
@@ -460,6 +584,16 @@ const faqList = isPl
         ? {
             question: { ...faq.question, uk: ov.question },
             answer: { ...faq.answer, uk: ov.answer },
+          }
+        : faq;
+    })
+  : isHe
+  ? BATUMI_NEWS_FAQS.map((faq, idx) => {
+      const ov = HE_BATUMI_FAQS[idx];
+      return ov
+        ? {
+            question: { ...faq.question, he: ov.question },
+            answer: { ...faq.answer, he: ov.answer },
           }
         : faq;
     })

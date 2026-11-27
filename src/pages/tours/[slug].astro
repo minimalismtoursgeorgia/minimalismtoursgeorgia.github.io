@@ -95,6 +95,7 @@ const videoJsonLd = (tour.videos || []).map((v) => ({
   alternateEnPath={`/tours/${tour.slug}/`}
   alternatePlPath={`/pl/tours/${tour.slug}/`}
   alternateUkPath={`/uk/tours/${tour.slug}/`}
+  alternateHePath={`/he/tours/${tour.slug}/`}
   ogImage={tour.heroImage}
   keywords={tour.keywords}
   jsonLd={[tourJsonLd, breadcrumbJsonLd, ...faqJsonLd, ...videoJsonLd]}

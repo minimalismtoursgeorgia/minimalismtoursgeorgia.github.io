@@ -1,0 +1,485 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import ReviewsSection from '../../../components/ReviewsSection.astro';
+import { SITE } from '../../../data/site';
+import {
+  HE_B2B_PARTNER_TYPES,
+  HE_B2B_GUARANTEES,
+  HE_VEHICLES,
+  HE_CERTIFICATIONS,
+  getReviewsForLangHe,
+} from '../../../data/i18n-he';
+import { withBase, absoluteUrl } from '../../../lib/urls';
+
+const hePartnerProofReviews = getReviewsForLangHe('he').filter(
+  (review) => review.category === 'b2b' || review.category === 'safety-cancellation',
+);
+
+const breadcrumbJsonLd = {
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'ראשי', item: absoluteUrl('/he/', Astro.site) },
+    { '@type': 'ListItem', position: 2, name: 'B2B ושותפים', item: absoluteUrl('/he/partners/', Astro.site) },
+  ],
+};
+---
+
+<BaseLayout
+  title={`שיתופי פעולה B2B ושירותי DMC בגאורגיה | ${SITE.brandName}`}
+  description="שתפו פעולה עם Minimalism Tours Georgia לשירותי DMC בבטומי ובאג׳רה, סיורים לאורחי מלונות, טיולי חברות ולוגיסטיקה מוסמכת ברחבי גאורגיה."
+  canonicalPath="/he/partners/"
+  alternateEnPath="/partners/"
+  alternateKaPath="/ka/"
+  alternatePlPath="/pl/partners/"
+  alternateUkPath="/uk/partners/"
+  alternateHePath="/he/partners/"
+  lang="he"
+  jsonLd={[breadcrumbJsonLd]}
+>
+  <section class="page-banner">
+    <div class="container">
+      <nav class="breadcrumbs" aria-label="Breadcrumb">
+        <a href={withBase('/he/')}>ראשי</a>
+        <span aria-hidden="true">/</span>
+        <span aria-current="page">B2B ושותפים</span>
+      </nav>
+      <span class="eyebrow">DMC בטומי ואג׳רה · תפעול לתעשיית התיירות</span>
+      <h1>שירותי קרקע B2B ושיתופי פעולה עם סוכנויות</h1>
+      <p style="max-width: 48rem; font-size: 1.05rem;">
+        {SITE.brandName} מספקת תפעול שטח אמין מבטומי ברחבי אג׳רה, קולחתי, סוואנתי וקזבגי עבור מפעילי תיירות בינלאומיים, מלונות, חברות וקבוצות קרוזים או משלחות אקדמיות.
+      </p>
+      <div style="display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1.35rem;">
+        <a
+          class="btn btn-coral"
+          href={`${SITE.whatsappUrl}?text=${encodeURIComponent('שלום Minimalism Tours Georgia B2B! נשמח לקבל מחירי נטו B2B ופרטי תפעול בבטומי / גאורגיה.')}`}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          בקשו מחירון B2B ב-WhatsApp →
+        </a>
+        <a
+          class="btn btn-forest"
+          href={`${SITE.telegramUrl}?text=${encodeURIComponent('שלום Minimalism Tours Georgia B2B! נשמח לדון בשיתוף פעולה עם סוכנות/מלון.')}`}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          כתבו למחלקת B2B ב-Telegram
+        </a>
+        <a class="btn btn-outline" href="#b2b-inquiry">מלאו טופס פניית שותפים</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Who We Partner With -->
+  <section id="partner-types" class="section">
+    <div class="container">
+      <div class="section-header">
+        <div>
+          <span class="eyebrow">מודלי שיתוף פעולה גמישים</span>
+          <h2>עם מי אנחנו עובדים</h2>
+        </div>
+        <p>פתרונות מותאמים לסוכנויות נסיעות, מלונות, צוותי חברות וקבוצות תוכן.</p>
+      </div>
+
+      <div class="partner-grid">
+        {
+          HE_B2B_PARTNER_TYPES.map((partner) => (
+            <article class="partner-card reveal-on-scroll">
+              <span class="badge badge-forest">{partner.tag}</span>
+              <h3>{partner.title}</h3>
+              <p>{partner.summary}</p>
+              <ul class="partner-points">
+                {partner.points.map((pt) => <li>{pt}</li>)}
+              </ul>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- Operational Guarantees & Fleet -->
+  <section id="guarantees" class="section section-surface">
+    <div class="container">
+      <div class="section-header">
+        <div>
+          <span class="eyebrow">תקני תפעול ולוגיסטיקה</span>
+          <h2>אחריות שירות B2B וצי רכבים</h2>
+        </div>
+        <p>בטיחות עקבית, תמחור שקוף וליווי מזג אוויר מהחוף ועד להרים הגבוהים.</p>
+      </div>
+
+      <div class="guarantees-grid">
+        {
+          HE_B2B_GUARANTEES.map((g) => (
+            <article class="guarantee-card reveal-on-scroll">
+              <h3>{g.title}</h3>
+              <p>{g.detail}</p>
+            </article>
+          ))
+        }
+      </div>
+
+      <div class="fleet-subhead">
+        <span class="eyebrow">צי רכבים בבעלות מקומית</span>
+        <h3>דרגות רכב לפי גודל הקבוצה (1–16+ משתתפים)</h3>
+      </div>
+
+      <div class="fleet-grid">
+        {
+          HE_VEHICLES.map((v) => (
+            <article class="fleet-card reveal-on-scroll">
+              <span class="badge badge-sea">{v.capacity}</span>
+              <h4>{v.name}</h4>
+              <p>{v.idealFor}</p>
+              <ul>
+                {v.amenities.map((a) => <li>{a}</li>)}
+              </ul>
+            </article>
+          ))
+        }
+      </div>
+
+      <div class="cert-strip" aria-label="הסמכות מדריכים ובטיחות">
+        {
+          HE_CERTIFICATIONS.map((c) => (
+            <span class="badge badge-forest">{c.title}</span>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- Proven B2B & Safety Track Record -->
+  <ReviewsSection
+    sectionId="partner-proof"
+    reviews={hePartnerProofReviews}
+    variant="band"
+    surface="subtle"
+    eyebrow="ניסיון מוכח ב-B2B ובבטיחות"
+    heading="משוב משותפים והחלטות בטיחות אחראיות"
+    intro="משובים אמיתיים ממפעיל תיירות בינלאומי ומאורחים שסיוריהם בוטלו בכנות למען הבטיחות בשבילים."
+    showPlatformBar={false}
+    lang="he"
+  />
+
+  <!-- Request B2B Tariff / Partner Brief -->
+  <section id="b2b-inquiry" class="section">
+    <div class="container b2b-form-wrap">
+      <div class="b2b-form-card">
+        <span class="eyebrow">מוקד B2B זמין 24/7</span>
+        <h2>בקשו מחירון B2B או הצעה לקבוצה</h2>
+        <p style="font-size: 0.94rem; margin-bottom: 1.5rem;">
+          הזינו את פרטי החברה והמסלול המבוקש למטה כדי ליצור מיידית פנייה מוכנה ל-<strong>WhatsApp</strong>, ל-<strong>Telegram</strong> או להעתקה ללוח.
+        </p>
+
+        <form id="b2b-partner-form" class="form-grid" data-enhanced-validation novalidate>
+          <div class="form-grid form-grid-2">
+            <div class="field">
+              <label for="p-company">שם החברה / הסוכנות *</label>
+              <span id="p-company-hint" class="field-hint">נדרש להכנת הצעת מחיר לשותפים</span>
+              <input
+                id="p-company"
+                name="company"
+                type="text"
+                required
+                minlength="2"
+                autocomplete="organization"
+                aria-describedby="p-company-hint"
+                data-error="p-company-error"
+                placeholder="לדוגמה: Travel DMC או מלון בטומי"
+              />
+              <div id="p-company-error" class="error-msg">
+                <span role="img" aria-label="שגיאה">⚠</span> אנא הזינו לפחות 2 תווים לשם החברה.
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="p-type">סוג שותף *</label>
+              <span id="p-type-hint" class="field-hint">בחרו את מודל שיתוף הפעולה המרכזי</span>
+              <select
+                id="p-type"
+                name="partnerType"
+                required
+                aria-describedby="p-type-hint"
+                data-error="p-type-error"
+              >
+                <option value="">בחרו סוג שותף...</option>
+                <option value="סוכנות נסיעות / מפעיל תיירות / DMC">סוכנות נסיעות / מפעיל תיירות / DMC</option>
+                <option value="מלון / קונסיירז׳ בבטומי">מלון / קונסיירז׳ בבטומי</option>
+                <option value="טיול חברה / גיבוש צוות">טיול חברה / גיבוש צוות</option>
+                <option value="סיור חוף לקרוז / קבוצה אקדמית">סיור חוף לקרוז / קבוצה אקדמית</option>
+                <option value="שירותי DMC B2B מותאמים">שירותי DMC B2B מותאמים</option>
+              </select>
+              <div id="p-type-error" class="error-msg">
+                <span role="img" aria-label="שגיאה">⚠</span> אנא בחרו סוג שותף.
+              </div>
+            </div>
+          </div>
+
+          <div class="form-grid form-grid-2">
+            <div class="field">
+              <label for="p-location">מדינה / עיר</label>
+              <span id="p-location-hint" class="field-hint">מאיפה מגיעים האורחים או היכן פועלת הסוכנות</span>
+              <input
+                id="p-location"
+                name="location"
+                type="text"
+                autocomplete="country-name"
+                aria-describedby="p-location-hint"
+                placeholder="לדוגמה: תל אביב, ישראל / בטומי, גאורגיה"
+              />
+            </div>
+
+            <div class="field">
+              <label for="p-group">גודל קבוצה משוער ועונה</label>
+              <span id="p-group-hint" class="field-hint">אופציונלי: מספר נוסעים, תדירות או חודשים</span>
+              <input
+                id="p-group"
+                name="groupSeason"
+                type="text"
+                aria-describedby="p-group-hint"
+                placeholder="לדוגמה: 6–14 נוסעים · מאי–ספטמבר"
+              />
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="p-notes">מסלולים, שפות והערות תפעוליות</label>
+            <span id="p-notes-hint" class="field-hint">אופציונלי: מחירי נטו או עמלה, מדריך white-label, מודולי מטירלה/קזבגי/סוואנתי</span>
+            <textarea
+              id="p-notes"
+              name="notes"
+              aria-describedby="p-notes-hint"
+              placeholder="תארו תוכניות מועדפות, נקודות איסוף או דרישות רב-יומיות..."
+            ></textarea>
+          </div>
+
+          <div class="b2b-submit-row">
+            <button type="submit" class="btn btn-coral">שליחה ב-WhatsApp →</button>
+            <button id="p-tg-btn" type="button" class="btn btn-forest">שליחה ב-Telegram →</button>
+            <button id="p-copy-btn" type="button" class="btn btn-outline">העתקת פניית B2B</button>
+          </div>
+
+          <p id="p-feedback" class="b2b-feedback" role="status" aria-live="polite"></p>
+        </form>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<script
+  id="partners-config"
+  type="application/json"
+  set:html={JSON.stringify({
+    whatsappUrl: SITE.whatsappUrl,
+    telegramUrl: SITE.telegramUrl,
+  })}
+/>
+
+<script>
+  const cfgNode = document.getElementById('partners-config');
+  const cfg = cfgNode?.textContent ? JSON.parse(cfgNode.textContent) : null;
+
+  const form = document.getElementById('b2b-partner-form') as HTMLFormElement | null;
+  const tgBtn = document.getElementById('p-tg-btn');
+  const copyBtn = document.getElementById('p-copy-btn');
+  const feedbackEl = document.getElementById('p-feedback');
+
+  const getBrief = () => {
+    if (!form) return '';
+    const d = new FormData(form);
+    return [
+      'Minimalism Tours Georgia — פניית שותפים B2B (HE)',
+      `חברה / סוכנות: ${d.get('company')}`,
+      `סוג שותף: ${d.get('partnerType')}`,
+      d.get('location') ? `מדינה / עיר: ${d.get('location')}` : '',
+      d.get('groupSeason') ? `גודל קבוצה ועונה: ${d.get('groupSeason')}` : '',
+      d.get('notes') ? `הערות: ${d.get('notes')}` : '',
+    ]
+      .filter(Boolean)
+      .join('\n');
+  };
+
+  form?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    if (!form.reportValidity() || !cfg) return;
+    const url = `${cfg.whatsappUrl}?text=${encodeURIComponent(getBrief())}`;
+    window.open(url, '_blank', 'noopener,noreferrer');
+    if (feedbackEl) {
+      feedbackEl.textContent = 'פותח את WhatsApp עם פניית ה-B2B המלאה.';
+    }
+  });
+
+  tgBtn?.addEventListener('click', () => {
+    if (!form || !form.reportValidity() || !cfg) return;
+    const url = `${cfg.telegramUrl}?text=${encodeURIComponent(getBrief())}`;
+    window.open(url, '_blank', 'noopener,noreferrer');
+    if (feedbackEl) {
+      feedbackEl.textContent = 'פותח את Telegram עם פניית ה-B2B המלאה.';
+    }
+  });
+
+  copyBtn?.addEventListener('click', async () => {
+    if (!form || !form.reportValidity()) return;
+    try {
+      await navigator.clipboard.writeText(getBrief());
+      if (feedbackEl) {
+        feedbackEl.textContent = 'פניית ה-B2B הועתקה ללוח!';
+      }
+    } catch {
+      if (feedbackEl) {
+        feedbackEl.textContent = 'השתמשו בכפתור שליחה ב-WhatsApp או Telegram למעלה.';
+      }
+    }
+  });
+</script>
+
+<style>
+  .page-banner {
+    background-color: var(--bg-surface);
+    border-bottom: 1px solid var(--border-subtle);
+    padding-block: clamp(2.25rem, 4.5vw, 3.75rem);
+  }
+
+  .breadcrumbs {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    font-size: 0.86rem;
+    color: var(--ink-600);
+    margin-bottom: 1rem;
+  }
+
+  .breadcrumbs a {
+    color: var(--ink-700);
+    text-decoration: none;
+    font-weight: 600;
+  }
+
+  .partner-grid {
+    display: grid;
+    gap: 1.5rem;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr));
+  }
+
+  .partner-card {
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-xl);
+    padding: clamp(1.35rem, 2.5vw, 1.85rem);
+    box-shadow: var(--shadow-xs);
+  }
+
+  .partner-card h3 {
+    margin: 0.85rem 0 0.5rem;
+    font-size: 1.25rem;
+  }
+
+  .partner-points {
+    margin: 0.85rem 0 0;
+    padding-inline-start: 1.15rem;
+    display: grid;
+    gap: 0.4rem;
+    color: var(--ink-700);
+    font-size: 0.92rem;
+  }
+
+  .guarantees-grid {
+    display: grid;
+    gap: 1.25rem;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));
+  }
+
+  .guarantee-card {
+    background-color: var(--bg-page);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    padding: 1.35rem;
+  }
+
+  .guarantee-card h3 {
+    margin-bottom: 0.45rem;
+    font-size: 1.08rem;
+  }
+
+  .guarantee-card p {
+    margin-bottom: 0;
+    font-size: 0.92rem;
+  }
+
+  .fleet-subhead {
+    margin-top: 2.5rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .fleet-subhead h3 {
+    margin: 0.35rem 0 0;
+    font-size: 1.35rem;
+  }
+
+  .fleet-grid {
+    display: grid;
+    gap: 1.25rem;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
+  }
+
+  .fleet-card {
+    background-color: var(--bg-page);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    padding: 1.35rem;
+  }
+
+  .fleet-card h4 {
+    margin: 0.8rem 0 0.45rem;
+    font-size: 1.12rem;
+  }
+
+  .fleet-card ul {
+    margin: 0.75rem 0 0;
+    padding-inline-start: 1.15rem;
+    display: grid;
+    gap: 0.3rem;
+    font-size: 0.88rem;
+    color: var(--ink-700);
+  }
+
+  .cert-strip {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin-top: 1.75rem;
+  }
+
+  .b2b-form-wrap {
+    max-width: 54rem;
+  }
+
+  .b2b-form-card {
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-xl);
+    padding: clamp(1.5rem, 3.2vw, 2.5rem);
+    box-shadow: var(--shadow-xs);
+  }
+
+  .b2b-form-card h2 {
+    margin-top: 0.4rem;
+  }
+
+  .b2b-submit-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 0.4rem;
+  }
+
+  .b2b-feedback {
+    margin: 0.25rem 0 0;
+    min-height: 1.4rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--forest-800);
+  }
+</style>

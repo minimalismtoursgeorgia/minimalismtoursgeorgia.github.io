@@ -1,0 +1,87 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import GuestRegistrationForm from '../../../components/GuestRegistrationForm.astro';
+import { SITE } from '../../../data/site';
+import { withBase, absoluteUrl } from '../../../lib/urls';
+
+const breadcrumbJsonLd = {
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'ראשי', item: absoluteUrl('/he/', Astro.site) },
+    {
+      '@type': 'ListItem',
+      position: 2,
+      name: 'רישום אורחים וטופס רפואי',
+      item: absoluteUrl('/he/guest-registration/', Astro.site),
+    },
+  ],
+};
+---
+
+<BaseLayout
+  title={`רישום אורחים וטופס רפואי | ${SITE.brandName}`}
+  description="טופס רישום סודי לפני יציאה לסיור, איש קשר לשעת חירום, פרטי ביטוח והצהרת בריאות למשתתפי סיורי Minimalism Tours Georgia."
+  canonicalPath="/he/guest-registration/"
+  alternateEnPath="/guest-registration/"
+  alternateKaPath="/ka/guest-registration/"
+  alternatePlPath="/pl/guest-registration/"
+  alternateUkPath="/uk/guest-registration/"
+  alternateHePath="/he/guest-registration/"
+  lang="he"
+  jsonLd={[breadcrumbJsonLd]}
+>
+  <section class="page-hero">
+    <div class="container">
+      <nav class="breadcrumbs" aria-label="Breadcrumb">
+        <a href={withBase('/he/')}>ראשי</a>
+        <span aria-hidden="true">/</span>
+        <span aria-current="page">רישום אורחים וטופס רפואי</span>
+      </nav>
+      <span class="eyebrow">בטיחות ורישום לפני היציאה לשטח</span>
+      <h1>טופס רישום אורח והצהרת בריאות לשעת חירום</h1>
+      <p>
+        טופס הבטיחות הסטנדרטי של {SITE.brandName} לטיולים במטירלה, מצ׳אחלה והקווקז הגדול.
+      </p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container" style="max-width: 58rem;">
+      <GuestRegistrationForm lang="he" />
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .page-hero {
+    background-color: var(--bg-surface);
+    border-bottom: 1px solid var(--border-subtle);
+    padding-block: clamp(2.25rem, 4.5vw, 3.5rem);
+  }
+
+  .breadcrumbs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+    font-size: 0.85rem;
+    color: var(--ink-500);
+    margin-bottom: 0.9rem;
+  }
+
+  .breadcrumbs a {
+    color: var(--forest-800);
+    text-decoration: none;
+    font-weight: 600;
+  }
+
+  .page-hero h1 {
+    margin: 0.55rem 0 0.7rem;
+    max-width: 24ch;
+  }
+
+  .page-hero p {
+    margin: 0;
+    max-width: 62ch;
+    color: var(--ink-700);
+  }
+</style>

@@ -1,0 +1,67 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import BatumiNewsHub from '../../../components/BatumiNewsHub.astro';
+import { SITE } from '../../../data/site';
+import { BATUMI_NEWS_FAQS, BATUMI_NEWS_ITEMS } from '../../../data/batumi-news';
+import { HE_BATUMI_FAQS, HE_BATUMI_NEWS_ITEMS } from '../../../data/batumi-news-he';
+import { absoluteUrl } from '../../../lib/urls';
+
+const breadcrumbJsonLd = {
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'ראשי', item: absoluteUrl('/he/', Astro.site) },
+    {
+      '@type': 'ListItem',
+      position: 2,
+      name: 'חדשות ואירועים בבטומי',
+      item: absoluteUrl('/he/batumi-news/', Astro.site),
+    },
+  ],
+};
+
+const itemListJsonLd = {
+  '@type': 'ItemList',
+  name: 'חדשות בטומי, אירועים מתוכננים ונהלי כניסה (2026–2027)',
+  numberOfItems: BATUMI_NEWS_ITEMS.length,
+  itemListElement: BATUMI_NEWS_ITEMS.map((item, idx) => ({
+    '@type': 'ListItem',
+    position: idx + 1,
+    name: HE_BATUMI_NEWS_ITEMS[item.slug]?.title || item.title.en,
+    url: `${absoluteUrl('/he/batumi-news/', Astro.site)}#${item.slug}`,
+  })),
+};
+
+const faqJsonLd = {
+  '@type': 'FAQPage',
+  mainEntity: BATUMI_NEWS_FAQS.map((faq, idx) => ({
+    '@type': 'Question',
+    name: HE_BATUMI_FAQS[idx]?.question || faq.question.en,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: HE_BATUMI_FAQS[idx]?.answer || faq.answer.en,
+    },
+  })),
+};
+---
+
+<BaseLayout
+  title={`חדשות בטומי, אירועים ולוח שנה 2026–2027 | ${SITE.brandName}`}
+  description="המדריך המלא לבטומי ואג׳רה: כפר השנה החדשה בכיכר אירופה, עונת הסקי בגודרדזי, ביטוח נסיעות חובה 2026, פסטיבלים ומחירי כרטיסים."
+  canonicalPath="/he/batumi-news/"
+  alternateEnPath="/batumi-news/"
+  alternateKaPath="/ka/batumi-news/"
+  alternatePlPath="/pl/batumi-news/"
+  alternateUkPath="/uk/batumi-news/"
+  alternateHePath="/he/batumi-news/"
+  lang="he"
+  keywords={[
+    'חדשות בטומי 2026 2027',
+    'אירועים בבטומי',
+    'ביטוח חובה גאורגיה 2026',
+    'אתר סקי גודרדזי 2026',
+    'Minimalism Tours Georgia',
+  ]}
+  jsonLd={[breadcrumbJsonLd, itemListJsonLd, faqJsonLd]}
+>
+  <BatumiNewsHub lang="he" />
+</BaseLayout>

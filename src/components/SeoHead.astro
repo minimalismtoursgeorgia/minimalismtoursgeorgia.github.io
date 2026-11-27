@@ -8,11 +8,12 @@ export interface Props {
   canonicalPath?: string;
   ogImage?: string;
   ogType?: 'website' | 'article';
-  lang?: 'en' | 'ka' | 'pl' | 'uk';
+  lang?: 'en' | 'ka' | 'pl' | 'uk' | 'he';
   alternateEnPath?: string;
   alternateKaPath?: string;
   alternatePlPath?: string;
   alternateUkPath?: string;
+  alternateHePath?: string;
   keywords?: string[];
   jsonLd?: Record<string, unknown>[];
 }
@@ -28,6 +29,7 @@ const {
   alternateKaPath,
   alternatePlPath,
   alternateUkPath,
+  alternateHePath,
   keywords = lang === 'pl'
     ? [
         'Minimalism Tours Georgia',
@@ -45,6 +47,15 @@ const {
         'Ущелина Мачахела екскурсія',
         'гірські походи Аджарія Грузія',
         'DMC Грузія B2B',
+      ]
+    : lang === 'he'
+    ? [
+        'Minimalism Tours Georgia',
+        'טיולים מבאטומי',
+        'הפארק הלאומי מטירלה טיול',
+        'ערוץ מצ׳אחלה טיול ג׳יפים',
+        'מדריך טיולים באטומי אג׳ריה גאורגיה',
+        'טיולי טבע בגאורגיה',
       ]
     : [
         'Minimalism Tours Georgia',
@@ -143,7 +154,12 @@ const schemaGraph = {
   )
 }
 {
-  (alternateEnPath || alternateKaPath || alternatePlPath || alternateUkPath) && (
+  alternateHePath && (
+    <link rel="alternate" hreflang="he" href={absoluteUrl(alternateHePath, Astro.site)} />
+  )
+}
+{
+  (alternateEnPath || alternateKaPath || alternatePlPath || alternateUkPath || alternateHePath) && (
     <link
       rel="alternate"
       hreflang="x-default"
@@ -152,7 +168,7 @@ const schemaGraph = {
   )
 }
 
-<meta property="og:locale" content={lang === 'ka' ? 'ka_GE' : lang === 'pl' ? 'pl_PL' : lang === 'uk' ? 'uk_UA' : 'en_US'} />
+<meta property="og:locale" content={lang === 'ka' ? 'ka_GE' : lang === 'pl' ? 'pl_PL' : lang === 'uk' ? 'uk_UA' : lang === 'he' ? 'he_IL' : 'en_US'} />
 <meta property="og:type" content={ogType} />
 <meta property="og:site_name" content={SITE.brandName} />
 <meta property="og:title" content={title} />
@@ -176,7 +192,7 @@ const schemaGraph = {
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link
   rel="stylesheet"
-  href="https://fonts.googleapis.com/css2?family=Noto+Sans+Georgian:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+  href="https://fonts.googleapis.com/css2?family=Noto+Sans+Georgian:wght@400;500;600;700&family=Noto+Sans+Hebrew:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
 />
 
 <script type="application/ld+json" set:html={JSON.stringify(schemaGraph)} />

@@ -25,12 +25,14 @@ const {
   enableFilters = false,
   surface = 'subtle',
   lang = 'en',
-  eyebrow = lang === 'pl' ? 'Zweryfikowane opinie podróżnych' : lang === 'uk' ? 'Перевірені відгуки гостей' : 'Verified Traveler Feedback',
-  heading = lang === 'pl' ? 'Co mówią nasi goście o wycieczkach' : lang === 'uk' ? 'Що кажуть гості про наші тури' : 'What Guests Say About Our Tours',
+  eyebrow = lang === 'pl' ? 'Zweryfikowane opinie podróżnych' : lang === 'uk' ? 'Перевірені відгуки гостей' : lang === 'he' ? 'ביקורות מאומתות של מטיילים' : 'Verified Traveler Feedback',
+  heading = lang === 'pl' ? 'Co mówią nasi goście o wycieczkach' : lang === 'uk' ? 'Що кажуть гості про наші тури' : lang === 'he' ? 'מה המטיילים מספרים על הסיורים שלנו' : 'What Guests Say About Our Tours',
   intro = lang === 'pl'
     ? 'Prawdziwe słowa podróżnych, którzy odkrywali Batumi i Adżarię z naszym zespołem przewodników.'
     : lang === 'uk'
     ? 'Реальні відгуки мандрівників, які відкривали Батумі та Аджарію разом із нашою командою гідів.'
+    : lang === 'he'
+    ? 'מילים אמיתיות ממטיילים שגילו את בטומי ואג׳רה יחד עם צוות המדריכים שלנו.'
     : 'Real words from travelers who explored Batumi and Adjara with our guiding team.',
   showTourLink = true,
   showPlatformBar = true,
@@ -38,6 +40,7 @@ const {
 
 const isPl = lang === 'pl';
 const isUk = lang === 'uk';
+const isHe = lang === 'he';
 
 const resolvedId = sectionId ?? (variant === 'band' ? 'reviews' : undefined);
 const sectionClass =
@@ -54,8 +57,8 @@ const CATEGORY_META: Record<
   tour: {
     badgeClass: 'badge badge-forest',
     badgeText: (platform) =>
-      isPl ? `Zweryfikowana opinia · ${platform}` : isUk ? `Перевірений відгук · ${platform}` : `Verified ${platform} Review`,
-    filterLabel: isPl ? 'Ukończone wycieczki' : isUk ? 'Проведені тури' : 'Completed Tours',
+      isPl ? `Zweryfikowana opinia · ${platform}` : isUk ? `Перевірений відгук · ${platform}` : isHe ? `ביקורת מאומתת · ${platform}` : `Verified ${platform} Review`,
+    filterLabel: isPl ? 'Ukończone wycieczki' : isUk ? 'Проведені тури' : isHe ? 'סיורים שהושלמו' : 'Completed Tours',
   },
   'safety-cancellation': {
     badgeClass: 'badge badge-sea',
@@ -64,18 +67,20 @@ const CATEGORY_META: Record<
         ? `Anulowanie dla bezpieczeństwa · ${platform}`
         : isUk
         ? `Скасування заради безпеки · ${platform}`
+        : isHe
+        ? `ביטול למען הבטיחות · ${platform}`
         : `Safety-First Cancellation · ${platform}`,
-    filterLabel: isPl ? 'Bezpieczeństwo i zwroty' : isUk ? 'Безпека та повернення' : 'Weather Safety & Refunds',
+    filterLabel: isPl ? 'Bezpieczeństwo i zwroty' : isUk ? 'Безпека та повернення' : isHe ? 'בטיחות והחזרים' : 'Weather Safety & Refunds',
   },
   b2b: {
     badgeClass: 'badge badge-coral',
-    badgeText: (platform) => (isPl ? `Partner B2B · ${platform}` : isUk ? `Партнер B2B · ${platform}` : `B2B Partner · ${platform}`),
-    filterLabel: isPl ? 'Partnerzy B2B' : isUk ? 'Партнери B2B' : 'B2B Partners',
+    badgeText: (platform) => (isPl ? `Partner B2B · ${platform}` : isUk ? `Партнер B2B · ${platform}` : isHe ? `שותף B2B · ${platform}` : `B2B Partner · ${platform}`),
+    filterLabel: isPl ? 'Partnerzy B2B' : isUk ? 'Партнери B2B' : isHe ? 'שותפי B2B' : 'B2B Partners',
   },
 };
 
 const filterOptions = [
-  { id: 'all', label: isPl ? 'Wszystkie opinie' : isUk ? 'Усі відгуки' : 'All Feedback', count: reviews.length },
+  { id: 'all', label: isPl ? 'Wszystkie opinie' : isUk ? 'Усі відгуки' : isHe ? 'כל הביקורות' : 'All Feedback', count: reviews.length },
   ...(['tour', 'safety-cancellation', 'b2b'] as ReviewCategory[]).map((cat) => ({
     id: cat,
     label: CATEGORY_META[cat].filterLabel,
@@ -172,7 +177,7 @@ const filterOptions = [
                   <p>“{review.quote}”</p>
                   {review.originalQuote && (
                     <p class="review-original" lang={review.originalLang}>
-                      {isPl ? 'Oryginał:' : isUk ? 'Оригінал:' : 'Original:'} “{review.originalQuote}”
+                      {isPl ? 'Oryginał:' : isUk ? 'Оригінал:' : isHe ? 'מקור:' : 'Original:'} “{review.originalQuote}”
                     </p>
                   )}
                 </blockquote>
@@ -210,6 +215,8 @@ const filterOptions = [
               ? 'Zobacz i zostaw zweryfikowane opinie na:'
               : isUk
               ? 'Переглядайте та залишайте перевірені відгуки на:'
+              : isHe
+              ? 'קראו וכתבו ביקורות מאומתות ב:'
               : 'Explore & leave verified reviews on:'}
           </span>
           <div class="reviews-cta-actions">
@@ -219,7 +226,7 @@ const filterOptions = [
               target="_blank"
               rel="noopener noreferrer"
             >
-              {isPl ? 'Opinie Google ↗' : isUk ? 'Відгуки Google ↗' : 'Google Reviews ↗'}
+              {isPl ? 'Opinie Google ↗' : isUk ? 'Відгуки Google ↗' : isHe ? 'ביקורות Google ↗' : 'Google Reviews ↗'}
             </a>
             <a
               class="btn btn-outline btn-sm"
@@ -227,7 +234,7 @@ const filterOptions = [
               target="_blank"
               rel="noopener noreferrer"
             >
-              {isPl ? 'Opinie Tripadvisor ↗' : isUk ? 'Відгуки Tripadvisor ↗' : 'Tripadvisor Reviews ↗'}
+              {isPl ? 'Opinie Tripadvisor ↗' : isUk ? 'Відгуки Tripadvisor ↗' : isHe ? 'ביקורות Tripadvisor ↗' : 'Tripadvisor Reviews ↗'}
             </a>
             <a
               class="btn btn-outline btn-sm"
@@ -235,7 +242,7 @@ const filterOptions = [
               target="_blank"
               rel="noopener noreferrer"
             >
-              {isPl ? 'Opinie Trustpilot ↗' : isUk ? 'Відгуки Trustpilot ↗' : 'Trustpilot Reviews ↗'}
+              {isPl ? 'Opinie Trustpilot ↗' : isUk ? 'Відгуки Trustpilot ↗' : isHe ? 'ביקורות Trustpilot ↗' : 'Trustpilot Reviews ↗'}
             </a>
             <a
               class="btn btn-sea btn-sm"
@@ -243,7 +250,7 @@ const filterOptions = [
               target="_blank"
               rel="noopener noreferrer"
             >
-              {isPl ? 'Wycieczki GetYourGuide ↗' : isUk ? 'Тури на GetYourGuide ↗' : 'GetYourGuide Tours ↗'}
+              {isPl ? 'Wycieczki GetYourGuide ↗' : isUk ? 'Тури на GetYourGuide ↗' : isHe ? 'סיורים ב-GetYourGuide ↗' : 'GetYourGuide Tours ↗'}
             </a>
           </div>
         </div>

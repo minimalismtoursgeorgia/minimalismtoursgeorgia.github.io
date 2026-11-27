@@ -3,6 +3,7 @@ import { SITE } from '../data/site';
 import { TOURS } from '../data/tours';
 import { getToursForLang } from '../data/i18n-pl';
 import { getToursForLangUk } from '../data/i18n-uk';
+import { getToursForLangHe } from '../data/i18n-he';
 import type { Lang } from '../lib/i18n';
 
 export interface Props {
@@ -19,17 +20,22 @@ const {
     ? 'Formularz zapytania i planowania wyjazdu grupowego'
     : lang === 'uk'
     ? 'Форма запиту та планування групового туру'
+    : lang === 'he'
+    ? 'טופס פנייה ותכנון לטיול קבוצתי מותאם'
     : 'Custom Group Trip Inquiry & Planning Form',
   intro = lang === 'pl'
     ? 'Skonfiguruj szczegóły wyjazdu grupowego poniżej. Po zatwierdzeniu zobaczysz pełne podsumowanie z wysyłką jednym kliknięciem na WhatsApp lub e-mail.'
     : lang === 'uk'
     ? 'Налаштуйте деталі групової поїздки нижче. Після підтвердження ви отримаєте повний підсумок із миттєвим надсиланням у WhatsApp або на пошту.'
+    : lang === 'he'
+    ? 'הגדירו את פרטי הטיול הקבוצתי למטה. לאחר השליחה תקבלו סיכום מלא עם שליחה בלחיצה אחת ל-WhatsApp או לדוא״ל.'
     : 'Configure your group trip details below. On submit, you’ll see a complete summary with one-click WhatsApp and Email sending — zero backend wait.',
 } = Astro.props;
 
 const isPl = lang === 'pl';
 const isUk = lang === 'uk';
-const groupTours = (isPl ? getToursForLang('pl') : isUk ? getToursForLangUk('uk') : TOURS).filter((t) => t.isGroupProgram);
+const isHe = lang === 'he';
+const groupTours = (isPl ? getToursForLang('pl') : isUk ? getToursForLangUk('uk') : isHe ? getToursForLangHe('he') : TOURS).filter((t) => t.isGroupProgram);
 const currentTour = groupTours.find((t) => t.slug === selectedSlug);
 const defaultGroupSizeValue = currentTour?.defaultGroupSize || '';
 const showRouteInitially = selectedSlug === 'jorunners-mountain-lodge-program';
@@ -39,7 +45,7 @@ const showRouteInitially = selectedSlug === 'jorunners-mountain-lodge-program';
   <div class="group-inquiry-card">
     <div class="group-inquiry-head">
       <span class="badge badge-forest">
-        {isPl ? '8 Dni / 7 Nocy · Pełne wyżywienie (3 posiłki/dzień)' : isUk ? '8 Днів / 7 Ночей · Повний пансіон (3 рази/день)' : '8 Days / 7 Nights · Full Board (3 Meals/Day)'}
+        {isPl ? '8 Dni / 7 Nocy · Pełne wyżywienie (3 posiłki/dzień)' : isUk ? '8 Днів / 7 Ночей · Повний пансіон (3 рази/день)' : isHe ? '8 ימים / 7 לילות · פנסיון מלא (3 ארוחות ביום)' : '8 Days / 7 Nights · Full Board (3 Meals/Day)'}
       </span>
       <h2 id="group-inquiry-heading">{heading}</h2>
       <p>{intro}</p>
@@ -48,9 +54,9 @@ const showRouteInitially = selectedSlug === 'jorunners-mountain-lodge-program';
     <form id="group-inquiry-form" class="form-grid" data-enhanced-validation novalidate>
       <div class="form-grid form-grid-2">
         <div class="field">
-          <label for="gi-trip">{isPl ? 'Wybór programu' : isUk ? 'Вибір програми' : 'Trip Selection'} <span aria-hidden="true">*</span></label>
+          <label for="gi-trip">{isPl ? 'Wybór programu' : isUk ? 'Вибір програми' : isHe ? 'בחירת תוכנית' : 'Trip Selection'} <span aria-hidden="true">*</span></label>
           <span id="gi-trip-hint" class="field-hint">
-            {isPl ? 'Wstępnie wybrany bieżący program lub przełącz na inny wyjazd grupowy' : isUk ? 'Обрано поточну програму або перемкніть на інший груповий тур' : 'Pre-selected to the current trip, or switch to another group program'}
+            {isPl ? 'Wstępnie wybrany bieżący program lub przełącz na inny wyjazd grupowy' : isUk ? 'Обрано поточну програму або перемкніть на інший груповий тур' : isHe ? 'נבחרה התוכנית הנוכחית או החליפו לתוכנית קבוצתית אחרת' : 'Pre-selected to the current trip, or switch to another group program'}
           </span>
           <select
             id="gi-trip"
@@ -59,7 +65,7 @@ const showRouteInitially = selectedSlug === 'jorunners-mountain-lodge-program';
             aria-describedby="gi-trip-hint"
             data-error="gi-trip-error"
           >
-            <option value="">{isPl ? 'Wybierz wyjazd grupowy...' : isUk ? 'Оберіть груповий тур...' : 'Choose a group trip...'}</option>
+            <option value="">{isPl ? 'Wybierz wyjazd grupowy...' : isUk ? 'Оберіть груповий тур...' : isHe ? 'בחרו טיול קבוצתי...' : 'Choose a group trip...'}</option>
             {
               groupTours.map((t) => (
                 <option
@@ -72,20 +78,20 @@ const showRouteInitially = selectedSlug === 'jorunners-mountain-lodge-program';
                 </option>
               ))
             }
-            <option value={isPl ? 'Indywidualny program grupowy w Gruzji' : isUk ? 'Індивідуальна групова програма в Грузії' : 'Custom Multi-Day Group Program in Georgia'} data-slug="custom">
-              {isPl ? 'Indywidualny program grupowy w Gruzji' : isUk ? 'Індивідуальна групова програма в Грузії' : 'Custom Multi-Day Group Program in Georgia'}
+            <option value={isPl ? 'Indywidualny program grupowy w Gruzji' : isUk ? 'Індивідуальна групова програма в Грузії' : isHe ? 'תוכנית קבוצתית מותאמת בגאורגיה' : 'Custom Multi-Day Group Program in Georgia'} data-slug="custom">
+              {isPl ? 'Indywidualny program grupowy w Gruzji' : isUk ? 'Індивідуальна групова програма в Грузії' : isHe ? 'תוכנית קבוצתית מותאמת בגאורגיה' : 'Custom Multi-Day Group Program in Georgia'}
             </option>
           </select>
           <div id="gi-trip-error" class="error-msg">
-            <span role="img" aria-label={isPl ? 'Błąd' : isUk ? 'Помилка' : 'Error'}>⚠</span>{' '}
-            {isPl ? 'Wybierz program grupowy.' : isUk ? 'Оберіть групову програму.' : 'Please select a group trip.'}
+            <span role="img" aria-label={isPl ? 'Błąd' : isUk ? 'Помилка' : isHe ? 'שגיאה' : 'Error'}>⚠</span>{' '}
+            {isPl ? 'Wybierz program grupowy.' : isUk ? 'Оберіть групову програму.' : isHe ? 'אנא בחרו תוכנית קבוצתית.' : 'Please select a group trip.'}
           </div>
         </div>
 
         <div class="field">
-          <label for="gi-dates">{isPl ? 'Preferowany miesiąc / daty' : isUk ? 'Бажаний місяць / дати' : 'Preferred Month / Dates'} <span aria-hidden="true">*</span></label>
+          <label for="gi-dates">{isPl ? 'Preferowany miesiąc / daty' : isUk ? 'Бажаний місяць / дати' : isHe ? 'חודש / תאריכים מועדפים' : 'Preferred Month / Dates'} <span aria-hidden="true">*</span></label>
           <span id="gi-dates-hint" class="field-hint">
-            {isPl ? 'np. styczeń 2027, 10–17 lutego lub lipiec 2027' : isUk ? 'напр., січень 2027, 10–17 лютого або липень 2027' : 'e.g., January 2027, February 10–17, or July 2027'}
+            {isPl ? 'np. styczeń 2027, 10–17 lutego lub lipiec 2027' : isUk ? 'напр., січень 2027, 10–17 лютого або липень 2027' : isHe ? 'לדוגמה: ינואר 2027, 10–17 בפברואר או יולי 2027' : 'e.g., January 2027, February 10–17, or July 2027'}
           </span>
           <input
             id="gi-dates"
@@ -95,23 +101,25 @@ const showRouteInitially = selectedSlug === 'jorunners-mountain-lodge-program';
             minlength="3"
             aria-describedby="gi-dates-hint"
             data-error="gi-dates-error"
-            placeholder={isPl ? 'np. styczeń lub luty' : isUk ? 'напр., січень або лютий' : 'e.g., January or February'}
+            placeholder={isPl ? 'np. styczeń lub luty' : isUk ? 'напр., січень або лютий' : isHe ? 'לדוגמה: ינואר או פברואר' : 'e.g., January or February'}
           />
           <div id="gi-dates-error" class="error-msg">
-            <span role="img" aria-label={isPl ? 'Błąd' : isUk ? 'Помилка' : 'Error'}>⚠</span>{' '}
-            {isPl ? 'Podaj preferowany miesiąc lub daty wyjazdu.' : isUk ? 'Вкажіть бажаний місяць або дати подорожі.' : 'Please enter your preferred month or travel dates.'}
+            <span role="img" aria-label={isPl ? 'Błąd' : isUk ? 'Помилка' : isHe ? 'שגיאה' : 'Error'}>⚠</span>{' '}
+            {isPl ? 'Podaj preferowany miesiąc lub daty wyjazdu.' : isUk ? 'Вкажіть бажаний місяць або дати подорожі.' : isHe ? 'אנא הזינו חודש או תאריכי נסיעה מועדפים.' : 'Please enter your preferred month or travel dates.'}
           </div>
         </div>
       </div>
 
       <!-- Trip 2 Route Option Selector (shown for Jorunners) -->
       <fieldset id="gi-route-fieldset" class="gi-route-fieldset" hidden={!showRouteInitially}>
-        <legend>{isPl ? 'Opcja trasy Jorunners' : isUk ? 'Варіант маршруту Jorunners' : 'Jorunners Route Option'}</legend>
+        <legend>{isPl ? 'Opcja trasy Jorunners' : isUk ? 'Варіант маршруту Jorunners' : isHe ? 'אפשרות מסלול Jorunners' : 'Jorunners Route Option'}</legend>
         <p class="field-hint" style="margin-bottom: 0.65rem;">
           {isPl
             ? 'Wybierz między rekomendowaną bazą w dolinie Stepancmindy a letnim trekkingiem Mestia–Uszguli.'
             : isUk
             ? 'Оберіть між рекомендованою базою в долині Степанцмінди або літнім походом Местія–Ушгулі.'
+            : isHe
+            ? 'בחרו בין בסיס מומלץ בעמק סטפנצמינדה לבין טרק קיץ ממסטיה לאושגולי.'
             : 'Choose between our recommended Stepantsminda valley basecamp or the summer Mestia–Ushguli lodge trek.'}
         </p>
         <div class="gi-route-options">
@@ -119,17 +127,19 @@ const showRouteInitially = selectedSlug === 'jorunners-mountain-lodge-program';
             <input
               type="radio"
               name="routeOption"
-              value={isPl ? 'Opcja A (Rekomendowana): Baza w Kazbegi / Stepancminda' : isUk ? 'Варіант A (Рекомендований): База в Казбегі / Степанцмінда' : 'Option A (Recommended): Kazbegi / Stepantsminda Valley Basecamp'}
+              value={isPl ? 'Opcja A (Rekomendowana): Baza w Kazbegi / Stepancminda' : isUk ? 'Варіант A (Рекомендований): База в Казбегі / Степанцмінда' : isHe ? 'אפשרות A (מומלצת): בסיס בקזבגי / סטפנצמינדה' : 'Option A (Recommended): Kazbegi / Stepantsminda Valley Basecamp'}
               checked
               disabled={!showRouteInitially}
             />
             <span>
-              <strong>{isPl ? 'Opcja A (Rekomendowana): Kazbegi / Stepancminda' : isUk ? 'Варіант A (Рекомендований): Казбегі / Степанцмінда' : 'Option A (Recommended): Kazbegi / Stepantsminda'}</strong>
+              <strong>{isPl ? 'Opcja A (Rekomendowana): Kazbegi / Stepancminda' : isUk ? 'Варіант A (Рекомендований): Казбегі / Степанцмінда' : isHe ? 'אפשרות A (מומלצת): קזבגי / סטפנצמינדה' : 'Option A (Recommended): Kazbegi / Stepantsminda'}</strong>
               <small>
                 {isPl
                   ? '6 nocy w górskich pensjonatach + 1 noc w Tbilisi · Szlaki Truso i Juta · ~3 godz. transferu'
                   : isUk
                   ? '6 ночей у гірських гостьових будинках + 1 ніч у Тбілісі · Маршрути Трусо і Джута · ~3 год трансферу'
+                  : isHe
+                  ? '6 לילות בבתי הארחה בהרים + לילה בטביליסי · מסלולי טרוסו וג׳וטה · ~3 שעות נסיעה'
                   : '6 nights mountain lodges + 1 night Tbilisi · Truso & Juta day trails · ~3h transfer'}
               </small>
             </span>
@@ -138,16 +148,18 @@ const showRouteInitially = selectedSlug === 'jorunners-mountain-lodge-program';
             <input
               type="radio"
               name="routeOption"
-              value={isPl ? 'Opcja B: Swanetia (Mestia do Uszguli) od schroniska do schroniska' : isUk ? 'Варіант B: Сванетія (Местія до Ушгулі) від притулку до притулку' : 'Option B: Svaneti (Mestia to Ushguli) Point-to-Point Lodges'}
+              value={isPl ? 'Opcja B: Swanetia (Mestia do Uszguli) od schroniska do schroniska' : isUk ? 'Варіант B: Сванетія (Местія до Ушгулі) від притулку до притулку' : isHe ? 'אפשרות B: סוואנתי (ממסטיה לאושגולי) מבקתה לבקתה' : 'Option B: Svaneti (Mestia to Ushguli) Point-to-Point Lodges'}
               disabled={!showRouteInitially}
             />
             <span>
-              <strong>{isPl ? 'Opcja B: Swanetia (Mestia – Uszguli)' : isUk ? 'Варіант B: Сванетія (Местія – Ушгулі)' : 'Option B: Svaneti (Mestia to Ushguli)'}</strong>
+              <strong>{isPl ? 'Opcja B: Swanetia (Mestia – Uszguli)' : isUk ? 'Варіант B: Сванетія (Местія – Ушгулі)' : isHe ? 'אפשרות B: סוואנתי (מסטיה – אושגולי)' : 'Option B: Svaneti (Mestia to Ushguli)'}</strong>
               <small>
                 {isPl
                   ? 'Tylko czerwiec–wrzesień · Rodzinne pensjonaty · Transport bagażu 4x4 i wsparcie na podjazdach'
                   : isUk
                   ? 'Лише червень–вересень · Сімейні гостьові будинки · Супровід багажу 4x4'
+                  : isHe
+                  ? 'יוני–ספטמבר בלבד · בתי הארחה משפחתיים · העברת ציוד 4x4'
                   : 'June–September only · Family-run lodges · 4x4 luggage support & vehicle skips'}
               </small>
             </span>
@@ -157,9 +169,9 @@ const showRouteInitially = selectedSlug === 'jorunners-mountain-lodge-program';
 
       <div class="form-grid form-grid-2">
         <div class="field">
-          <label for="gi-group-size">{isPl ? 'Wielkość grupy' : isUk ? 'Розмір групи' : 'Group Size'} <span aria-hidden="true">*</span></label>
+          <label for="gi-group-size">{isPl ? 'Wielkość grupy' : isUk ? 'Розмір групи' : isHe ? 'גודל הקבוצה' : 'Group Size'} <span aria-hidden="true">*</span></label>
           <span id="gi-group-size-hint" class="field-hint">
-            {isPl ? 'Przybliżona liczba uczestników (np. 20–25 studentów)' : isUk ? 'Орієнтовна кількість учасників (напр., 20–25 студентів)' : 'Approximate number of participants (e.g., 20–25 students)'}
+            {isPl ? 'Przybliżona liczba uczestników (np. 20–25 studentów)' : isUk ? 'Орієнтовна кількість учасників (напр., 20–25 студентів)' : isHe ? 'מספר משוער של משתתפים (לדוגמה: 20–25 מטיילים)' : 'Approximate number of participants (e.g., 20–25 students)'}
           </span>
           <input
             id="gi-group-size"
@@ -169,21 +181,23 @@ const showRouteInitially = selectedSlug === 'jorunners-mountain-lodge-program';
             value={defaultGroupSizeValue}
             aria-describedby="gi-group-size-hint"
             data-error="gi-group-size-error"
-            placeholder={isPl ? 'np. 20–25 osób' : isUk ? 'напр., 20–25 осіб' : 'e.g., 20–25 students'}
+            placeholder={isPl ? 'np. 20–25 osób' : isUk ? 'напр., 20–25 осіб' : isHe ? 'לדוגמה: 20–25 משתתפים' : 'e.g., 20–25 students'}
           />
           <div id="gi-group-size-error" class="error-msg">
-            <span role="img" aria-label={isPl ? 'Błąd' : isUk ? 'Помилка' : 'Error'}>⚠</span>{' '}
-            {isPl ? 'Podaj szacowaną wielkość grupy.' : isUk ? 'Вкажіть орієнтовний розмір групи.' : 'Please enter your estimated group size.'}
+            <span role="img" aria-label={isPl ? 'Błąd' : isUk ? 'Помилка' : isHe ? 'שגיאה' : 'Error'}>⚠</span>{' '}
+            {isPl ? 'Podaj szacowaną wielkość grupy.' : isUk ? 'Вкажіть орієнтовний розмір групи.' : isHe ? 'אנא הזינו גודל קבוצה משוער.' : 'Please enter your estimated group size.'}
           </div>
         </div>
 
         <div class="field">
-          <label for="gi-meals">{isPl ? 'Wymagania żywieniowe / diety' : isUk ? 'Харчування / дієтичні побажання' : 'Meal / Dietary Requirements'}</label>
+          <label for="gi-meals">{isPl ? 'Wymagania żywieniowe / diety' : isUk ? 'Харчування / дієтичні побажання' : isHe ? 'דרישות תזונה / כשרות / דיאטה' : 'Meal / Dietary Requirements'}</label>
           <span id="gi-meals-hint" class="field-hint">
             {isPl
               ? 'Pełne wyżywienie (3 posiłki/dzień) jest w cenie — podaj diety wegetariańskie, wegańskie, bezglutenowe lub alergie'
               : isUk
               ? 'Повний пансіон (3 рази/день) у ціні — вкажіть вегетаріанське, веганське, безглютенове меню або алергії'
+              : isHe
+              ? 'פנסיון מלא (3 ארוחות ביום) כלול — ציינו צמחוני, טבעוני, ללא גלוטן או אלרגיות'
               : '3 meals/day Full Board is included — note vegetarian, vegan, halal, gluten-free, or allergies'}
           </span>
           <input
@@ -191,15 +205,15 @@ const showRouteInitially = selectedSlug === 'jorunners-mountain-lodge-program';
             name="meals"
             type="text"
             aria-describedby="gi-meals-hint"
-            placeholder={isPl ? 'Pełne wyżywienie (3 posiłki/dzień) — np. 2 wegetariańskie' : isUk ? 'Повний пансіон — напр., 2 вегетаріанці' : 'Full Board (3 meals/day) — e.g., 2 vegetarian, no nuts'}
+            placeholder={isPl ? 'Pełne wyżywienie (3 posiłki/dzień) — np. 2 wegetariańskie' : isUk ? 'Повний пансіон — напр., 2 вегетаріанці' : isHe ? 'פנסיון מלא — לדוגמה: 2 צמחוניים' : 'Full Board (3 meals/day) — e.g., 2 vegetarian, no nuts'}
           />
         </div>
       </div>
 
       <div class="form-grid form-grid-3">
         <div class="field">
-          <label for="gi-name">{isPl ? 'Osoba kontaktowa' : isUk ? 'Контактна особа' : 'Contact Name'} <span aria-hidden="true">*</span></label>
-          <span id="gi-name-hint" class="field-hint">{isPl ? 'Lider grupy lub koordynator' : isUk ? 'Лідер групи або координатор' : 'Group leader or coordinator'}</span>
+          <label for="gi-name">{isPl ? 'Osoba kontaktowa' : isUk ? 'Контактна особа' : isHe ? 'איש קשר' : 'Contact Name'} <span aria-hidden="true">*</span></label>
+          <span id="gi-name-hint" class="field-hint">{isPl ? 'Lider grupy lub koordynator' : isUk ? 'Лідер групи або координатор' : isHe ? 'ראש קבוצה או רכז/ת' : 'Group leader or coordinator'}</span>
           <input
             id="gi-name"
             name="contactName"
@@ -209,17 +223,17 @@ const showRouteInitially = selectedSlug === 'jorunners-mountain-lodge-program';
             autocomplete="name"
             aria-describedby="gi-name-hint"
             data-error="gi-name-error"
-            placeholder={isPl ? 'Twoje imię i nazwisko' : isUk ? 'Ваше ім’я та прізвище' : 'Your full name'}
+            placeholder={isPl ? 'Twoje imię i nazwisko' : isUk ? 'Ваше ім’я та прізвище' : isHe ? 'שמכם המלא' : 'Your full name'}
           />
           <div id="gi-name-error" class="error-msg">
-            <span role="img" aria-label={isPl ? 'Błąd' : isUk ? 'Помилка' : 'Error'}>⚠</span>{' '}
-            {isPl ? 'Wpisz co najmniej 2 znaki.' : isUk ? 'Введіть щонайменше 2 символи.' : 'Please enter at least 2 characters.'}
+            <span role="img" aria-label={isPl ? 'Błąd' : isUk ? 'Помилка' : isHe ? 'שגיאה' : 'Error'}>⚠</span>{' '}
+            {isPl ? 'Wpisz co najmniej 2 znaki.' : isUk ? 'Введіть щонайменше 2 символи.' : isHe ? 'אנא הזינו לפחות 2 תווים.' : 'Please enter at least 2 characters.'}
           </div>
         </div>
 
         <div class="field">
-          <label for="gi-email">{isPl ? 'Adres e-mail' : isUk ? 'Електронна пошта' : 'Email Address'} <span aria-hidden="true">*</span></label>
-          <span id="gi-email-hint" class="field-hint">{isPl ? 'Format: imie@example.com' : isUk ? 'Формат: you@example.com' : 'Format: you@example.com'}</span>
+          <label for="gi-email">{isPl ? 'Adres e-mail' : isUk ? 'Електронна пошта' : isHe ? 'כתובת דוא״ל' : 'Email Address'} <span aria-hidden="true">*</span></label>
+          <span id="gi-email-hint" class="field-hint">{isPl ? 'Format: imie@example.com' : isUk ? 'Формат: you@example.com' : isHe ? 'פורמט: you@example.com' : 'Format: you@example.com'}</span>
           <input
             id="gi-email"
             name="email"
@@ -234,14 +248,14 @@ const showRouteInitially = selectedSlug === 'jorunners-mountain-lodge-program';
             placeholder={isPl ? 'imie@example.com' : 'you@example.com'}
           />
           <div id="gi-email-error" class="error-msg">
-            <span role="img" aria-label={isPl ? 'Błąd' : isUk ? 'Помилка' : 'Error'}>⚠</span>{' '}
-            {isPl ? 'Podaj poprawny adres e-mail.' : isUk ? 'Введіть коректну електронну адресу.' : 'Enter an email address in the format you@example.com.'}
+            <span role="img" aria-label={isPl ? 'Błąd' : isUk ? 'Помилка' : isHe ? 'שגיאה' : 'Error'}>⚠</span>{' '}
+            {isPl ? 'Podaj poprawny adres e-mail.' : isUk ? 'Введіть коректну електронну адресу.' : isHe ? 'אנא הזינו כתובת דוא״ל תקינה.' : 'Enter an email address in the format you@example.com.'}
           </div>
         </div>
 
         <div class="field">
-          <label for="gi-phone">{isPl ? 'Numer WhatsApp / Telefon' : isUk ? 'Номер WhatsApp / Телефон' : 'WhatsApp / Phone Number'} <span aria-hidden="true">*</span></label>
-          <span id="gi-phone-hint" class="field-hint">{isPl ? 'Z kodem kraju (np. +48...)' : isUk ? 'З кодом країни (напр., +380...)' : 'Include country code (e.g., +995...)'}</span>
+          <label for="gi-phone">{isPl ? 'Numer WhatsApp / Telefon' : isUk ? 'Номер WhatsApp / Телефон' : isHe ? 'מספר WhatsApp / טלפון' : 'WhatsApp / Phone Number'} <span aria-hidden="true">*</span></label>
+          <span id="gi-phone-hint" class="field-hint">{isPl ? 'Z kodem kraju (np. +48...)' : isUk ? 'З кодом країни (напр., +380...)' : isHe ? 'כולל קידומת מדינה (לדוגמה +972...)' : 'Include country code (e.g., +995...)'}</span>
           <input
             id="gi-phone"
             name="phone"
@@ -251,22 +265,24 @@ const showRouteInitially = selectedSlug === 'jorunners-mountain-lodge-program';
             autocomplete="tel"
             aria-describedby="gi-phone-hint"
             data-error="gi-phone-error"
-            placeholder={isUk ? '+380 67 000 00 00' : '+48 600 000 000'}
+            placeholder={isUk ? '+380 67 000 00 00' : isHe ? '+972 50 000 0000' : '+48 600 000 000'}
           />
           <div id="gi-phone-error" class="error-msg">
-            <span role="img" aria-label={isPl ? 'Błąd' : isUk ? 'Помилка' : 'Error'}>⚠</span>{' '}
-            {isPl ? 'Podaj poprawny numer telefonu lub WhatsApp.' : isUk ? 'Введіть дійсний номер телефону або WhatsApp.' : 'Please enter a valid WhatsApp or phone number.'}
+            <span role="img" aria-label={isPl ? 'Błąd' : isUk ? 'Помилка' : isHe ? 'שגיאה' : 'Error'}>⚠</span>{' '}
+            {isPl ? 'Podaj poprawny numer telefonu lub WhatsApp.' : isUk ? 'Введіть дійсний номер телефону або WhatsApp.' : isHe ? 'אנא הזינו מספר טלפון או WhatsApp תקין.' : 'Please enter a valid WhatsApp or phone number.'}
           </div>
         </div>
       </div>
 
       <div class="field">
-        <label for="gi-notes">{isPl ? 'Dodatkowe uwagi' : isUk ? 'Додаткові побажання' : 'Additional Notes'}</label>
+        <label for="gi-notes">{isPl ? 'Dodatkowe uwagi' : isUk ? 'Додаткові побажання' : isHe ? 'הערות נוספות' : 'Additional Notes'}</label>
         <span id="gi-notes-hint" class="field-hint">
           {isPl
             ? 'Opcjonalnie: godziny przylotów, rozmiary sprzętu narciarskiego, preferowane tempo lub prośby specjalne'
             : isUk
             ? 'Необов’язково: час прильоту, розміри лижного спорядження, побажання щодо темпу'
+            : isHe
+            ? 'אופציונלי: שעות נחיתה, מידות ציוד סקי, העדפות קצב או בקשות מיוחדות'
             : 'Optional: flight arrival times, ski rental sizes, pacing preferences, or special requests'}
         </span>
         <textarea
@@ -278,13 +294,15 @@ const showRouteInitially = selectedSlug === 'jorunners-mountain-lodge-program';
             ? 'Opowiedz o celach grupy, poziomie zaawansowania lub harmonogramie...'
             : isUk
             ? 'Розкажіть про цілі групи, рівень підготовки або графік...'
+            : isHe
+            ? 'ספרו לנו על מטרות הקבוצה, רמת הכושר או לוח הזמנים...'
             : "Tell us about your group's goals, experience level, or schedule..."}
         ></textarea>
       </div>
 
       <div class="gi-submit-row">
         <button type="submit" class="btn btn-coral">
-          {isPl ? 'Sprawdź i przygotuj zapytanie →' : isUk ? 'Перевірити та підготувати запит →' : 'Review & Prepare Inquiry →'}
+          {isPl ? 'Sprawdź i przygotuj zapytanie →' : isUk ? 'Перевірити та підготувати запит →' : isHe ? 'בדקו והכינו פנייה →' : 'Review & Prepare Inquiry →'}
         </button>
       </div>
     </form>
@@ -298,13 +316,15 @@ const showRouteInitially = selectedSlug === 'jorunners-mountain-lodge-program';
       hidden
     >
       <div class="gi-confirmation-head">
-        <span class="badge badge-forest">{isPl ? '✓ Zapytanie gotowe do wysyłki' : isUk ? '✓ Запит готовий до надсилання' : '✓ Inquiry Ready to Send'}</span>
-        <h3>{isPl ? 'Podsumowanie wyjazdu grupowego' : isUk ? 'Підсумок групової поїздки' : 'Your Group Trip Summary'}</h3>
+        <span class="badge badge-forest">{isPl ? '✓ Zapytanie gotowe do wysyłki' : isUk ? '✓ Запит готовий до надсилання' : isHe ? '✓ הפנייה מוכנה לשליחה' : '✓ Inquiry Ready to Send'}</span>
+        <h3>{isPl ? 'Podsumowanie wyjazdu grupowego' : isUk ? 'Підсумок групової поїздки' : isHe ? 'סיכום הטיול הקבוצתי' : 'Your Group Trip Summary'}</h3>
         <p>
           {isPl
             ? 'Sprawdź dane poniżej i kliknij Wyślij przez WhatsApp lub Wyślij przez E-mail, aby przesłać zapytanie bezpośrednio do '
             : isUk
             ? 'Перевірте дані нижче та натисніть Надіслати у WhatsApp або Надіслати на E-mail, щоб надіслати запит напряму до '
+            : isHe
+            ? 'בדקו את הפרטים למטה ולחצו על שליחה ב-WhatsApp או שליחה בדוא״ל כדי להעביר את הפנייה ישירות אל '
             : 'Review your details below and click Send via WhatsApp or Send via Email to deliver your inquiry directly to '}
           {SITE.brandName}.
         </p>
@@ -320,20 +340,20 @@ const showRouteInitially = selectedSlug === 'jorunners-mountain-lodge-program';
           target="_blank"
           rel="noopener noreferrer"
         >
-          {isPl ? 'Wyślij przez WhatsApp →' : isUk ? 'Надіслати у WhatsApp →' : 'Send via WhatsApp →'}
+          {isPl ? 'Wyślij przez WhatsApp →' : isUk ? 'Надіслати у WhatsApp →' : isHe ? 'שליחה ב-WhatsApp →' : 'Send via WhatsApp →'}
         </a>
         <a
           id="gi-email-link"
           class="btn btn-forest"
           href={`mailto:${SITE.email}`}
         >
-          {isPl ? 'Wyślij przez E-mail →' : isUk ? 'Надіслати на E-mail →' : 'Send via Email →'}
+          {isPl ? 'Wyślij przez E-mail →' : isUk ? 'Надіслати на E-mail →' : isHe ? 'שליחה בדוא״ל →' : 'Send via Email →'}
         </a>
         <button id="gi-copy-btn" type="button" class="btn btn-outline">
-          {isPl ? 'Kopiuj podsumowanie' : isUk ? 'Копіювати підсумок' : 'Copy Summary'}
+          {isPl ? 'Kopiuj podsumowanie' : isUk ? 'Копіювати підсумок' : isHe ? 'העתקת הסיכום' : 'Copy Summary'}
         </button>
         <button id="gi-edit-btn" type="button" class="btn btn-outline">
-          {isPl ? 'Edytuj dane' : isUk ? 'Редагувати дані' : 'Edit Details'}
+          {isPl ? 'Edytuj dane' : isUk ? 'Редагувати дані' : isHe ? 'עריכת פרטים' : 'Edit Details'}
         </button>
       </div>
       <p id="gi-copy-feedback" class="gi-copy-feedback" aria-live="polite"></p>

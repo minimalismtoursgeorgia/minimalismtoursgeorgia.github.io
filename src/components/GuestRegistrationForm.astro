@@ -12,6 +12,7 @@ const { lang = 'en' } = Astro.props;
 const isKa = lang === 'ka';
 const isPl = lang === 'pl';
 const isUk = lang === 'uk';
+const isHe = lang === 'he';
 
 const copy = isKa
   ? {
@@ -234,6 +235,80 @@ const copy = isKa
       statusOpenedWa: 'Відкрито WhatsApp із заповненою формою.',
       statusOpenedTg: 'Відкрито Telegram із заповненою формою.',
       printNote: 'Minimalism Tours Georgia · Реєстрація гостя та медична форма · СУВОРО КОНФІДЕНЦІЙНО',
+    }
+  : isHe
+  ? {
+      badge: 'סודי בהחלט · STRICTLY CONFIDENTIAL',
+      heading: 'טופס רישום אורח והצהרת בריאות לשעת חירום',
+      intro:
+        'מלאו לפני היציאה לסיור. כל הפרטים נשמרים אך ורק בדפדפן שלכם (ללא שמירה בשרת האתר) — תוכלו לשמור כ-PDF, להדפיס או לשלוח ישירות ב-WhatsApp או ב-Telegram.',
+      tripLegend: '1. פרטי הסיור ואטרקציות אופציונליות',
+      tripNameLabel: 'שם הסיור',
+      tripDateLabel: 'תאריך הסיור',
+      customTourOption: 'מסלול פרטי מותאם בגאורגיה',
+      addonsLegend: 'פעילויות אופציונליות במטירלה (לבחירה בלבד)',
+      addonsHint: 'אף אחת מהן אינה חובה — סמנו רק אם תרצו להוסיף:',
+      addons: [
+        { value: 'Zipline (80 GEL)', label: 'אומגה (Zipline) — 80 GEL' },
+        { value: 'ATV Quad Ride (150 GEL)', label: 'טרקטורון ATV — 150 GEL' },
+        { value: 'Local Mountain Honey (50 GEL)', label: 'דבש הרים מקומי (עם חלה / מסונן) — 50 GEL' },
+        { value: 'Propolis / დინდგელი (40 GEL)', label: 'פרופוליס (დინდგელი) — 40 GEL' },
+        { value: 'Georgian Lunch (With Guide)', label: 'ארוחת צהריים גאורגית (בתיאום עם המדריך)' },
+      ],
+      personalLegend: '2. פרטים אישיים של המטייל',
+      fullNameLabel: 'שם מלא',
+      fullNameHint: 'כפי שמופיע בדרכון או בתעודת הזהות',
+      fullNameError: 'אנא הזינו שם מלא (לפחות 2 תווים).',
+      dobLabel: 'תאריך לידה',
+      dobError: 'אנא בחרו תאריך לידה.',
+      addressLabel: 'כתובת מגורים',
+      addressHint: 'רחוב, עיר, מיקוד ומדינה',
+      addressError: 'אנא הזינו את כתובת המגורים שלכם.',
+      mobileLabel: 'טלפון נייד (כולל קידומת מדינה)',
+      mobileHint: 'ציינו קידומת בינלאומית (לדוגמה +972, +995, +48)',
+      mobileError: 'אנא הזינו מספר טלפון נייד תקין.',
+      medicalLegend: '3. מידע רפואי ואיש קשר לחירום',
+      doctorLabel: 'שם רופא ומרפאה (אופציונלי)',
+      medicalLabel: 'מצבים רפואיים, תרופות ואלרגיות (מזון, תרופות, עקיצות וכו׳)',
+      medicalHint: 'כתבו "אין" (None) אם אין מצבים רפואיים, תרופות או אלרגיות.',
+      medicalError: 'אנא מלאו את השדה הרפואי (או כתבו "אין").',
+      kinNameLabel: 'איש קשר לשעת חירום (שם מלא)',
+      kinNameError: 'אנא הזינו שם של איש קשר לחירום.',
+      kinPhoneLabel: 'טלפון של איש הקשר לחירום',
+      kinPhoneError: 'אנא הזינו מספר טלפון של איש הקשר לחירום.',
+      insuranceLegend: '4. פרטי ביטוח נסיעות',
+      insCompLabel: 'שם חברת הביטוח',
+      insCompError: 'אנא הזינו את שם חברת הביטוח.',
+      insPolicyLabel: 'מספר פוליסת ביטוח',
+      insPolicyError: 'אנא הזינו את מספר הפוליסה.',
+      insPhoneLabel: 'טלפון חירום 24/7 של חברת הביטוח',
+      insPhoneError: 'אנא הזינו את מספר החירום של חברת הביטוח.',
+      heliLegend: 'האם הפוליסה שלכם כוללת פינוי מוסק?',
+      heliOptions: [
+        { value: 'Yes', label: 'כן (Yes)' },
+        { value: 'No', label: 'לא (No)' },
+        { value: 'Not sure', label: 'לא בטוח/ה' },
+      ],
+      heliError: 'אנא בחרו אם יש כיסוי לפינוי מוסק.',
+      declLegend: '5. הצהרה וחתימה',
+      agreePrefix: 'אני מאשר/ת שכל הפרטים נכונים ומסכים/ה ל-',
+      agreeLinkText: 'תנאי הבטיחות, מזג האוויר והתפעול של Minimalism Tours Georgia',
+      agreeSuffix: '. עותק מודפס זמין גם במהלך הסיור.',
+      agreeError: 'אנא סמנו את תיבת ההסכמה לפני ההמשך.',
+      signedLabel: 'חתימה (הקלידו שם מלא)',
+      signedError: 'אנא הקלידו את שמכם המלא כחתימה.',
+      signedDateLabel: 'תאריך',
+      signedDateError: 'אנא הזינו את תאריך החתימה של היום.',
+      btnPrint: 'שמירה כ-PDF / הדפסה',
+      btnWa: 'שליחה ב-WhatsApp',
+      btnTg: 'שליחה ב-Telegram',
+      btnCopy: 'העתקת הטופס',
+      btnReset: 'ניקוי',
+      statusInvalid: 'אנא מלאו את כל שדות החובה המסומנים.',
+      statusCopied: 'פרטי הרישום המלאים הועתקו ללוח.',
+      statusOpenedWa: 'WhatsApp נפתח עם הטופס המלא.',
+      statusOpenedTg: 'Telegram נפתח עם הטופס המלא.',
+      printNote: 'Minimalism Tours Georgia · טופס רישום אורח והצהרת בריאות · סודי בהחלט',
     }
   : {
       badge: 'STRICTLY CONFIDENTIAL',

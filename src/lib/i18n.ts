@@ -1,4 +1,4 @@
-export type Lang = 'en' | 'ka' | 'pl' | 'uk';
+export type Lang = 'en' | 'ka' | 'pl' | 'uk' | 'he';
 
 const KA_SUPPORTED_PATHS = new Set([
   '/',
@@ -16,10 +16,10 @@ export function localizePath(path: string, lang: Lang): string {
   const [baseAndQuery, hash] = path.split('#');
   const [pathname, query] = baseAndQuery.split('?');
   const normalized = pathname.startsWith('/') ? pathname : `/${pathname}`;
-  const cleanPath = normalized.replace(/^\/(pl|ka|uk)(?=\/|$)/, '') || '/';
+  const cleanPath = normalized.replace(/^\/(pl|ka|uk|he)(?=\/|$)/, '') || '/';
 
   let target = cleanPath;
-  if (lang === 'pl' || lang === 'uk') {
+  if (lang === 'pl' || lang === 'uk' || lang === 'he') {
     target = cleanPath === '/' ? `/${lang}/` : `/${lang}${cleanPath}`;
   } else if (lang === 'ka') {
     target = KA_SUPPORTED_PATHS.has(cleanPath)
