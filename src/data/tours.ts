@@ -87,9 +87,9 @@ const MTIRALA_OPTIONAL_EXTRAS: Record<OptionalExtra['id'], OptionalExtra> = {
   },
   atv: {
     id: 'atv',
-    label: 'ATV Quad Ride (300 GEL)',
-    shortLabel: 'ATV Ride · 300 GEL',
-    detail: 'Optional ATV mountain ride along designated valley tracks — 300 GEL, arranged on guest request.',
+    label: 'ATV Quad Ride (150 GEL)',
+    shortLabel: 'ATV Ride · 150 GEL',
+    detail: 'Optional ATV mountain ride along designated valley tracks — 150 GEL, arranged on guest request.',
   },
   honey: {
     id: 'honey',
@@ -105,9 +105,9 @@ const MTIRALA_OPTIONAL_EXTRAS: Record<OptionalExtra['id'], OptionalExtra> = {
   },
   lunch: {
     id: 'lunch',
-    label: 'Georgian Lunch (150 GEL)',
-    shortLabel: 'Lunch · 150 GEL',
-    detail: 'Optional homemade Adjarian village lunch or riverside café spread tailored to your group — 150 GEL.',
+    label: 'Georgian Lunch (Suggested with Guide)',
+    shortLabel: 'Lunch · With Guide',
+    detail: 'Optional homemade Adjarian village lunch or riverside café stop — suggested and arranged directly with your guide based on your group’s preferences.',
   },
 };
 
@@ -245,6 +245,11 @@ export const TOURS: Tour[] = [
         question: 'Can we book last minute if Batumi weather clears in the morning?',
         answer:
           'Yes — reach out directly via WhatsApp for same-morning availability on Shared or Private departures before heading out.',
+      },
+      {
+        question: 'Can I pay with a bank card, or is cash easier? Where is the best exchange rate?',
+        answer:
+          'Bank cards are accepted in Batumi and at many restaurants, but it is much easier to carry cash (GEL) in the mountains, villages, and for optional on-site activities (zipline, ATV ride, honey, propolis, or lunch). Local guide tip: for the best cash exchange rates in Batumi, look for Rico Credit exchange offices.',
       },
     ],
     seoDescription:

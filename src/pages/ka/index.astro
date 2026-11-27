@@ -146,6 +146,29 @@ const kaFeaturedTours: FeaturedTourSlide[] = [
       </div>
     </div>
   </section>
+
+  <section class="section">
+    <div class="container" style="max-width: 56rem;">
+      <div class="section-header">
+        <div>
+          <span class="eyebrow">პრაქტიკული რჩევები</span>
+          <h2>{KA_CONTENT.faqTitle}</h2>
+        </div>
+      </div>
+      <div class="accordion">
+        {
+          KA_CONTENT.faqs.map((item) => (
+            <details open>
+              <summary>{item.question}</summary>
+              <div class="accordion-panel">
+                <p>{item.answer}</p>
+              </div>
+            </details>
+          ))
+        }
+      </div>
+    </div>
+  </section>
 </BaseLayout>
 
 <style>

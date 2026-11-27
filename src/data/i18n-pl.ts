@@ -39,9 +39,9 @@ export const PL_MTIRALA_OPTIONAL_EXTRAS: Record<OptionalExtra['id'], OptionalExt
   },
   atv: {
     id: 'atv',
-    label: 'Jazda quadem ATV (300 GEL)',
-    shortLabel: 'Quad ATV · 300 GEL',
-    detail: 'Opcjonalna przejażdżka górskim quadem ATV po wyznaczonych trasach w dolinie — 300 GEL, na życzenie gości.',
+    label: 'Jazda quadem ATV (150 GEL)',
+    shortLabel: 'Quad ATV · 150 GEL',
+    detail: 'Opcjonalna przejażdżka górskim quadem ATV po wyznaczonych trasach w dolinie — 150 GEL, na życzenie gości.',
   },
   honey: {
     id: 'honey',
@@ -57,9 +57,9 @@ export const PL_MTIRALA_OPTIONAL_EXTRAS: Record<OptionalExtra['id'], OptionalExt
   },
   lunch: {
     id: 'lunch',
-    label: 'Gruziński obiad (150 GEL)',
-    shortLabel: 'Obiad · 150 GEL',
-    detail: 'Opcjonalny domowy obiad adżarski w wiosce lub w nadrzecznej restauracji — 150 GEL.',
+    label: 'Gruziński obiad (ustalany z przewodnikiem)',
+    shortLabel: 'Obiad · Z przewodnikiem',
+    detail: 'Opcjonalny domowy obiad adżarski w wiosce lub w nadrzecznej restauracji — proponowany i organizowany bezpośrednio z przewodnikiem.',
   },
 };
 
@@ -150,6 +150,11 @@ export const PL_GENERAL_FAQS = [
     question: 'Jak zarezerwować wycieczkę bez opłat manipulacyjnych na stronie?',
     answer:
       'Wybierz liczbę osób i datę w kalkulatorze dowolnej wycieczki i kliknij Rezerwuj bezpośrednio przez WhatsApp lub Telegram — albo zarezerwuj na GetYourGuide. Przy rezerwacji bezpośredniej nie pobieramy żadnych opłat pośredników.',
+  },
+  {
+    question: 'Czy można płacić kartą bankową, czy lepiej mieć gotówkę? Gdzie najlepiej wymienić walutę?',
+    answer:
+      'Karty płatnicze są akceptowane w Batumi i wielu restauracjach, ale w górach, wioskach oraz przy opcjonalnych atrakcjach na miejscu (tyrolka 80 GEL, quad ATV 150 GEL, miód 50 GEL, propolis 40 GEL lub obiad ustalany z przewodnikiem) znacznie wygodniej jest mieć gotówkę (GEL). Wskazówka lokalnych przewodników: najlepsze kursy wymiany gotówki znajdziesz w kantorach Rico Credit.',
   },
 ];
 
@@ -534,6 +539,11 @@ const PL_TOURS_MAP: Record<string, TourOverride> = {
         question: 'Czy można popływać pod wodospadem?',
         answer:
           'Latem (czerwiec–wrzesień) woda w jeziorze górskim i przy wodospadzie jest orzeźwiająco chłodna i krystalicznie czysta — chętni mogą zażyć kąpieli.',
+      },
+      {
+        question: 'Czy można płacić kartą bankową, czy lepiej mieć gotówkę? Gdzie wymienić walutę?',
+        answer:
+          'W Batumi i wielu restauracjach zapłacisz kartą, ale w górach, wioskach i za opcjonalne atrakcje na miejscu (tyrolka 80 GEL, quad ATV 150 GEL, miód 50 GEL, propolis 40 GEL, obiad z przewodnikiem) znacznie łatwiej płacić gotówką (GEL). Wskazówka lokalnych przewodników: najlepsze kursy wymiany gotówki oferują kantory Rico Credit.',
       },
     ],
     seoDescription:
