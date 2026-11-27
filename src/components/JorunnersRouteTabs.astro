@@ -1,0 +1,499 @@
+---
+// Interactive, accessible Route Comparison Tabs for Trip 2 (Jorunners)
+---
+
+<section class="detail-block route-options-section" aria-labelledby="route-options-heading">
+  <div class="route-options-head">
+    <div>
+      <span class="badge badge-forest">Compare 2 Curated Routes</span>
+      <h2 id="route-options-heading">Choose Your Jorunners Route Option</h2>
+      <p class="route-options-lead">
+        Both options deliver ~50 km of easy, scenic mountain trails across 8 Days / 7 Nights with Full Board (3 meals/day) and mountain lodge stays. Switch tabs below to compare terrain, transfers, and logistics.
+      </p>
+    </div>
+  </div>
+
+  <div class="route-tabs-wrap">
+    <div
+      class="route-tablist"
+      role="tablist"
+      {...({ focusgroup: 'tablist nomemory' } as any)}
+      aria-label="Jorunners route options"
+    >
+      <button
+        type="button"
+        role="tab"
+        id="tab-option-a"
+        class="route-tab"
+        aria-selected="true"
+        data-route-value="Option A (Recommended): Kazbegi / Stepantsminda Valley Basecamp"
+        {...({ focusgroupstart: '' } as any)}
+      >
+        <span class="route-tab-kicker">Recommended · Easy Terrain</span>
+        <span class="route-tab-title">Option A: Stepantsminda Basecamp</span>
+      </button>
+
+      <button
+        type="button"
+        role="tab"
+        id="tab-option-b"
+        class="route-tab"
+        aria-selected="false"
+        data-route-value="Option B: Svaneti (Mestia to Ushguli) Point-to-Point Lodges"
+      >
+        <span class="route-tab-kicker">June–September Only · Classic Trek</span>
+        <span class="route-tab-title">Option B: Mestia to Ushguli</span>
+      </button>
+    </div>
+
+    <div class="route-panels-grid">
+      <!-- Option A Panel -->
+      <div
+        role="tabpanel"
+        id="panel-option-a"
+        aria-labelledby="tab-option-a"
+        tabindex="0"
+        class="route-panel"
+      >
+        <div class="route-panel-card">
+          <div class="route-panel-header">
+            <div>
+              <span class="badge badge-forest">Recommended · Valley Basecamp &amp; Day Trails</span>
+              <h3>Option A: Kazbegi / Stepantsminda Valley Basecamp</h3>
+            </div>
+            <span class="badge badge-sea">~3h from Tbilisi</span>
+          </div>
+
+          <p class="route-panel-intro">
+            Ideal for running &amp; active groups wanting easy terrain, short transfers, and zero daily packing or unpacking. Stay anchored in comfortable mountain lodges while completing 8–12 km daily outings totaling ~50 km.
+          </p>
+
+          <dl class="route-specs-grid">
+            <div>
+              <dt>Base &amp; Stay</dt>
+              <dd>Stepantsminda (6 nights in mountain lodges + 1 night in Tbilisi)</dd>
+            </div>
+            <div>
+              <dt>Daily Distance</dt>
+              <dd>8–12 km daily outings totaling ~50 km across the week</dd>
+            </div>
+            <div>
+              <dt>Transfer Time</dt>
+              <dd>~3 hours north of Tbilisi by private group vehicle</dd>
+            </div>
+            <div>
+              <dt>Logistics</dt>
+              <dd>Single basecamp — no daily packing/unpacking</dd>
+            </div>
+          </dl>
+
+          <div class="route-highlights-box">
+            <h4>Signature Day Trails Included</h4>
+            <ul>
+              <li>
+                <strong>Truso Valley (15–20 km round-trip, customizable):</strong> Wide, mostly flat gravel valley road past travertine mineral springs, abandoned stone villages, and sweeping river valley panoramas.
+              </li>
+              <li>
+                <strong>Juta High-Mountain Valley (8–12 km out-and-back):</strong> Easy-to-moderate alpine valley trail with flexible turn-back points and an optional mountain lodge overnight.
+              </li>
+            </ul>
+          </div>
+
+          <div class="route-panel-actions">
+            <a
+              href="#group-inquiry"
+              class="btn btn-coral btn-sm select-route-cta"
+              data-select-route="Option A (Recommended): Kazbegi / Stepantsminda Valley Basecamp"
+            >
+              Inquire About Option A →
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Option B Panel -->
+      <div
+        role="tabpanel"
+        id="panel-option-b"
+        aria-labelledby="tab-option-b"
+        class="route-panel"
+        hidden="until-found"
+      >
+        <div class="route-panel-card">
+          <div class="route-panel-header">
+            <div>
+              <span class="badge badge-coral">Summer / Early Autumn Only · June–September</span>
+              <h3>Option B: Mestia to Ushguli Point-to-Point Mountain Lodges</h3>
+            </div>
+            <span class="badge badge-sea">4x4 Luggage Support</span>
+          </div>
+
+          <p class="route-panel-intro">
+            A classic village-to-village ~50 km tailored route through Upper Svaneti, staying in traditional family-run mountain lodges with full-board local dining and full 4x4 support.
+          </p>
+
+          <dl class="route-specs-grid">
+            <div>
+              <dt>Seasonality</dt>
+              <dd>Summer / Early Autumn only (June–September)</dd>
+            </div>
+            <div>
+              <dt>Route &amp; Distance</dt>
+              <dd>Mestia to Ushguli (~50 km tailored point-to-point route)</dd>
+            </div>
+            <div>
+              <dt>Transfer Time</dt>
+              <dd>~8–9 hour road transfer from Tbilisi (or domestic flight when available)</dd>
+            </div>
+            <div>
+              <dt>Support</dt>
+              <dd>4x4 luggage support + optional vehicle skips on the steepest pass to keep effort easy-to-moderate</dd>
+            </div>
+          </dl>
+
+          <div class="route-highlights-box">
+            <h4>Route Experience &amp; Finish</h4>
+            <ul>
+              <li>
+                <strong>Family-Run Mountain Lodges:</strong> Village-to-village hospitality with hearty Full Board Svanetian dining each evening.
+              </li>
+              <li>
+                <strong>Ushguli Finish:</strong> Arrive among UNESCO-listed medieval stone defensive towers and glacier-backed Caucasus valleys.
+              </li>
+            </ul>
+          </div>
+
+          <div class="route-panel-actions">
+            <a
+              href="#group-inquiry"
+              class="btn btn-coral btn-sm select-route-cta"
+              data-select-route="Option B: Svaneti (Mestia to Ushguli) Point-to-Point Lodges"
+            >
+              Inquire About Option B →
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Quick Side-by-Side Comparison Table -->
+  <div class="route-compare-wrap">
+    <h3 class="route-compare-title">Quick Side-by-Side Comparison</h3>
+    <div class="route-table-scroll">
+      <table class="route-compare-table">
+        <thead>
+          <tr>
+            <th>Feature</th>
+            <th>Option A: Stepantsminda (Recommended)</th>
+            <th>Option B: Mestia to Ushguli</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Format</strong></td>
+            <td>Valley basecamp + day trails (no daily packing)</td>
+            <td>Classic point-to-point village mountain lodges</td>
+          </tr>
+          <tr>
+            <td><strong>Transfer from Tbilisi</strong></td>
+            <td>~3 hours north by road</td>
+            <td>~8–9 hours by road (or domestic flight if available)</td>
+          </tr>
+          <tr>
+            <td><strong>Season</strong></td>
+            <td>Spring through Autumn</td>
+            <td>Summer / Early Autumn only (June–September)</td>
+          </tr>
+          <tr>
+            <td><strong>Effort &amp; Support</strong></td>
+            <td>Easy flat gravel (Truso) &amp; flexible turn-back (Juta)</td>
+            <td>Easy-to-moderate with 4x4 luggage &amp; steep-pass vehicle skips</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<script>
+  const tablist = document.querySelector<HTMLElement>('.route-tablist');
+  const tabs = tablist ? Array.from(tablist.querySelectorAll<HTMLButtonElement>('[role="tab"]')) : [];
+  const panels = Array.from(document.querySelectorAll<HTMLElement>('.route-panel'));
+
+  function activateTab(selectedTab: HTMLButtonElement, moveFocus = false) {
+    const selectedId = selectedTab.id;
+    tabs.forEach((tab) => {
+      const isSelected = tab === selectedTab;
+      tab.setAttribute('aria-selected', String(isSelected));
+      tab.toggleAttribute('focusgroupstart', isSelected);
+      if (!isSelected) {
+        tab.setAttribute('tabindex', '-1');
+      } else {
+        tab.removeAttribute('tabindex');
+      }
+    });
+
+    panels.forEach((panel) => {
+      const matches = panel.getAttribute('aria-labelledby') === selectedId;
+      if (matches) {
+        panel.removeAttribute('hidden');
+        panel.setAttribute('tabindex', '0');
+      } else {
+        panel.setAttribute('hidden', 'until-found');
+        panel.removeAttribute('tabindex');
+      }
+    });
+
+    selectedTab.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+    if (moveFocus) selectedTab.focus();
+
+    const routeValue = selectedTab.dataset.routeValue;
+    if (routeValue) {
+      document.dispatchEvent(
+        new CustomEvent('jorunners:route-change', { detail: { routeValue } })
+      );
+    }
+  }
+
+  tabs.forEach((tab, index) => {
+    tab.addEventListener('click', () => activateTab(tab));
+
+    tab.addEventListener('keydown', (e) => {
+      let nextIdx = -1;
+      if (e.key === 'ArrowRight') nextIdx = (index + 1) % tabs.length;
+      else if (e.key === 'ArrowLeft') nextIdx = (index - 1 + tabs.length) % tabs.length;
+      else if (e.key === 'Home') nextIdx = 0;
+      else if (e.key === 'End') nextIdx = tabs.length - 1;
+
+      if (nextIdx !== -1) {
+        e.preventDefault();
+        activateTab(tabs[nextIdx], true);
+      }
+    });
+  });
+
+  // Sync find-in-page reveal (hidden="until-found")
+  panels.forEach((panel) => {
+    panel.addEventListener('beforematch', () => {
+      const tabId = panel.getAttribute('aria-labelledby');
+      const tab = tabId ? document.getElementById(tabId) : null;
+      if (tab instanceof HTMLButtonElement) activateTab(tab);
+    });
+  });
+
+  // Clicking "Inquire About Option A/B" syncs the form radio button
+  document.querySelectorAll<HTMLAnchorElement>('.select-route-cta').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const routeValue = btn.dataset.selectRoute;
+      if (routeValue) {
+        document.dispatchEvent(
+          new CustomEvent('jorunners:route-change', { detail: { routeValue } })
+        );
+      }
+    });
+  });
+</script>
+
+<style>
+  .route-options-head {
+    margin-bottom: 1.25rem;
+  }
+
+  .route-options-head h2 {
+    margin-top: 0.5rem;
+    margin-bottom: 0.45rem;
+  }
+
+  .route-options-lead {
+    color: var(--ink-600);
+    max-width: 46rem;
+    margin-bottom: 0;
+  }
+
+  .route-tablist {
+    display: flex;
+    gap: 0.5rem;
+    overflow-x: auto;
+    border-bottom: 1px solid var(--border-subtle);
+    margin-bottom: 1.25rem;
+    scrollbar-width: none;
+  }
+
+  .route-tablist::-webkit-scrollbar {
+    display: none;
+  }
+
+  .route-tab {
+    position: relative;
+    flex: 1 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.15rem;
+    padding: 0.85rem 1.15rem;
+    border: 1px solid transparent;
+    border-bottom: none;
+    border-radius: var(--radius-md) var(--radius-md) 0 0;
+    background: transparent;
+    color: var(--ink-600);
+    cursor: pointer;
+    text-align: left;
+    font: inherit;
+    transition: background-color 0.18s ease, color 0.18s ease;
+  }
+
+  .route-tab:hover {
+    background-color: var(--bg-surface);
+    color: var(--ink-900);
+  }
+
+  .route-tab[aria-selected='true'] {
+    background-color: var(--bg-surface);
+    color: var(--forest-800);
+    border-color: var(--border-subtle);
+  }
+
+  .route-tab[aria-selected='true']::after {
+    content: '';
+    position: absolute;
+    inset: auto 0 0;
+    border-block-end: 3px solid var(--forest-700);
+  }
+
+  .route-tab-kicker {
+    font-size: 0.74rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--sea-700);
+  }
+
+  .route-tab-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: inherit;
+  }
+
+  .route-panels-grid {
+    display: grid;
+  }
+
+  .route-panel {
+    grid-area: 1 / 1;
+  }
+
+  .route-panel-card {
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    padding: 1.4rem;
+    box-shadow: var(--shadow-xs);
+  }
+
+  .route-panel-header {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .route-panel-header h3 {
+    margin: 0.4rem 0 0;
+    font-size: 1.25rem;
+  }
+
+  .route-panel-intro {
+    color: var(--ink-700);
+    margin-bottom: 1.15rem;
+  }
+
+  .route-specs-grid {
+    display: grid;
+    gap: 0.75rem;
+    grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+    margin: 0 0 1.15rem;
+    padding: 0.9rem;
+    background-color: #ffffff;
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+  }
+
+  .route-specs-grid dt {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--ink-500);
+    font-weight: 700;
+    margin-bottom: 0.2rem;
+  }
+
+  .route-specs-grid dd {
+    margin: 0;
+    font-size: 0.92rem;
+    font-weight: 600;
+    color: var(--ink-900);
+  }
+
+  .route-highlights-box h4 {
+    font-size: 0.96rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .route-highlights-box ul {
+    margin: 0 0 1.15rem;
+    padding-left: 1.2rem;
+    display: grid;
+    gap: 0.5rem;
+    font-size: 0.94rem;
+    color: var(--ink-700);
+  }
+
+  .route-panel-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  .route-compare-wrap {
+    margin-top: 1.5rem;
+  }
+
+  .route-compare-title {
+    font-size: 1.05rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .route-table-scroll {
+    overflow-x: auto;
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    background-color: #ffffff;
+  }
+
+  .route-compare-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+    text-align: left;
+  }
+
+  .route-compare-table th,
+  .route-compare-table td {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid var(--border-subtle);
+    vertical-align: top;
+  }
+
+  .route-compare-table th {
+    background-color: var(--bg-surface);
+    font-weight: 700;
+    color: var(--forest-800);
+  }
+
+  .route-compare-table tbody tr:last-child td {
+    border-bottom: none;
+  }
+</style>

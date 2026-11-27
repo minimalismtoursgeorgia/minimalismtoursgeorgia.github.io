@@ -1,128 +1,224 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>https://minimalismtoursgeorgia.github.io/</loc>
-    <lastmod>2026-11-25</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>1.0</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://minimalismtoursgeorgia.github.io/" />
-    <xhtml:link rel="alternate" hreflang="ka" href="https://minimalismtoursgeorgia.github.io/ka/" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://minimalismtoursgeorgia.github.io/" />
-  </url>
-  <url>
-    <loc>https://minimalismtoursgeorgia.github.io/ka/</loc>
-    <lastmod>2026-11-25</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://minimalismtoursgeorgia.github.io/" />
-    <xhtml:link rel="alternate" hreflang="ka" href="https://minimalismtoursgeorgia.github.io/ka/" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://minimalismtoursgeorgia.github.io/" />
-  </url>
-  <url>
-    <loc>https://minimalismtoursgeorgia.github.io/tours/</loc>
-    <lastmod>2026-11-25</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
+    <loc>https://minimalismtoursgeorgia.github.io/about/</loc>
+    <lastmod>2026-11-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
   </url>
   <url>
     <loc>https://minimalismtoursgeorgia.github.io/batumi-news/</loc>
-    <lastmod>2026-11-25</lastmod>
+    <lastmod>2026-11-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://minimalismtoursgeorgia.github.io/batumi-news/" />
-    <xhtml:link rel="alternate" hreflang="ka" href="https://minimalismtoursgeorgia.github.io/ka/batumi-news/" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://minimalismtoursgeorgia.github.io/batumi-news/" />
   </url>
   <url>
-    <loc>https://minimalismtoursgeorgia.github.io/ka/batumi-news/</loc>
-    <lastmod>2026-11-25</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://minimalismtoursgeorgia.github.io/batumi-news/" />
-    <xhtml:link rel="alternate" hreflang="ka" href="https://minimalismtoursgeorgia.github.io/ka/batumi-news/" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://minimalismtoursgeorgia.github.io/batumi-news/" />
+    <loc>https://minimalismtoursgeorgia.github.io/contact/</loc>
+    <lastmod>2026-11-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
   </url>
   <url>
     <loc>https://minimalismtoursgeorgia.github.io/destinations/</loc>
-    <lastmod>2026-11-25</lastmod>
+    <lastmod>2026-11-27</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://minimalismtoursgeorgia.github.io/guest-registration/</loc>
-    <lastmod>2026-11-25</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.75</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://minimalismtoursgeorgia.github.io/guest-registration/" />
-    <xhtml:link rel="alternate" hreflang="ka" href="https://minimalismtoursgeorgia.github.io/ka/guest-registration/" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://minimalismtoursgeorgia.github.io/guest-registration/" />
-  </url>
-  <url>
-    <loc>https://minimalismtoursgeorgia.github.io/ka/guest-registration/</loc>
-    <lastmod>2026-11-25</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://minimalismtoursgeorgia.github.io/guest-registration/" />
-    <xhtml:link rel="alternate" hreflang="ka" href="https://minimalismtoursgeorgia.github.io/ka/guest-registration/" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://minimalismtoursgeorgia.github.io/guest-registration/" />
-  </url>
-  <url>
-    <loc>https://minimalismtoursgeorgia.github.io/partners/</loc>
-    <lastmod>2026-11-25</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.85</priority>
-  </url>
-  <url>
-    <loc>https://minimalismtoursgeorgia.github.io/about/</loc>
-    <lastmod>2026-11-25</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://minimalismtoursgeorgia.github.io/contact/</loc>
-    <lastmod>2026-11-25</lastmod>
+    <lastmod>2026-11-27</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://minimalismtoursgeorgia.github.io/tours/mtirala-lake-waterfall-hike/</loc>
-    <lastmod>2026-11-25</lastmod>
+    <loc>https://minimalismtoursgeorgia.github.io/</loc>
+    <lastmod>2026-11-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://minimalismtoursgeorgia.github.io/ka/batumi-news/</loc>
+    <lastmod>2026-11-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://minimalismtoursgeorgia.github.io/tours/mtirala-botanical-garden-tour/</loc>
-    <lastmod>2026-11-25</lastmod>
+    <loc>https://minimalismtoursgeorgia.github.io/ka/guest-registration/</loc>
+    <lastmod>2026-11-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://minimalismtoursgeorgia.github.io/ka/</loc>
+    <lastmod>2026-11-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://minimalismtoursgeorgia.github.io/tours/mtirala-hike-homemade-food/</loc>
-    <lastmod>2026-11-25</lastmod>
+    <loc>https://minimalismtoursgeorgia.github.io/partners/</loc>
+    <lastmod>2026-11-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://minimalismtoursgeorgia.github.io/pl/about/</loc>
+    <lastmod>2026-11-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://minimalismtoursgeorgia.github.io/pl/batumi-news/</loc>
+    <lastmod>2026-11-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://minimalismtoursgeorgia.github.io/tours/machakhela-guided-hiking/</loc>
-    <lastmod>2026-11-25</lastmod>
+    <loc>https://minimalismtoursgeorgia.github.io/pl/contact/</loc>
+    <lastmod>2026-11-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://minimalismtoursgeorgia.github.io/pl/destinations/</loc>
+    <lastmod>2026-11-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://minimalismtoursgeorgia.github.io/pl/guest-registration/</loc>
+    <lastmod>2026-11-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://minimalismtoursgeorgia.github.io/pl/</loc>
+    <lastmod>2026-11-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://minimalismtoursgeorgia.github.io/pl/partners/</loc>
+    <lastmod>2026-11-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://minimalismtoursgeorgia.github.io/pl/tours/batumi-architecture-walking-tour/</loc>
+    <lastmod>2026-11-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://minimalismtoursgeorgia.github.io/pl/tours/</loc>
+    <lastmod>2026-11-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://minimalismtoursgeorgia.github.io/pl/tours/jorunners-mountain-lodge-program/</loc>
+    <lastmod>2026-11-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://minimalismtoursgeorgia.github.io/pl/tours/kazbegi-mount-kazbek-expedition/</loc>
+    <lastmod>2026-11-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://minimalismtoursgeorgia.github.io/pl/tours/machakhela-guided-hiking/</loc>
+    <lastmod>2026-11-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://minimalismtoursgeorgia.github.io/pl/tours/mtirala-2-day-shelter-hike/</loc>
+    <lastmod>2026-11-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://minimalismtoursgeorgia.github.io/pl/tours/mtirala-botanical-garden-tour/</loc>
+    <lastmod>2026-11-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://minimalismtoursgeorgia.github.io/pl/tours/mtirala-hike-homemade-food/</loc>
+    <lastmod>2026-11-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://minimalismtoursgeorgia.github.io/pl/tours/mtirala-lake-waterfall-hike/</loc>
+    <lastmod>2026-11-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://minimalismtoursgeorgia.github.io/pl/tours/student-beginner-ski-bakuriani/</loc>
+    <lastmod>2026-11-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://minimalismtoursgeorgia.github.io/tours/batumi-architecture-walking-tour/</loc>
-    <lastmod>2026-11-25</lastmod>
+    <lastmod>2026-11-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://minimalismtoursgeorgia.github.io/tours/mtirala-2-day-shelter-hike/</loc>
-    <lastmod>2026-11-25</lastmod>
+    <loc>https://minimalismtoursgeorgia.github.io/tours/</loc>
+    <lastmod>2026-11-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://minimalismtoursgeorgia.github.io/tours/jorunners-mountain-lodge-program/</loc>
+    <lastmod>2026-11-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://minimalismtoursgeorgia.github.io/tours/kazbegi-mount-kazbek-expedition/</loc>
-    <lastmod>2026-11-25</lastmod>
+    <lastmod>2026-11-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://minimalismtoursgeorgia.github.io/tours/machakhela-guided-hiking/</loc>
+    <lastmod>2026-11-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://minimalismtoursgeorgia.github.io/tours/mtirala-2-day-shelter-hike/</loc>
+    <lastmod>2026-11-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://minimalismtoursgeorgia.github.io/tours/mtirala-botanical-garden-tour/</loc>
+    <lastmod>2026-11-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://minimalismtoursgeorgia.github.io/tours/mtirala-hike-homemade-food/</loc>
+    <lastmod>2026-11-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://minimalismtoursgeorgia.github.io/tours/mtirala-lake-waterfall-hike/</loc>
+    <lastmod>2026-11-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://minimalismtoursgeorgia.github.io/tours/student-beginner-ski-bakuriani/</loc>
+    <lastmod>2026-11-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>

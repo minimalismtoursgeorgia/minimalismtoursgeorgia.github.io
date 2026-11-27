@@ -13,29 +13,33 @@ import {
   type BatumiNewsStatus,
 } from '../data/batumi-news';
 import { withBase } from '../lib/urls';
+import { localizePath, type Lang } from '../lib/i18n';
 
 export interface Props {
-  lang?: 'en' | 'ka';
+  lang?: Lang;
 }
 
 const { lang = 'en' } = Astro.props;
 const isKa = lang === 'ka';
-const homePath = withBase(isKa ? '/ka/' : '/');
+const isPl = lang === 'pl';
+const homePath = withBase(localizePath('/', lang));
+const l = (field: { en: string; ka: string; pl?: string }) => field[lang] || field.en;
+const la = (field: { en: string[]; ka: string[]; pl?: string[] }) => field[lang] || field.en;
 
 const categoryFilters: { id: 'all' | BatumiNewsCategory; label: string; count: number }[] = [
-  { id: 'all', label: isKa ? 'ყველა' : 'All Updates', count: BATUMI_NEWS_ITEMS.length },
+  { id: 'all', label: isKa ? 'ყველა' : isPl ? 'Wszystkie' : 'All Updates', count: BATUMI_NEWS_ITEMS.length },
   ...(['events', 'projects', 'travel-rules', 'seasonal'] as BatumiNewsCategory[]).map((cat) => ({
     id: cat,
-    label: BATUMI_CATEGORY_LABELS[cat][lang],
+    label: l(BATUMI_CATEGORY_LABELS[cat]),
     count: BATUMI_NEWS_ITEMS.filter((i) => i.category === cat).length,
   })),
 ];
 
 const statusOptions: { id: 'all' | BatumiNewsStatus; label: string }[] = [
-  { id: 'all', label: isKa ? 'ყველა სტატუსი' : 'Any Timeline' },
+  { id: 'all', label: isKa ? 'ყველა სტატუსი' : isPl ? 'Dowolny termin' : 'Any Timeline' },
   ...(['happening-soon', 'active-2026', 'planned-2027', 'annual-highlight'] as BatumiNewsStatus[]).map((st) => ({
     id: st,
-    label: BATUMI_STATUS_LABELS[st][lang],
+    label: l(BATUMI_STATUS_LABELS[st]),
   })),
 ];
 
@@ -90,6 +94,59 @@ const copy = isKa
       faqHeading: 'ხშირად დასმული კითხვები ბათუმის სიახლეებზე',
       expandAll: 'ყველას გაშლა',
       collapseAll: 'ყველას ჩაკეცვა',
+    }
+  : isPl
+  ? {
+      breadcrumbHome: 'Start',
+      breadcrumbCurrent: 'Batumi News i wydarzenia',
+      eyebrow: 'Kompletny przewodnik lokalny · 2026–2027',
+      h1: 'Batumi News: wydarzenia, projekty i zasady podróży',
+      heroDesc:
+        'Wszystko, co planowane w Batumi w jednym miejscu: harmonogram Wioski Noworocznej, festiwale, projekty nadmorskie, obowiązkowe ubezpieczenie turystyczne 2026, otwarcie stoków w Goderdzi i ceny biletów.',
+      verifiedLabel: 'Ostatnia weryfikacja:',
+      verifiedDate: BATUMI_NEWS_META.lastVerifiedPl,
+      jumpUpdates: 'Aktualne i planowane',
+      jumpCalendar: 'Kalendarz 12-miesięczny',
+      jumpResources: 'Bilety i wsparcie',
+      jumpFaq: 'FAQ',
+      snapshotHeading: 'Najważniejsze fakty 2026–2027 w skrócie',
+      searchLandmarkLabel: 'Szukaj i filtruj aktualności oraz wydarzenia w Batumi',
+      searchLabel: 'Szukaj słowa kluczowego',
+      searchPlaceholder: 'Plac Europy, Goderdzi, ubezpieczenie, jazz, Ogród Botaniczny...',
+      statusLabel: 'Termin / Status',
+      showingPrefix: 'Wyświetlono',
+      showingOf: 'z',
+      clearFilters: 'Wyczyść filtry',
+      emptyTitle: 'Brak pasujących aktualności',
+      emptyDesc:
+        'Spróbuj innego słowa kluczowego lub wyczyść filtry — albo napisz bezpośrednio do naszego biura w Batumi na WhatsApp.',
+      emptyReset: 'Pokaż wszystkie',
+      emptyAsk: 'Zapytaj przewodnika na WhatsApp',
+      venueLabel: 'Lokalizacja',
+      mapsLinkLabel: 'Mapa ↗',
+      admissionLabel: 'Wstęp / Cena',
+      detailsSummary: 'Pełny opis, daty i wskazówka przewodnika',
+      guideTipLabel: 'Wskazówka lokalnego przewodnika',
+      askAboutTopic: 'Zapytaj na WhatsApp ↗',
+      relatedTourPrefix: 'Połącz z wycieczką:',
+      calendarEyebrow: 'Od stycznia do grudnia',
+      calendarHeading: 'Całoroczny kalendarz wydarzeń w Batumi i Adżarii',
+      calendarIntro:
+        'Niezależnie od miesiąca przyjazdu do Batumi, sprawdź najważniejsze festiwale, sezony górskie i pasujące wycieczki.',
+      pairLabel: 'Polecana wycieczka:',
+      resourcesEyebrow: 'Oficjalne bilety i pomoc na miejscu',
+      resourcesHeading: 'Jak działają bilety i rozkłady w Batumi',
+      resourcesIntro:
+        'Oszczędź czas: sprawdź oficjalne platformy biletowe i skontaktuj się z naszym zespołem w Batumi po aktualne informacje.',
+      conciergeTitle: 'Minimalism Tours Georgia — Bezpośredni Concierge w Batumi',
+      conciergeDesc:
+        'Chcesz sprawdzić, czy kolejka linowa Argo kursuje przy wietrze, o której są koncerty na Placu Europy lub zamówić 4x4 do Goderdzi albo Mtirali? Napisz do nas bezpośrednio.',
+      conciergeWa: 'Napisz na WhatsApp',
+      conciergeTg: 'Napisz na Telegram',
+      faqEyebrow: 'Szybkie odpowiedzi',
+      faqHeading: 'FAQ: Wydarzenia w Batumi i zasady dla turystów',
+      expandAll: 'Rozwiń wszystko',
+      collapseAll: 'Zwiń wszystko',
     }
   : {
       breadcrumbHome: 'Home',
@@ -222,9 +279,9 @@ const ticketingPlatforms = isKa
         BATUMI_ESSENTIAL_FACTS.map((fact) => (
           <a href={`#${fact.targetSlug}`} class="fact-tile">
             <article class={`fact-tile-inner fact-tone-${fact.tone}`}>
-              <span class="fact-kicker">{fact.kicker[lang]}</span>
-              <h2>{fact.headline[lang]}</h2>
-              <p>{fact.detail[lang]}</p>
+              <span class="fact-kicker">{l(fact.kicker)}</span>
+              <h2>{l(fact.headline)}</h2>
+              <p>{l(fact.detail)}</p>
             </article>
           </a>
         ))
@@ -285,18 +342,18 @@ const ticketingPlatforms = isKa
       {
         BATUMI_NEWS_ITEMS.map((item) => {
           const catMeta = BATUMI_CATEGORY_LABELS[item.category];
-          const statusText = BATUMI_STATUS_LABELS[item.status][lang];
+          const statusText = l(BATUMI_STATUS_LABELS[item.status]);
           const relatedTour = item.relatedTourSlug
             ? TOURS.find((t) => t.slug === item.relatedTourSlug)
             : undefined;
           const searchHaystack = [
-            item.title[lang],
-            item.summary[lang],
-            item.dateRange[lang],
-            item.venue[lang],
-            item.admission[lang],
-            item.localTip[lang],
-            ...item.keyDetails[lang],
+            l(item.title),
+            l(item.summary),
+            l(item.dateRange),
+            l(item.venue),
+            l(item.admission),
+            l(item.localTip),
+            ...la(item.keyDetails),
           ]
             .join(' ')
             .toLowerCase();
@@ -313,7 +370,7 @@ const ticketingPlatforms = isKa
                   item.image && item.imageAlt && (
                     <img
                       src={withBase(item.image)}
-                      alt={item.imageAlt[lang]}
+                      alt={l(item.imageAlt)}
                       width="1200"
                       height="800"
                       loading="lazy"
@@ -324,21 +381,21 @@ const ticketingPlatforms = isKa
 
                 <header class="news-card-head">
                   <div class="news-card-badges">
-                    <span class={`badge ${catMeta.badgeClass}`}>{catMeta[lang]}</span>
+                    <span class={`badge ${catMeta.badgeClass}`}>{l(catMeta)}</span>
                     <span class="news-status-pill">{statusText}</span>
-                    <span class="news-date-pill">{item.dateRange[lang]}</span>
+                    <span class="news-date-pill">{l(item.dateRange)}</span>
                   </div>
-                  <h3>{item.title[lang]}</h3>
+                  <h3>{l(item.title)}</h3>
                 </header>
 
                 <div class="news-card-body">
-                  <p class="news-summary">{item.summary[lang]}</p>
+                  <p class="news-summary">{l(item.summary)}</p>
 
                   <dl class="news-facts">
                     <div>
                       <dt>{copy.venueLabel}</dt>
                       <dd>
-                        {item.venue[lang]}
+                        {l(item.venue)}
                         {item.mapsUrl && (
                           <>
                             {' '}
@@ -356,7 +413,7 @@ const ticketingPlatforms = isKa
                     </div>
                     <div>
                       <dt>{copy.admissionLabel}</dt>
-                      <dd>{item.admission[lang]}</dd>
+                      <dd>{l(item.admission)}</dd>
                     </div>
                   </dl>
 
@@ -364,11 +421,11 @@ const ticketingPlatforms = isKa
                     <summary>{copy.detailsSummary}</summary>
                     <div class="news-disclosure-panel">
                       <ul class="news-detail-list">
-                        {item.keyDetails[lang].map((bullet) => <li>{bullet}</li>)}
+                        {la(item.keyDetails).map((bullet) => <li>{bullet}</li>)}
                       </ul>
 
                       <div class="news-guide-tip">
-                        <strong>{copy.guideTipLabel}:</strong> {item.localTip[lang]}
+                        <strong>{copy.guideTipLabel}:</strong> {l(item.localTip)}
                       </div>
                     </div>
                   </details>
@@ -376,11 +433,11 @@ const ticketingPlatforms = isKa
 
                 <footer class="news-card-foot">
                   {relatedTour ? (
-                    <a class="btn btn-forest btn-sm" href={withBase(`/tours/${relatedTour.slug}/`)}>
+                    <a class="btn btn-forest btn-sm" href={withBase(`${localizePath(`/tours/${relatedTour.slug}/`, lang)}`)}>
                       {copy.relatedTourPrefix} {relatedTour.shortTitle} →
                     </a>
                   ) : (
-                    <span class="news-foot-tag">{catMeta[lang]}</span>
+                    <span class="news-foot-tag">{l(catMeta)}</span>
                   )}
 
                   <a
@@ -440,15 +497,15 @@ const ticketingPlatforms = isKa
       {
         BATUMI_ANNUAL_CALENDAR.map((block) => (
           <article class="calendar-card reveal-on-scroll">
-            <span class="badge badge-sea">{block.months[lang]}</span>
-            <h3>{block.title[lang]}</h3>
+            <span class="badge badge-sea">{l(block.months)}</span>
+            <h3>{l(block.title)}</h3>
             <ul class="calendar-list">
-              {block.highlights[lang].map((hl) => <li>{hl}</li>)}
+              {la(block.highlights).map((hl) => <li>{hl}</li>)}
             </ul>
             <footer>
               <span>{copy.pairLabel}</span>
-              <a href={withBase(`/tours/${block.pairWithTourSlug}/`)}>
-                {block.pairWithTourLabel[lang]} →
+              <a href={withBase(`${localizePath(`/tours/${block.pairWithTourSlug}/`, lang)}`)}>
+                {l(block.pairWithTourLabel)} →
               </a>
             </footer>
           </article>
@@ -544,9 +601,9 @@ const ticketingPlatforms = isKa
       {
         BATUMI_NEWS_FAQS.map((faq) => (
           <details>
-            <summary>{faq.question[lang]}</summary>
+            <summary>{l(faq.question)}</summary>
             <div class="accordion-panel">
-              <p>{faq.answer[lang]}</p>
+              <p>{l(faq.answer)}</p>
             </div>
           </details>
         ))

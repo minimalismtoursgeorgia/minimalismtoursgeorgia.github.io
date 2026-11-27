@@ -2,13 +2,15 @@
 import { SITE } from '../data/site';
 import { TOURS } from '../data/tours';
 import { withBase } from '../lib/urls';
+import { type Lang } from '../lib/i18n';
 
 export interface Props {
-  lang?: 'en' | 'ka';
+  lang?: Lang;
 }
 
 const { lang = 'en' } = Astro.props;
 const isKa = lang === 'ka';
+const isPl = lang === 'pl';
 
 const copy = isKa
   ? {
@@ -82,6 +84,79 @@ const copy = isKa
       statusOpenedWa: 'გაიხსნა WhatsApp შევსებული მონაცემებით.',
       statusOpenedTg: 'გაიხსნა Telegram შევსებული მონაცემებით.',
       printNote: 'ამობეჭდილი ან PDF ვერსია · Minimalism Tours Georgia · მკაცრად კონფიდენციალური',
+    }
+  : isPl
+  ? {
+      badge: 'ŚCIŚLE POUFNE · STRICTLY CONFIDENTIAL',
+      heading: 'Rejestracja gościa i formularz medyczny',
+      intro:
+        'Wypełnij przed wyjazdem. Wszystkie dane pozostają wyłącznie w Twojej przeglądarce (nic nie jest zapisywane na serwerze) — możesz zapisać formularz jako PDF, wydrukować lub wysłać bezpośrednio przez WhatsApp albo Telegram.',
+      tripLegend: '1. Szczegóły wycieczki i opcjonalne atrakcje',
+      tripNameLabel: 'Nazwa wycieczki',
+      tripDateLabel: 'Data wycieczki',
+      customTourOption: 'Indywidualna trasa prywatna po Gruzji',
+      addonsLegend: 'Opcjonalne atrakcje w Mtirali (tylko na życzenie)',
+      addonsHint: 'Żadna nie jest obowiązkowa — zaznacz tylko, jeśli chcesz je dodać na życzenie:',
+      addons: [
+        { value: 'Zipline', label: 'Tyrolka (Zipline)' },
+        { value: 'ATV Quad Ride', label: 'Jazda quadem ATV' },
+        { value: 'Local Mountain Honey Tasting', label: 'Degustacja lokalnego miodu górskiego' },
+        { value: 'Georgian Lunch', label: 'Gruziński obiad' },
+      ],
+      personalLegend: '2. Dane osobowe gościa',
+      fullNameLabel: 'Imię i nazwisko',
+      fullNameHint: 'Zgodnie z paszportem lub dowodem osobistym',
+      fullNameError: 'Wpisz pełne imię i nazwisko (min. 2 znaki).',
+      dobLabel: 'Data urodzenia',
+      dobError: 'Wybierz datę urodzenia.',
+      addressLabel: 'Adres zamieszkania',
+      addressHint: 'Ulica, miasto, kod pocztowy i kraj',
+      addressError: 'Wpisz swój adres zamieszkania.',
+      mobileLabel: 'Numer telefonu (z kodem kraju)',
+      mobileHint: 'Podaj międzynarodowy kod kraju (np. +48, +995, +44)',
+      mobileError: 'Podaj aktywny numer telefonu komórkowego.',
+      medicalLegend: '3. Informacje medyczne i kontakt alarmowy',
+      doctorLabel: 'Imię i nazwisko lekarza / klinika (opcjonalnie)',
+      medicalLabel: 'Stan zdrowia, przyjmowane leki i alergie (pokarmowe, leki, ukąszenia itp.)',
+      medicalHint: 'Wpisz „Brak” (None), jeśli nie masz schorzeń, leków ani alergii.',
+      medicalError: 'Uzupełnij informacje medyczne/alergie (lub wpisz „Brak”).',
+      kinNameLabel: 'Osoba do kontaktu w nagłych wypadkach (Imię i nazwisko)',
+      kinNameError: 'Podaj imię i nazwisko osoby kontaktowej.',
+      kinPhoneLabel: 'Telefon osoby do kontaktu w nagłych wypadkach',
+      kinPhoneError: 'Podaj numer telefonu osoby kontaktowej.',
+      insuranceLegend: '4. Szczegóły ubezpieczenia podróżnego',
+      insCompLabel: 'Nazwa towarzystwa ubezpieczeniowego',
+      insCompError: 'Podaj nazwę ubezpieczyciela.',
+      insPolicyLabel: 'Numer polisy ubezpieczeniowej',
+      insPolicyError: 'Podaj numer polisy ubezpieczeniowej.',
+      insPhoneLabel: 'Całodobowy telefon alarmowy ubezpieczyciela (24/7)',
+      insPhoneError: 'Podaj numer alarmowy ubezpieczyciela.',
+      heliLegend: 'Czy polisa obejmuje ratownictwo helikopterowe?',
+      heliOptions: [
+        { value: 'Yes', label: 'Tak (Yes)' },
+        { value: 'No', label: 'Nie (No)' },
+        { value: 'Not sure', label: 'Nie jestem pewien / pewna' },
+      ],
+      heliError: 'Wybierz status ochrony ratownictwa helikopterowego.',
+      declLegend: '5. Oświadczenie i podpis',
+      agreePrefix: 'Potwierdzam prawdziwość danych i akceptuję ',
+      agreeLinkText: 'Zasady bezpieczeństwa, pogody i operacyjne Minimalism Tours Georgia',
+      agreeSuffix: '. Wydrukowana kopia jest również dostępna podczas wycieczki.',
+      agreeError: 'Zaznacz zgodę przed kontynuowaniem.',
+      signedLabel: 'Podpis (wpisz pełne imię i nazwisko)',
+      signedError: 'Wpisz pełne imię i nazwisko jako podpis.',
+      signedDateLabel: 'Data',
+      signedDateError: 'Podaj dzisiejszą datę podpisu.',
+      btnPrint: 'Zapisz jako PDF / Drukuj',
+      btnWa: 'Wyślij przez WhatsApp',
+      btnTg: 'Wyślij przez Telegram',
+      btnCopy: 'Kopiuj formularz',
+      btnReset: 'Wyczyść',
+      statusInvalid: 'Uzupełnij podświetlone pola wymagane.',
+      statusCopied: 'Wypełnione dane rejestracji skopiowano do schowka.',
+      statusOpenedWa: 'Otwarto WhatsApp z wypełnionym formularzem.',
+      statusOpenedTg: 'Otwarto Telegram z wypełnionym formularzem.',
+      printNote: 'Minimalism Tours Georgia · Rejestracja gościa i formularz medyczny · ŚCIŚLE POUFNE',
     }
   : {
       badge: 'STRICTLY CONFIDENTIAL',

@@ -49,6 +49,13 @@ export interface Tour {
   difficulty: 'Easy' | 'Easy–Moderate' | 'Moderate' | 'Moderate–Challenging' | 'Challenging';
   groupSize: string;
   minAge: string;
+  meals?: string;
+  season?: string;
+  cardTags?: string[];
+  quoteLabel?: string;
+  isGroupProgram?: boolean;
+  defaultGroupSize?: string;
+  hasRouteOptions?: boolean;
   startingPriceEur: number | null;
   pricingTiers: PricingTier[];
   gygTourId?: string;
@@ -847,6 +854,273 @@ export const TOURS: Tour[] = [
       'Mount Kazbek summit expedition',
       'Kazbegi 5 day climbing tour Georgia',
       'Mount Kazbek 5054m guide',
+    ],
+  },
+  {
+    slug: 'student-beginner-ski-bakuriani',
+    title: 'Student Beginner Ski Course & Easy Snow Hike',
+    shortTitle: 'Student Beginner Ski Course & Snow Hike',
+    status: 'inquiry',
+    statusLabel: 'Winter Group Tour · Jan–Feb',
+    pricingNote: 'January or February · 20–25 students · Full Board',
+    region: 'Bakuriani & Borjomi-Kharagauli',
+    regionSlug: 'bakuriani-borjomi',
+    category: 'Multi-Day Trek',
+    duration: '8 Days / 7 Nights',
+    durationHours: 192,
+    durationBucket: 'multi-day',
+    difficulty: 'Easy',
+    groupSize: '20–25 students',
+    minAge: 'Student Groups',
+    meals: 'Full Board (3 meals/day included)',
+    season: 'January or February',
+    cardTags: ['8 Days / 7 Nights', 'Full Board', 'Group Tour'],
+    quoteLabel: 'Winter Group Quote',
+    isGroupProgram: true,
+    defaultGroupSize: '20–25 students',
+    startingPriceEur: null,
+    pricingTiers: [],
+    heroImage: '/images/kazbegi-peak.webp',
+    heroAlt: 'Snow-covered Georgian Caucasus peaks and winter mountain slopes ideal for beginner ski groups',
+    gallery: [
+      {
+        src: '/images/kazbegi-peak.webp',
+        alt: 'Snow-covered Georgian mountain landscape in winter season',
+      },
+      {
+        src: '/images/kazbegi-glacier.webp',
+        alt: 'Highland snow terrain in Georgia during winter',
+      },
+      {
+        src: '/images/mtirala-2day.webp',
+        alt: 'Sheltered forest trail and timber lodge environment in Georgian national parks',
+      },
+    ],
+    summary:
+      'An 8-day / 7-night winter group program designed specifically for 20–25 beginner students in January or February. Based in Bakuriani’s wide, gentle nursery slopes with small-group certified ski instruction (6–8 students per instructor), full-board hotel dining, and an avalanche-safe winter forest snowshoe hike in Borjomi-Kharagauli National Park.',
+    highlights: [
+      '6 nights in Bakuriani with wide, gentle nursery slopes at moderate elevation — ideal for first-time skiers',
+      '4–5 structured beginner ski lessons split into small groups of 6–8 students per certified instructor',
+      'Full Board included: 3 meals/day at the group hotel plus packed hot lunch on the National Park hike day',
+      '1 rest & snowshoe day in Borjomi-Kharagauli National Park (5–8 km sheltered winter forest loop, avalanche-safe)',
+      'Mandatory morning group trail registration & snowshoe coordination with Borjomi-Kharagauli National Park Administration',
+      'Tbilisi arrival & departure hub with welcome dinner, farewell city walk/meal, and ~3-hour coach transfer',
+    ],
+    itinerary: [
+      {
+        timeOrDuration: 'Day 1',
+        title: 'Tbilisi Arrival, Welcome Dinner & ~3h Coach Transfer',
+        detail:
+          'Group arrival at Tbilisi hub, welcome dinner, and comfortable ~3-hour private coach transfer into the Lesser Caucasus to Bakuriani (or overnight in Tbilisi depending on flight timing).',
+        ticketNote: 'Full Board · Coach included',
+      },
+      {
+        timeOrDuration: 'Days 2–3',
+        title: 'Bakuriani Beginner Ski Lessons (Sessions 1–2)',
+        detail:
+          'Equipment fitting and first two structured beginner ski lessons on Bakuriani’s wide, gentle nursery slopes. Students are divided into small groups of 6–8 per certified instructor for safe progression.',
+        ticketNote: '6–8 students / instructor',
+      },
+      {
+        timeOrDuration: 'Day 4 or 5',
+        title: 'Borjomi-Kharagauli National Park: Easy Winter Forest Snow Hike',
+        detail:
+          'Active recovery day off skis. Mandatory morning group trail registration, winter trail condition check, and snowshoe coordination at Borjomi-Kharagauli National Park Administration (open daily 9:00 AM–6:00 PM). Followed by an easy, sheltered 5–8 km forest loop with minimal elevation gain, avalanche-safe terrain, and a packed hot lunch.',
+        ticketNote: 'Park registration & hot lunch',
+      },
+      {
+        timeOrDuration: 'Days 5–7',
+        title: 'Bakuriani Beginner Ski Progression (Sessions 3–5)',
+        detail:
+          'Continue building confidence across 2–3 additional structured ski sessions on gentle resort slopes, with full-board group hotel breakfast, lunch, and dinner each day.',
+        ticketNote: 'Full Board (3 meals/day)',
+      },
+      {
+        timeOrDuration: 'Day 8',
+        title: 'Return Coach to Tbilisi, Farewell City Walk & Departure',
+        detail:
+          'Morning ~3-hour coach transfer back to Tbilisi, farewell Old Town walk and group meal, and departure transfers.',
+        ticketNote: 'Farewell meal & transfer',
+      },
+    ],
+    included: [
+      '7 nights accommodation (6 nights Bakuriani group hotel + Tbilisi hub logistics)',
+      'Full Board dining: 3 meals/day included throughout (plus packed hot lunch on hike day)',
+      '~3-hour private coach transfers between Tbilisi and Bakuriani',
+      '4–5 structured beginner ski lessons (6–8 students per certified instructor)',
+      'Borjomi-Kharagauli National Park winter snowshoe day with morning administration registration & snowshoe coordination',
+      'Tbilisi welcome dinner and farewell city walk/meal',
+    ],
+    excluded: [
+      'International flights to/from Tbilisi (TBS)',
+      'Personal ski clothing & winter travel/ski insurance',
+      'Optional personal ski pass or rental upgrades outside the group package (quoted transparently)',
+    ],
+    weatherPlan:
+      'Bakuriani’s moderate elevation and sheltered nursery slopes keep conditions beginner-friendly. On the Borjomi-Kharagauli National Park hike day, morning trail condition checks with the Park Administration (9:00 AM–6:00 PM) ensure an avalanche-safe, sheltered forest loop.',
+    packingList: [
+      'Waterproof ski jacket and snow pants',
+      'Thermal base layers, fleece mid-layer, and warm wool/ski socks',
+      'Waterproof ski gloves, warm beanie, neck gaiter, and UV ski goggles/sunglasses',
+      'Sturdy waterproof winter walking boots for the Borjomi-Kharagauli snowshoe loop',
+    ],
+    faqs: [
+      {
+        question: 'Is this program suitable for students who have never skied before?',
+        answer:
+          'Yes. Bakuriani is chosen specifically for its wide, gentle nursery slopes and moderate elevation. Students are split into small groups of 6–8 per certified instructor across 4–5 structured beginner lessons.',
+      },
+      {
+        question: 'How is safety handled on the Borjomi-Kharagauli snow hike?',
+        answer:
+          'The 5–8 km winter forest loop is sheltered with minimal elevation gain and is avalanche-safe. Every morning includes mandatory group trail registration, winter condition verification, and snowshoe coordination with the Borjomi-Kharagauli National Park Administration (open daily 9:00 AM–6:00 PM).',
+      },
+      {
+        question: 'Are all meals included for the whole 8-day trip?',
+        answer:
+          'Yes, Full Board (3 meals/day) is included across the 8 Days / 7 Nights, including group hotel dining in Bakuriani, a packed hot lunch on the National Park hike day, and Tbilisi welcome/farewell meals.',
+      },
+    ],
+    seoDescription:
+      '8-day / 7-night Student Beginner Ski Course in Bakuriani & easy Borjomi-Kharagauli snowshoe hike. Full board (3 meals/day) for 20–25 students in January or February.',
+    keywords: [
+      'Bakuriani student ski course',
+      'beginner ski trip Georgia students',
+      'Borjomi-Kharagauli winter snow hike',
+      'Georgia winter group tour',
+    ],
+  },
+  {
+    slug: 'jorunners-mountain-lodge-program',
+    title: 'Jorunners — Scenic ~50 km Mountain Lodge Program',
+    shortTitle: 'Jorunners: ~50 km Mountain Lodge Program',
+    status: 'inquiry',
+    statusLabel: 'Group Program · Mountain Lodges',
+    pricingNote: '8 Days / 7 Nights · Full Board · ~50 km Scenic Trails',
+    region: 'Kazbegi or Svaneti',
+    regionSlug: 'kazbegi-svaneti',
+    category: 'Multi-Day Trek',
+    duration: '8 Days / 7 Nights',
+    durationHours: 192,
+    durationBucket: 'multi-day',
+    difficulty: 'Easy–Moderate',
+    groupSize: 'Active Running & Trail Group',
+    minAge: 'Ages 16+',
+    meals: 'Full Board (3 meals/day included)',
+    season: 'Option A: Spring–Autumn | Option B: June–September',
+    cardTags: ['8 Days / 7 Nights', 'Full Board', 'Group Tour'],
+    quoteLabel: 'Group Custom Quote',
+    isGroupProgram: true,
+    defaultGroupSize: '12–20 runners',
+    hasRouteOptions: true,
+    startingPriceEur: null,
+    pricingTiers: [],
+    heroImage: '/images/mestia-svaneti.webp',
+    heroAlt: 'Scenic Greater Caucasus mountain valley trail and stone villages for Jorunners ~50 km mountain lodge program',
+    gallery: [
+      {
+        src: '/images/mestia-svaneti.webp',
+        alt: 'High-mountain valley trail in the Greater Caucasus',
+      },
+      {
+        src: '/images/kazbegi-peak.webp',
+        alt: 'Stepantsminda and Mount Kazbek mountain valley scenery',
+      },
+      {
+        src: '/images/kazbegi-glacier.webp',
+        alt: 'Glacier-backed Caucasus peaks above mountain valleys',
+      },
+    ],
+    summary:
+      'Tailored for Jorunners: an easy, scenic 8-day / 7-night mountain lodge program totaling ~50 km across the week with Full Board (3 meals/day). Compare two curated route options below — Option A (Recommended: Stepantsminda Valley Basecamp with Truso Valley & Juta day trails) or Option B (Classic Mestia-to-Ushguli point-to-point lodges, June–September).',
+    highlights: [
+      'Designed for running & active mountain groups: easy and scenic ~50 km total across 8 Days / 7 Nights',
+      'Full Board included: 3 nutritious meals/day tailored to active travelers and dietary preferences',
+      'Option A (Recommended): Stepantsminda valley basecamp (6 nights in mountain lodges + 1 night Tbilisi) with zero daily packing/unpacking',
+      'Option B (June–September): Classic Mestia to Ushguli point-to-point family-run mountain lodges with 4x4 luggage support & optional vehicle skips',
+      'Flexible daily turn-back points and pace management so the entire group enjoys the mountains together',
+    ],
+    itinerary: [
+      {
+        timeOrDuration: 'Day 1',
+        title: 'Tbilisi Arrival & Mountain Transfer',
+        detail:
+          'Arrive in Tbilisi (1 night in Tbilisi included in program logistics). Option A transfers ~3 hours north to Stepantsminda; Option B travels ~8–9 hours by road (or domestic flight when available) to Mestia.',
+        ticketNote: 'Full Board starts',
+      },
+      {
+        timeOrDuration: 'Days 2–3',
+        title: 'Valley Warm-Up & Scenic ~8–12 km Outings',
+        detail:
+          'Option A: Easy 8–12 km valley runs/hikes from Stepantsminda mountain lodge basecamp with no daily packing. Option B: Opening village-to-village stages from Mestia toward traditional family-run mountain lodges.',
+        ticketNote: 'Mountain Lodges',
+      },
+      {
+        timeOrDuration: 'Days 4–5',
+        title: 'Signature Scenic Stage (Truso Valley / Central Svaneti)',
+        detail:
+          'Option A: Truso Valley — wide, mostly flat gravel valley road (15–20 km round-trip, customizable) past travertine mineral springs, abandoned stone villages, and river panoramas. Option B: Mid-route Svaneti valleys with 4x4 luggage support and optional vehicle skips on the steepest pass.',
+        ticketNote: '~15–20 km customizable',
+      },
+      {
+        timeOrDuration: 'Day 6',
+        title: 'High-Mountain Finale (Juta Valley or Ushguli)',
+        detail:
+          'Option A: Juta high-mountain valley out-and-back trail (8–12 km, easy-to-moderate, turn-back flexible) with optional mountain lodge overnight. Option B: Finish in Ushguli among medieval stone defensive towers and glacier-backed valleys.',
+        ticketNote: 'Turn-back flexible',
+      },
+      {
+        timeOrDuration: 'Days 7–8',
+        title: 'Return to Tbilisi, Celebration Dinner & Departure',
+        detail:
+          'Return transfer to Tbilisi for final night, celebratory group dinner, and departure transfers on Day 8.',
+        ticketNote: 'Full Board · Transfers',
+      },
+    ],
+    included: [
+      '7 nights accommodation (mountain lodges for the mountain stay + 1 night Tbilisi)',
+      'Full Board dining: 3 meals/day included throughout the 8-day program',
+      'Private group transport from/to Tbilisi (and 4x4 luggage support on Option B)',
+      'Certified local mountain & trail guides pacing ~50 km across the week',
+      'Flexible daily distance & optional vehicle support on steeper sections',
+    ],
+    excluded: [
+      'International flights to/from Tbilisi (TBS)',
+      'Personal trail running shoes, hydration vest, and travel insurance',
+      'Optional domestic flight upgrade for Mestia (Option B, subject to weather/availability)',
+    ],
+    weatherPlan:
+      'Option A operates with ~3-hour Tbilisi transfers and flexible valley turn-backs in Truso and Juta. Option B operates exclusively in Summer / Early Autumn (June–September) with 4x4 support vehicles ready for weather or steep-pass skips.',
+    packingList: [
+      'Trail running shoes with good gravel/dirt grip',
+      'Lightweight windproof/waterproof running shell and breathable layers',
+      '1–1.5L hydration vest or soft flasks, sun cap, and sunglasses',
+      'Warm evening fleece/down layer for cool mountain lodge nights',
+    ],
+    faqs: [
+      {
+        question: 'Which option is better for an easy, scenic group week: Option A or Option B?',
+        answer:
+          'Option A (Stepantsminda Valley Basecamp) is recommended if you want easy terrain, ~3-hour transfers from Tbilisi, and no daily packing/unpacking. Option B (Mestia to Ushguli) is ideal for June–September groups seeking a classic point-to-point lodge trek with 4x4 luggage support.',
+      },
+      {
+        question: 'How is the ~50 km total distance paced across the week?',
+        answer:
+          'Daily outings average 8–12 km (with Truso Valley customizable between 15–20 km round-trip on flat gravel). Out-and-back trails like Juta and optional vehicle skips in Svaneti keep the effort easy-to-moderate for the whole group.',
+      },
+      {
+        question: 'Are 3 meals/day included at the mountain lodges?',
+        answer:
+          'Yes, Full Board (3 meals/day) is included across both options, featuring fresh local mountain lodge dining and dietary accommodations on request.',
+      },
+    ],
+    seoDescription:
+      'Jorunners 8-day / 7-night scenic ~50 km mountain lodge program in Georgia with Full Board. Compare Option A (Stepantsminda basecamp) and Option B (Mestia to Ushguli).',
+    keywords: [
+      'Jorunners Georgia mountain lodge program',
+      'Stepantsminda Truso Juta trail running',
+      'Mestia to Ushguli 50km lodge trek',
+      'Georgia group trail running tour',
     ],
   },
 ];

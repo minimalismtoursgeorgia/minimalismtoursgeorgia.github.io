@@ -8,9 +8,10 @@ export interface Props {
   canonicalPath?: string;
   ogImage?: string;
   ogType?: 'website' | 'article';
-  lang?: 'en' | 'ka';
+  lang?: 'en' | 'ka' | 'pl';
   alternateEnPath?: string;
   alternateKaPath?: string;
+  alternatePlPath?: string;
   keywords?: string[];
   jsonLd?: Record<string, unknown>[];
 }
@@ -24,14 +25,24 @@ const {
   lang = 'en',
   alternateEnPath,
   alternateKaPath,
-  keywords = [
-    'Minimalism Tours Georgia',
-    'Batumi day tours',
-    'Mtirala National Park hike',
-    'Machakhela hiking tour',
-    'Adjara DMC tour operator',
-    'Batumi B2B ground handling',
-  ],
+  alternatePlPath,
+  keywords = lang === 'pl'
+    ? [
+        'Minimalism Tours Georgia',
+        'wycieczki z Batumi',
+        'Park Narodowy Mtirala trekking',
+        'Wąwóz Machakhela wycieczka',
+        'polskojęzyczny przewodnik Batumi Adżaria',
+        'DMC Gruzja B2B',
+      ]
+    : [
+        'Minimalism Tours Georgia',
+        'Batumi day tours',
+        'Mtirala National Park hike',
+        'Machakhela hiking tour',
+        'Adjara DMC tour operator',
+        'Batumi B2B ground handling',
+      ],
   jsonLd = [],
 } = Astro.props;
 
@@ -111,7 +122,12 @@ const schemaGraph = {
   )
 }
 {
-  (alternateEnPath || alternateKaPath) && (
+  alternatePlPath && (
+    <link rel="alternate" hreflang="pl" href={absoluteUrl(alternatePlPath, Astro.site)} />
+  )
+}
+{
+  (alternateEnPath || alternateKaPath || alternatePlPath) && (
     <link
       rel="alternate"
       hreflang="x-default"
@@ -120,7 +136,7 @@ const schemaGraph = {
   )
 }
 
-<meta property="og:locale" content={lang === 'ka' ? 'ka_GE' : 'en_US'} />
+<meta property="og:locale" content={lang === 'ka' ? 'ka_GE' : lang === 'pl' ? 'pl_PL' : 'en_US'} />
 <meta property="og:type" content={ogType} />
 <meta property="og:site_name" content={SITE.brandName} />
 <meta property="og:title" content={title} />

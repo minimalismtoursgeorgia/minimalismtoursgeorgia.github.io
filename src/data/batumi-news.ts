@@ -5,6 +5,7 @@ export type BatumiNewsStatus = 'happening-soon' | 'active-2026' | 'planned-2027'
 export interface LocalizedText {
   en: string;
   ka: string;
+  pl?: string;
 }
 
 export interface BatumiNewsItem {
@@ -20,6 +21,7 @@ export interface BatumiNewsItem {
   keyDetails: {
     en: string[];
     ka: string[];
+    pl?: string[];
   };
   venue: LocalizedText;
   mapsUrl?: string;
@@ -47,6 +49,7 @@ export interface BatumiSeasonCalendarBlock {
   highlights: {
     en: string[];
     ka: string[];
+    pl?: string[];
   };
   pairWithTourSlug: string;
   pairWithTourLabel: LocalizedText;
@@ -61,30 +64,35 @@ export const BATUMI_NEWS_META = {
   lastVerifiedIso: '2026-11-24',
   lastVerifiedEn: 'November 24, 2026',
   lastVerifiedKa: '24 ნოემბერი, 2026',
+  lastVerifiedPl: '24 listopada 2026',
 } as const;
 
 export const BATUMI_CATEGORY_LABELS: Record<
   BatumiNewsCategory,
-  { en: string; ka: string; badgeClass: string }
+  { en: string; ka: string; pl: string; badgeClass: string }
 > = {
   events: {
     en: 'Events & Festivals',
     ka: 'ღონისძიებები და ფესტივალები',
+    pl: 'Wydarzenia i festiwale',
     badgeClass: 'badge-coral',
   },
   projects: {
     en: 'City & Coast Projects',
     ka: 'ქალაქის და სანაპიროს პროექტები',
+    pl: 'Projekty miejskie i wybrzeże',
     badgeClass: 'badge-sea',
   },
   'travel-rules': {
     en: 'Travel Rules & Transport',
     ka: 'მგზავრობის წესები და ტრანსპორტი',
+    pl: 'Zasady wjazdu i transport',
     badgeClass: 'badge-forest',
   },
   seasonal: {
     en: 'Attractions & Season',
     ka: 'სეზონი და ლოკაციები',
+    pl: 'Atrakcje i sezony',
     badgeClass: 'badge-sea',
   },
 };
@@ -93,18 +101,22 @@ export const BATUMI_STATUS_LABELS: Record<BatumiNewsStatus, LocalizedText> = {
   'happening-soon': {
     en: 'Happening Soon',
     ka: 'უახლოესი',
+    pl: 'Wkrótce',
   },
   'active-2026': {
     en: 'Active in 2026',
     ka: 'მოქმედი 2026',
+    pl: 'Aktywne 2026',
   },
   'planned-2027': {
     en: 'Planned 2027',
     ka: 'დაგეგმილი 2027',
+    pl: 'Planowane 2027',
   },
   'annual-highlight': {
     en: 'Annual Highlight',
     ka: 'ყოველწლიური',
+    pl: 'Coroczne',
   },
 };
 

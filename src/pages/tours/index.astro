@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import TourCard from '../../components/TourCard.astro';
+import GroupInquiryForm from '../../components/GroupInquiryForm.astro';
 import { SITE } from '../../data/site';
 import { TOURS } from '../../data/tours';
 import { absoluteUrl, withBase } from '../../lib/urls';
@@ -21,6 +22,8 @@ const categories = Array.from(new Set(TOURS.map((t) => t.category)));
   title={`All Tours in Georgia from Batumi | ${SITE.brandName}`}
   description="Browse all guided rainforest hikes, Mtirala & Botanical Garden combos, Machakhela valley treks, Batumi Old Town walking tours, and Mount Kazbek expeditions."
   canonicalPath="/tours/"
+  alternateEnPath="/tours/"
+  alternatePlPath="/pl/tours/"
   jsonLd={[breadcrumbJsonLd]}
 >
   <section class="page-banner">
@@ -30,7 +33,7 @@ const categories = Array.from(new Set(TOURS.map((t) => t.category)));
         <span aria-hidden="true">/</span>
         <span aria-current="page">Tours</span>
       </nav>
-      <span class="eyebrow">7 Authentic Routes</span>
+      <span class="eyebrow">{TOURS.length} Authentic Routes</span>
       <h1>Guided Tours Across Adjara &amp; Georgia</h1>
       <p style="max-width: 44rem; font-size: 1.05rem;">
         Filter by region, duration, terrain pace, or keyword. Every route shows honest physical grading, what is included, and transparent group rates.
@@ -121,6 +124,11 @@ const categories = Array.from(new Set(TOURS.map((t) => t.category)));
           <a class="btn btn-coral" href={withBase('/contact/')}>Request Custom Route</a>
         </div>
       </div>
+
+      <GroupInquiryForm
+        heading="Custom Group Trips & Multi-Day Planning"
+        intro="Planning a student winter ski course in Bakuriani, a Jorunners ~50 km mountain lodge week, or a custom group departure? Configure your inquiry below."
+      />
     </div>
   </section>
 </BaseLayout>

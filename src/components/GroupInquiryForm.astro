@@ -1,0 +1,582 @@
+---
+import { SITE } from '../data/site';
+import { TOURS } from '../data/tours';
+
+export interface Props {
+  selectedSlug?: string;
+  heading?: string;
+  intro?: string;
+}
+
+const {
+  selectedSlug = '',
+  heading = 'Custom Group Trip Inquiry & Planning Form',
+  intro = 'Configure your group trip details below. On submit, you’ll see a complete summary with one-click WhatsApp and Email sending — zero backend wait.',
+} = Astro.props;
+
+const groupTours = TOURS.filter((t) => t.isGroupProgram);
+const currentTour = groupTours.find((t) => t.slug === selectedSlug);
+const defaultGroupSizeValue = currentTour?.defaultGroupSize || '';
+const showRouteInitially = selectedSlug === 'jorunners-mountain-lodge-program';
+---
+
+<section id="group-inquiry" class="group-inquiry-section" aria-labelledby="group-inquiry-heading">
+  <div class="group-inquiry-card">
+    <div class="group-inquiry-head">
+      <span class="badge badge-forest">8 Days / 7 Nights · Full Board (3 Meals/Day)</span>
+      <h2 id="group-inquiry-heading">{heading}</h2>
+      <p>{intro}</p>
+    </div>
+
+    <form id="group-inquiry-form" class="form-grid" data-enhanced-validation novalidate>
+      <div class="form-grid form-grid-2">
+        <div class="field">
+          <label for="gi-trip">Trip Selection <span aria-hidden="true">*</span></label>
+          <span id="gi-trip-hint" class="field-hint">Pre-selected to the current trip, or switch to another group program</span>
+          <select
+            id="gi-trip"
+            name="trip"
+            required
+            aria-describedby="gi-trip-hint"
+            data-error="gi-trip-error"
+          >
+            <option value="">Choose a group trip...</option>
+            {
+              groupTours.map((t) => (
+                <option
+                  value={t.title}
+                  data-slug={t.slug}
+                  data-default-group={t.defaultGroupSize || ''}
+                  selected={t.slug === selectedSlug}
+                >
+                  {t.title} ({t.duration})
+                </option>
+              ))
+            }
+            <option value="Custom Multi-Day Group Program in Georgia" data-slug="custom">
+              Custom Multi-Day Group Program in Georgia
+            </option>
+          </select>
+          <div id="gi-trip-error" class="error-msg">
+            <span role="img" aria-label="Error">⚠</span> Please select a group trip.
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="gi-dates">Preferred Month / Dates <span aria-hidden="true">*</span></label>
+          <span id="gi-dates-hint" class="field-hint">e.g., January 2027, February 10–17, or July 2027</span>
+          <input
+            id="gi-dates"
+            name="dates"
+            type="text"
+            required
+            minlength="3"
+            aria-describedby="gi-dates-hint"
+            data-error="gi-dates-error"
+            placeholder="e.g., January or February"
+          />
+          <div id="gi-dates-error" class="error-msg">
+            <span role="img" aria-label="Error">⚠</span> Please enter your preferred month or travel dates.
+          </div>
+        </div>
+      </div>
+
+      <!-- Trip 2 Route Option Selector (shown for Jorunners) -->
+      <fieldset id="gi-route-fieldset" class="gi-route-fieldset" hidden={!showRouteInitially}>
+        <legend>Jorunners Route Option</legend>
+        <p class="field-hint" style="margin-bottom: 0.65rem;">
+          Choose between our recommended Stepantsminda valley basecamp or the summer Mestia–Ushguli lodge trek.
+        </p>
+        <div class="gi-route-options">
+          <label class="gi-radio-card">
+            <input
+              type="radio"
+              name="routeOption"
+              value="Option A (Recommended): Kazbegi / Stepantsminda Valley Basecamp"
+              checked
+              disabled={!showRouteInitially}
+            />
+            <span>
+              <strong>Option A (Recommended): Kazbegi / Stepantsminda</strong>
+              <small>6 nights mountain lodges + 1 night Tbilisi · Truso &amp; Juta day trails · ~3h transfer</small>
+            </span>
+          </label>
+          <label class="gi-radio-card">
+            <input
+              type="radio"
+              name="routeOption"
+              value="Option B: Svaneti (Mestia to Ushguli) Point-to-Point Lodges"
+              disabled={!showRouteInitially}
+            />
+            <span>
+              <strong>Option B: Svaneti (Mestia to Ushguli)</strong>
+              <small>June–September only · Family-run lodges · 4x4 luggage support &amp; vehicle skips</small>
+            </span>
+          </label>
+        </div>
+      </fieldset>
+
+      <div class="form-grid form-grid-2">
+        <div class="field">
+          <label for="gi-group-size">Group Size <span aria-hidden="true">*</span></label>
+          <span id="gi-group-size-hint" class="field-hint">Approximate number of participants (e.g., 20–25 students)</span>
+          <input
+            id="gi-group-size"
+            name="groupSize"
+            type="text"
+            required
+            value={defaultGroupSizeValue}
+            aria-describedby="gi-group-size-hint"
+            data-error="gi-group-size-error"
+            placeholder="e.g., 20–25 students"
+          />
+          <div id="gi-group-size-error" class="error-msg">
+            <span role="img" aria-label="Error">⚠</span> Please enter your estimated group size.
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="gi-meals">Meal / Dietary Requirements</label>
+          <span id="gi-meals-hint" class="field-hint">
+            3 meals/day Full Board is included — note vegetarian, vegan, halal, gluten-free, or allergies
+          </span>
+          <input
+            id="gi-meals"
+            name="meals"
+            type="text"
+            aria-describedby="gi-meals-hint"
+            placeholder="Full Board (3 meals/day) — e.g., 2 vegetarian, no nuts"
+          />
+        </div>
+      </div>
+
+      <div class="form-grid form-grid-3">
+        <div class="field">
+          <label for="gi-name">Contact Name <span aria-hidden="true">*</span></label>
+          <span id="gi-name-hint" class="field-hint">Group leader or coordinator</span>
+          <input
+            id="gi-name"
+            name="contactName"
+            type="text"
+            required
+            minlength="2"
+            autocomplete="name"
+            aria-describedby="gi-name-hint"
+            data-error="gi-name-error"
+            placeholder="Your full name"
+          />
+          <div id="gi-name-error" class="error-msg">
+            <span role="img" aria-label="Error">⚠</span> Please enter at least 2 characters.
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="gi-email">Email Address <span aria-hidden="true">*</span></label>
+          <span id="gi-email-hint" class="field-hint">Format: you@example.com</span>
+          <input
+            id="gi-email"
+            name="email"
+            type="email"
+            required
+            autocomplete="email"
+            autocorrect="off"
+            autocapitalize="none"
+            spellcheck="false"
+            aria-describedby="gi-email-hint"
+            data-error="gi-email-error"
+            placeholder="you@example.com"
+          />
+          <div id="gi-email-error" class="error-msg">
+            <span role="img" aria-label="Error">⚠</span> Enter an email address in the format you@example.com.
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="gi-phone">WhatsApp / Phone Number <span aria-hidden="true">*</span></label>
+          <span id="gi-phone-hint" class="field-hint">Include country code (e.g., +995...)</span>
+          <input
+            id="gi-phone"
+            name="phone"
+            type="tel"
+            required
+            minlength="6"
+            autocomplete="tel"
+            aria-describedby="gi-phone-hint"
+            data-error="gi-phone-error"
+            placeholder="+995 592 00 00 00"
+          />
+          <div id="gi-phone-error" class="error-msg">
+            <span role="img" aria-label="Error">⚠</span> Please enter a valid WhatsApp or phone number.
+          </div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="gi-notes">Additional Notes</label>
+        <span id="gi-notes-hint" class="field-hint">
+          Optional: flight arrival times, ski rental sizes, pacing preferences, or special requests
+        </span>
+        <textarea
+          id="gi-notes"
+          name="notes"
+          rows="3"
+          aria-describedby="gi-notes-hint"
+          placeholder="Tell us about your group's goals, experience level, or schedule..."
+        ></textarea>
+      </div>
+
+      <div class="gi-submit-row">
+        <button type="submit" class="btn btn-coral">
+          Review &amp; Prepare Inquiry →
+        </button>
+      </div>
+    </form>
+
+    <!-- Confirmation Summary Panel -->
+    <div
+      id="gi-confirmation"
+      class="gi-confirmation"
+      role="status"
+      aria-live="polite"
+      hidden
+    >
+      <div class="gi-confirmation-head">
+        <span class="badge badge-forest">✓ Inquiry Ready to Send</span>
+        <h3>Your Group Trip Summary</h3>
+        <p>
+          Review your details below and click <strong>Send via WhatsApp</strong> or <strong>Send via Email</strong> to deliver your inquiry directly to {SITE.brandName}.
+        </p>
+      </div>
+
+      <dl id="gi-summary-list" class="gi-summary-list"></dl>
+
+      <div class="gi-action-buttons">
+        <a
+          id="gi-wa-link"
+          class="btn btn-coral"
+          href={SITE.whatsappUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Send via WhatsApp →
+        </a>
+        <a
+          id="gi-email-link"
+          class="btn btn-forest"
+          href={`mailto:${SITE.email}`}
+        >
+          Send via Email →
+        </a>
+        <button id="gi-copy-btn" type="button" class="btn btn-outline">
+          Copy Summary
+        </button>
+        <button id="gi-edit-btn" type="button" class="btn btn-outline">
+          Edit Details
+        </button>
+      </div>
+      <p id="gi-copy-feedback" class="gi-copy-feedback" aria-live="polite"></p>
+    </div>
+  </div>
+</section>
+
+<script
+  id="group-inquiry-config"
+  type="application/json"
+  set:html={JSON.stringify({
+    whatsappUrl: SITE.whatsappUrl,
+    email: SITE.email,
+  })}
+/>
+
+<script>
+  const cfgEl = document.getElementById('group-inquiry-config');
+  const cfg = cfgEl ? JSON.parse(cfgEl.textContent || '{}') : {};
+
+  const form = document.getElementById('group-inquiry-form') as HTMLFormElement | null;
+  const tripSelect = document.getElementById('gi-trip') as HTMLSelectElement | null;
+  const routeFieldset = document.getElementById('gi-route-fieldset') as HTMLFieldSetElement | null;
+  const routeRadios = Array.from(
+    document.querySelectorAll<HTMLInputElement>('input[name="routeOption"]')
+  );
+  const groupSizeInput = document.getElementById('gi-group-size') as HTMLInputElement | null;
+
+  const confirmationBox = document.getElementById('gi-confirmation');
+  const summaryList = document.getElementById('gi-summary-list');
+  const waLink = document.getElementById('gi-wa-link') as HTMLAnchorElement | null;
+  const emailLink = document.getElementById('gi-email-link') as HTMLAnchorElement | null;
+  const copyBtn = document.getElementById('gi-copy-btn');
+  const editBtn = document.getElementById('gi-edit-btn');
+  const copyFeedback = document.getElementById('gi-copy-feedback');
+
+  let lastFormattedText = '';
+
+  function syncTripDependentFields() {
+    if (!tripSelect) return;
+    const selectedOpt = tripSelect.selectedOptions[0];
+    const slug = selectedOpt?.dataset.slug || '';
+    const isJorunners = slug === 'jorunners-mountain-lodge-program';
+
+    if (routeFieldset) {
+      routeFieldset.hidden = !isJorunners;
+      routeRadios.forEach((r) => {
+        r.disabled = !isJorunners;
+      });
+    }
+
+    const defaultGroup = selectedOpt?.dataset.defaultGroup || '';
+    if (groupSizeInput && !groupSizeInput.dataset.userEdited && defaultGroup) {
+      groupSizeInput.value = defaultGroup;
+    }
+  }
+
+  groupSizeInput?.addEventListener('input', () => {
+    groupSizeInput.dataset.userEdited = 'true';
+  });
+
+  tripSelect?.addEventListener('change', syncTripDependentFields);
+
+  // Sync with JorunnersRouteTabs when user switches tabs or clicks CTA
+  document.addEventListener('jorunners:route-change', (e: Event) => {
+    const detail = (e as CustomEvent<{ routeValue?: string }>).detail;
+    if (!detail?.routeValue) return;
+    routeRadios.forEach((r) => {
+      if (r.value === detail.routeValue) r.checked = true;
+    });
+  });
+
+  form?.addEventListener('submit', (e) => {
+    e.preventDefault();
+
+    if (!form.checkValidity()) {
+      const firstInvalid = form.querySelector<HTMLElement>(':invalid');
+      firstInvalid?.focus();
+      return;
+    }
+
+    const data = new FormData(form);
+    const trip = String(data.get('trip') || '').trim();
+    const routeOption = String(data.get('routeOption') || '').trim();
+    const dates = String(data.get('dates') || '').trim();
+    const groupSize = String(data.get('groupSize') || '').trim();
+    const meals = String(data.get('meals') || '').trim() || 'Standard Full Board (3 meals/day)';
+    const contactName = String(data.get('contactName') || '').trim();
+    const email = String(data.get('email') || '').trim();
+    const phone = String(data.get('phone') || '').trim();
+    const notes = String(data.get('notes') || '').trim() || 'None';
+
+    const rows: [string, string][] = [
+      ['Trip', trip],
+      ...(routeOption ? [['Route Option', routeOption] as [string, string]] : []),
+      ['Preferred Month / Dates', dates],
+      ['Group Size', groupSize],
+      ['Meals / Dietary', `${meals} (3 meals/day Full Board included)`],
+      ['Contact Name', contactName],
+      ['Email', email],
+      ['WhatsApp / Phone', phone],
+      ['Additional Notes', notes],
+    ];
+
+    if (summaryList) {
+      summaryList.innerHTML = '';
+      rows.forEach(([label, val]) => {
+        const div = document.createElement('div');
+        const dt = document.createElement('dt');
+        dt.textContent = label;
+        const dd = document.createElement('dd');
+        dd.textContent = val;
+        div.append(dt, dd);
+        summaryList.append(div);
+      });
+    }
+
+    lastFormattedText = [
+      'Hello Minimalism Tours Georgia! Group Trip Inquiry:',
+      ...rows.map(([k, v]) => `- ${k}: ${v}`),
+    ].join('\n');
+
+    if (waLink && cfg.whatsappUrl) {
+      waLink.href = `${cfg.whatsappUrl}?text=${encodeURIComponent(lastFormattedText)}`;
+    }
+    if (emailLink && cfg.email) {
+      const subject = `Group Inquiry: ${trip} (${dates})`;
+      emailLink.href = `mailto:${cfg.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(lastFormattedText)}`;
+    }
+
+    if (confirmationBox) {
+      confirmationBox.hidden = false;
+      confirmationBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+  });
+
+  copyBtn?.addEventListener('click', async () => {
+    if (!lastFormattedText) return;
+    try {
+      await navigator.clipboard.writeText(lastFormattedText);
+      if (copyFeedback) copyFeedback.textContent = '✓ Inquiry summary copied to clipboard.';
+    } catch {
+      if (copyFeedback) copyFeedback.textContent = 'Could not copy automatically — please use WhatsApp or Email above.';
+    }
+  });
+
+  editBtn?.addEventListener('click', () => {
+    if (confirmationBox) confirmationBox.hidden = true;
+    form?.querySelector<HTMLElement>('input, select')?.focus();
+  });
+
+  syncTripDependentFields();
+</script>
+
+<style>
+  .group-inquiry-section {
+    margin-top: 2.25rem;
+  }
+
+  .group-inquiry-card {
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    padding: clamp(1.35rem, 3vw, 2.1rem);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .group-inquiry-head {
+    margin-bottom: 1.5rem;
+  }
+
+  .group-inquiry-head h2 {
+    margin: 0.55rem 0 0.45rem;
+  }
+
+  .group-inquiry-head p {
+    margin-bottom: 0;
+    color: var(--ink-600);
+    max-width: 44rem;
+  }
+
+  .form-grid-3 {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
+  }
+
+  .gi-route-fieldset {
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    padding: 1rem 1.15rem;
+    background-color: #ffffff;
+    margin: 0;
+  }
+
+  .gi-route-fieldset legend {
+    font-weight: 700;
+    font-size: 0.95rem;
+    padding: 0 0.4rem;
+    color: var(--forest-800);
+  }
+
+  .gi-route-options {
+    display: grid;
+    gap: 0.75rem;
+    grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+  }
+
+  .gi-radio-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.65rem;
+    padding: 0.85rem;
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    background-color: var(--bg-surface);
+    cursor: pointer;
+    transition: border-color 0.18s ease, background-color 0.18s ease;
+  }
+
+  .gi-radio-card:has(input:checked) {
+    border-color: var(--forest-700);
+    background-color: #eaf2e8;
+  }
+
+  .gi-radio-card input {
+    margin-top: 0.25rem;
+    accent-color: var(--forest-700);
+    width: 1.1rem;
+    height: 1.1rem;
+    flex-shrink: 0;
+  }
+
+  .gi-radio-card strong {
+    display: block;
+    font-size: 0.92rem;
+    color: var(--ink-900);
+  }
+
+  .gi-radio-card small {
+    display: block;
+    font-size: 0.82rem;
+    color: var(--ink-600);
+    margin-top: 0.2rem;
+  }
+
+  .gi-submit-row {
+    margin-top: 0.5rem;
+  }
+
+  .gi-confirmation {
+    margin-top: 1.75rem;
+    padding: 1.4rem;
+    background-color: #ffffff;
+    border: 2px solid var(--forest-700);
+    border-radius: var(--radius-md);
+  }
+
+  .gi-confirmation-head h3 {
+    margin: 0.5rem 0 0.35rem;
+  }
+
+  .gi-confirmation-head p {
+    color: var(--ink-600);
+    font-size: 0.94rem;
+    margin-bottom: 1rem;
+  }
+
+  .gi-summary-list {
+    display: grid;
+    gap: 0.65rem;
+    grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+    margin: 0 0 1.25rem;
+    padding: 0.95rem;
+    background-color: var(--bg-surface);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-subtle);
+  }
+
+  .gi-summary-list dt {
+    font-size: 0.74rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--ink-500);
+  }
+
+  .gi-summary-list dd {
+    margin: 0.15rem 0 0;
+    font-size: 0.92rem;
+    font-weight: 600;
+    color: var(--ink-900);
+    word-break: break-word;
+  }
+
+  .gi-action-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  .gi-copy-feedback {
+    margin: 0.65rem 0 0;
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: var(--forest-700);
+  }
+</style>

@@ -1,13 +1,16 @@
 ---
 import type { Tour } from '../data/tours';
 import { withBase } from '../lib/urls';
+import { localizePath, type Lang } from '../lib/i18n';
 
 export interface Props {
   tour: Tour;
   priority?: boolean;
+  lang?: Lang;
 }
 
-const { tour, priority = false } = Astro.props;
+const { tour, priority = false, lang = 'en' } = Astro.props;
+const isPl = lang === 'pl';
 ---
 
 <article
@@ -30,11 +33,23 @@ const { tour, priority = false } = Astro.props;
   />
   <header>
     <div class="tour-card-meta">
-      <span class="badge badge-forest">{tour.category}</span>
-      <span class="badge badge-sea">{tour.duration}</span>
+      {
+        tour.cardTags && tour.cardTags.length > 0 ? (
+          tour.cardTags.map((tag, idx) => (
+            <span class={`badge ${idx === 0 ? 'badge-forest' : idx === 1 ? 'badge-sea' : 'badge-coral'}`}>
+              {tag}
+            </span>
+          ))
+        ) : (
+          <>
+            <span class="badge badge-forest">{tour.category}</span>
+            <span class="badge badge-sea">{tour.duration}</span>
+          </>
+        )
+      }
     </div>
     <h3>
-      <a class="card-link" href={withBase(`/tours/${tour.slug}/`)}>
+      <a class="card-link" href={withBase(localizePath(`/tours/${tour.slug}/`, lang))}>
         {tour.shortTitle}
       </a>
     </h3>
@@ -50,12 +65,16 @@ const { tour, priority = false } = Astro.props;
   <footer>
     <div class="tour-price-block">
       <span class="tour-price-kicker">
-        {tour.startingPriceEur !== null ? 'Direct Group Rate From' : 'Seasonal Expedition'}
+        {tour.startingPriceEur !== null
+          ? (isPl ? 'Cena grupowa już od' : 'Direct Group Rate From')
+          : (tour.quoteLabel || (isPl ? 'Wyprawa sezonowa' : 'Seasonal Expedition'))}
       </span>
       <span class="tour-price-value">
-        {tour.startingPriceEur !== null ? `€${tour.startingPriceEur} / guest` : 'Custom Quote'}
+        {tour.startingPriceEur !== null
+          ? `€${tour.startingPriceEur} / ${isPl ? 'os.' : 'guest'}`
+          : (isPl ? 'Wycena indywidualna' : 'Custom Quote')}
       </span>
     </div>
-    <span class="btn btn-outline btn-sm" aria-hidden="true">Explore →</span>
+    <span class="btn btn-outline btn-sm" aria-hidden="true">{isPl ? 'Zobacz →' : 'Explore →'}</span>
   </footer>
 </article>

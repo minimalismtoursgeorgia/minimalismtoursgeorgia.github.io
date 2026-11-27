@@ -1,0 +1,295 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import { SITE } from '../../../data/site';
+import {
+  PL_SITE,
+  PL_CERTIFICATIONS,
+  PL_VEHICLES,
+  PL_CONTENT_PILLARS,
+} from '../../../data/i18n-pl';
+import { withBase, absoluteUrl } from '../../../lib/urls';
+
+const breadcrumbJsonLd = {
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Start', item: absoluteUrl('/pl/', Astro.site) },
+    { '@type': 'ListItem', position: 2, name: 'O nas', item: absoluteUrl('/pl/about/', Astro.site) },
+  ],
+};
+---
+
+<BaseLayout
+  title={`O ${SITE.brandName} | Licencjonowany operator z Batumi i DMC w Adżarii`}
+  description="Minimalism Tours Georgia to licencjonowany operator turystyczny z Batumi z ponad 10-letnim doświadczeniem, działający zgodnie ze standardami GMGA/FMGA, UNESCO Heritage i Pierwszej Pomocy Czerwonego Krzyża."
+  canonicalPath="/pl/about/"
+  alternateEnPath="/about/"
+  alternateKaPath="/ka/"
+  alternatePlPath="/pl/about/"
+  lang="pl"
+  jsonLd={[breadcrumbJsonLd]}
+>
+  <section class="page-banner">
+    <div class="container">
+      <nav class="breadcrumbs" aria-label="Breadcrumb">
+        <a href={withBase('/pl/')}>Start</a>
+        <span aria-hidden="true">/</span>
+        <span aria-current="page">O nas</span>
+      </nav>
+      <span class="eyebrow">Licencjonowany lokalny operator i DMC · Batumi</span>
+      <h1>O Minimalism Tours Georgia</h1>
+      <p style="max-width: 46rem; font-size: 1.05rem;">
+        „{PL_SITE.motto}” — spokojne wycieczki przyrodnicze, kulturowe i B2B po Adżarii i Gruzji, prowadzone przez certyfikowanych przewodników z przejrzystą logistyką.
+      </p>
+    </div>
+  </section>
+
+  <!-- Company Operations & Philosophy -->
+  <section class="section">
+    <div class="container founder-grid">
+      <div class="founder-photo">
+        <img
+          src={withBase('/images/mtirala-canopy.webp')}
+          alt="Korona lasu deszczowego Kolchidy UNESCO w Parku Narodowym Mtirala niedaleko Batumi"
+          fetchpriority="high"
+          width="1200"
+          height="800"
+          decoding="async"
+        />
+      </div>
+
+      <div>
+        <span class="eyebrow">Operator turystyczny z Batumi i DMC w Adżarii</span>
+        <h2>Minimalism Tours Georgia · {SITE.experienceYears}+ lat doświadczenia w Gruzji</h2>
+        <p>
+          Z siedzibą w Batumi nad Morzem Czarnym realizujemy kameralne, prywatne i grupowe programy B2B dla podróżnych i biur podróży szukających autentycznej jakości zamiast pośpiesznych postojów autokarowych. Od wpisanych na listę UNESCO lasów deszczowych Kolchidy w Mtirali i Machakheli po wysokogórskie wyprawy w Kazbegi i Swanetii — stawiamy na wiedzę przyrodniczą, sprawdzoną wiejską gościnność i bezpieczne tempo.
+        </p>
+        <p>
+          Każda trasa zawiera uczciwy opis poziomu trudności, aktywny plan awaryjny na pogodę, dokładne miejsca zbiórki oraz pełną przejrzystość cen — zero niespodzianek z biletami przy wejściu do parków.
+        </p>
+
+        <div style="display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1.5rem;">
+          <a class="btn btn-coral" href={withBase('/pl/tours/')}>Poznaj nasze wycieczki</a>
+          <a class="btn btn-forest" href={withBase('/pl/partners/')}>Współpraca B2B i agencje</a>
+          <a class="btn btn-outline" href={SITE.youtubeUrl} target="_blank" rel="noopener noreferrer">
+            Zobacz trasy na YouTube ↗
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Verified Certifications -->
+  <section id="certifications" class="section section-surface">
+    <div class="container">
+      <div class="section-header">
+        <div>
+          <span class="eyebrow">Szkolenia i bezpieczeństwo gości</span>
+          <h2>Zweryfikowane certyfikaty przewodnickie</h2>
+        </div>
+        <p>Oficjalne uprawnienia w zakresie edukacji ekologicznej, trekkingu górskiego oraz pierwszej pomocy.</p>
+      </div>
+
+      <div class="cert-grid">
+        {
+          PL_CERTIFICATIONS.map((c) => (
+            <article class="cert-card reveal-on-scroll">
+              <span class="badge badge-forest">{c.issuer}</span>
+              <h3>{c.title}</h3>
+              <p>{c.scope}</p>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- Vehicles & Onboard Comfort -->
+  <section id="fleet" class="section">
+    <div class="container">
+      <div class="section-header">
+        <div>
+          <span class="eyebrow">Transport górski i nadmorski</span>
+          <h2>Pojazdy dopasowane do wielkości grupy i terenu</h2>
+        </div>
+        <p>Komfortowy, klimatyzowany transport z Wi-Fi na pokładzie na górskie podjazdy i trasy wzdłuż wybrzeża.</p>
+      </div>
+
+      <div class="vehicle-grid">
+        {
+          PL_VEHICLES.map((v) => (
+            <article class="vehicle-card reveal-on-scroll">
+              <span class="badge badge-sea">{v.capacity}</span>
+              <h3>{v.name}</h3>
+              <p>{v.idealFor}</p>
+              <ul>
+                {v.amenities.map((a) => <li>{a}</li>)}
+              </ul>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- Brand Pillars + B2B Partnerships -->
+  <section id="standards" class="section section-forest">
+    <div class="container">
+      <div class="section-header">
+        <div>
+          <span class="eyebrow">Jak działamy</span>
+          <h2>Cztery filary naszej pracy i współpraca B2B</h2>
+        </div>
+      </div>
+
+      <div class="about-pillars">
+        {
+          PL_CONTENT_PILLARS.map((p) => (
+            <div class="about-pillar">
+              <h3>{p.name}</h3>
+              <p>{p.summary}</p>
+            </div>
+          ))
+        }
+      </div>
+
+      <div class="b2b-box">
+        <div>
+          <h3>Hotele, hostele i partnerzy turystyczni</h3>
+          <p style="margin-bottom: 0;">
+            Szukasz sprawdzonych wycieczek z Batumi dla swoich gości? Skontaktuj się z nami po aktualną ofertę B2B, dostępność sezonową i przejrzyste warunki współpracy.
+          </p>
+        </div>
+        <a class="btn btn-coral" href={withBase('/pl/partners/#b2b-inquiry')}>Zapytaj o ofertę B2B</a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .page-banner {
+    background-color: var(--bg-surface);
+    border-bottom: 1px solid var(--border-subtle);
+    padding-block: clamp(2.25rem, 4.5vw, 3.75rem);
+  }
+
+  .breadcrumbs {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    font-size: 0.86rem;
+    color: var(--ink-600);
+    margin-bottom: 1rem;
+  }
+
+  .breadcrumbs a {
+    color: var(--ink-700);
+    text-decoration: none;
+    font-weight: 600;
+  }
+
+  .founder-grid {
+    display: grid;
+    gap: 2.5rem;
+    align-items: center;
+  }
+
+  @media (min-width: 54rem) {
+    .founder-grid {
+      grid-template-columns: minmax(17rem, 23rem) 1fr;
+    }
+  }
+
+  .founder-photo {
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    border: 1px solid var(--border-subtle);
+    box-shadow: var(--shadow-md);
+  }
+
+  .founder-photo img {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    object-position: center;
+  }
+
+  .cert-grid,
+  .vehicle-grid,
+  .about-pillars {
+    display: grid;
+    gap: 1.25rem;
+    grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+  }
+
+  .cert-card,
+  .vehicle-card {
+    background-color: var(--bg-page);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    padding: 1.4rem;
+  }
+
+  .vehicle-card {
+    background-color: var(--bg-surface);
+  }
+
+  .cert-card h3,
+  .vehicle-card h3 {
+    margin-top: 0.85rem;
+    margin-bottom: 0.5rem;
+    font-size: 1.18rem;
+  }
+
+  .cert-card p {
+    margin-bottom: 0;
+    font-size: 0.93rem;
+  }
+
+  .vehicle-card ul {
+    margin: 0.85rem 0 0;
+    padding-inline-start: 1.15rem;
+    font-size: 0.9rem;
+    color: var(--ink-700);
+    display: grid;
+    gap: 0.3rem;
+  }
+
+  .about-pillar {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    border-radius: var(--radius-md);
+    padding: 1.2rem;
+  }
+
+  .about-pillar h3 {
+    color: #f4b69f;
+    font-size: 1.12rem;
+    margin-bottom: 0.45rem;
+  }
+
+  .about-pillar p {
+    margin: 0;
+    font-size: 0.92rem;
+  }
+
+  .b2b-box {
+    margin-top: 2rem;
+    padding: 1.65rem;
+    border-radius: var(--radius-xl);
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.25rem;
+  }
+
+  .b2b-box h3 {
+    margin-bottom: 0.4rem;
+  }
+
+  .b2b-box > div {
+    max-width: 44rem;
+  }
+</style>

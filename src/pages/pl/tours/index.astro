@@ -1,0 +1,292 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import TourCard from '../../../components/TourCard.astro';
+import GroupInquiryForm from '../../../components/GroupInquiryForm.astro';
+import { SITE } from '../../../data/site';
+import {
+  PL_CATEGORY_LABELS,
+  PL_DIFFICULTY_LABELS,
+  getToursForLang,
+} from '../../../data/i18n-pl';
+import { absoluteUrl, withBase } from '../../../lib/urls';
+
+const plTours = getToursForLang('pl');
+
+const breadcrumbJsonLd = {
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Start', item: absoluteUrl('/pl/', Astro.site) },
+    { '@type': 'ListItem', position: 2, name: 'Wycieczki', item: absoluteUrl('/pl/tours/', Astro.site) },
+  ],
+};
+
+const regions = Array.from(new Set(plTours.map((t) => t.regionSlug)));
+const categories = Array.from(new Set(plTours.map((t) => t.category)));
+---
+
+<BaseLayout
+  title={`Wszystkie wycieczki po Gruzji z Batumi | ${SITE.brandName}`}
+  description="Przeglądaj wszystkie wycieczki z przewodnikiem: Park Narodowy Mtirala, Ogród Botaniczny, Wąwóz Machakhela, Stare Batumi oraz wyprawy na Kazbek."
+  canonicalPath="/pl/tours/"
+  alternateEnPath="/tours/"
+  alternateKaPath="/ka/"
+  alternatePlPath="/pl/tours/"
+  lang="pl"
+  jsonLd={[breadcrumbJsonLd]}
+>
+  <section class="page-banner">
+    <div class="container">
+      <nav class="breadcrumbs" aria-label="Breadcrumb">
+        <a href={withBase('/pl/')}>Start</a>
+        <span aria-hidden="true">/</span>
+        <span aria-current="page">Wycieczki</span>
+      </nav>
+      <span class="eyebrow">{plTours.length} autentycznych tras</span>
+      <h1>Wycieczki z przewodnikiem po Adżarii i Gruzji</h1>
+      <p style="max-width: 44rem; font-size: 1.05rem;">
+        Filtruj według regionu, czasu trwania, poziomu trudności lub słowa kluczowego. Każda trasa ma jasną ocenę kondycji, wykaz świadczeń i przejrzyste ceny grupowe.
+      </p>
+    </div>
+  </section>
+
+  <section class="section-tight">
+    <div class="container">
+      <div class="filter-bar" role="region" aria-label="Filtruj i sortuj wycieczki">
+        <div class="field">
+          <label for="f-search">Szukaj słowa kluczowego</label>
+          <input id="f-search" type="search" placeholder="wodospad, obiad, kolejka, Kazbek..." />
+        </div>
+
+        <div class="field">
+          <label for="f-region">Region</label>
+          <select id="f-region">
+            <option value="">Wszystkie regiony</option>
+            {
+              regions.map((slug) => {
+                const label = plTours.find((t) => t.regionSlug === slug)?.region || slug;
+                return <option value={slug}>{label}</option>;
+              })
+            }
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="f-category">Styl</label>
+          <select id="f-category">
+            <option value="">Wszystkie style</option>
+            {categories.map((cat) => <option value={cat}>{PL_CATEGORY_LABELS[cat]}</option>)}
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="f-duration">Czas trwania</label>
+          <select id="f-duration">
+            <option value="">Dowolny czas</option>
+            <option value="half-day">Półdniowe (~3 godz.)</option>
+            <option value="full-day">Całodniowe (6–7 godz.)</option>
+            <option value="multi-day">Wielodniowe (2–8 dni)</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="f-difficulty">Poziom trudności</label>
+          <select id="f-difficulty">
+            <option value="">Wszystkie poziomy</option>
+            <option value="Easy">{PL_DIFFICULTY_LABELS['Easy']}</option>
+            <option value="Easy–Moderate">{PL_DIFFICULTY_LABELS['Easy–Moderate']}</option>
+            <option value="Moderate">{PL_DIFFICULTY_LABELS['Moderate']}</option>
+            <option value="Moderate–Challenging">{PL_DIFFICULTY_LABELS['Moderate–Challenging']}</option>
+            <option value="Challenging">{PL_DIFFICULTY_LABELS['Challenging']}</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="f-sort">Sortuj według</label>
+          <select id="f-sort">
+            <option value="featured">Polecane</option>
+            <option value="price-asc">Najniższa cena grupowa</option>
+            <option value="duration-asc">Najkrótszy czas</option>
+            <option value="duration-desc">Najdłuższa wyprawa</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="filter-status-row">
+        <p id="tours-count" aria-live="polite">
+          Wyświetlono <strong>{plTours.length}</strong> z {plTours.length} wycieczek
+        </p>
+        <button id="reset-filters-btn" type="button" class="btn btn-outline btn-sm" hidden>
+          Wyczyść filtry
+        </button>
+      </div>
+
+      <div id="tours-grid" class="tours-grid">
+        {plTours.map((tour, idx) => <TourCard tour={tour} priority={idx < 2} lang="pl" />)}
+      </div>
+
+      <div id="tours-empty" class="empty-state" hidden>
+        <h2>Brak pasujących tras</h2>
+        <p>Spróbuj wyczyścić jeden z filtrów lub napisz do naszego zespołu, jaką trasę prywatną albo B2B planujesz.</p>
+        <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 0.75rem;">
+          <button id="empty-reset-btn" type="button" class="btn btn-forest">Pokaż wszystkie wycieczki</button>
+          <a class="btn btn-coral" href={withBase('/pl/contact/')}>Zapytaj o trasę indywidualną</a>
+        </div>
+      </div>
+
+      <GroupInquiryForm
+        heading="Wyjazdy grupowe i planowanie wielodniowe"
+        intro="Planujesz studencki obóz narciarski w Bakuriani, tydzień biegowy Jorunners ~50 km lub wyjazd dla większej grupy? Skonfiguruj zapytanie poniżej."
+      />
+    </div>
+  </section>
+</BaseLayout>
+
+<script>
+  const searchEl = document.getElementById('f-search') as HTMLInputElement | null;
+  const regionEl = document.getElementById('f-region') as HTMLSelectElement | null;
+  const categoryEl = document.getElementById('f-category') as HTMLSelectElement | null;
+  const durationEl = document.getElementById('f-duration') as HTMLSelectElement | null;
+  const difficultyEl = document.getElementById('f-difficulty') as HTMLSelectElement | null;
+  const sortEl = document.getElementById('f-sort') as HTMLSelectElement | null;
+  const grid = document.getElementById('tours-grid');
+  const countEl = document.getElementById('tours-count');
+  const resetBtn = document.getElementById('reset-filters-btn') as HTMLButtonElement | null;
+  const emptyResetBtn = document.getElementById('empty-reset-btn');
+  const emptyState = document.getElementById('tours-empty');
+
+  const cards = grid ? Array.from(grid.querySelectorAll<HTMLElement>('.tour-card')) : [];
+
+  const params = new URLSearchParams(window.location.search);
+  if (regionEl && params.get('region')) regionEl.value = params.get('region') || '';
+  if (durationEl && params.get('duration')) durationEl.value = params.get('duration') || '';
+  if (difficultyEl && params.get('difficulty')) difficultyEl.value = params.get('difficulty') || '';
+  if (categoryEl && params.get('category')) categoryEl.value = params.get('category') || '';
+  if (searchEl && params.get('q')) searchEl.value = params.get('q') || '';
+
+  const applyFilters = () => {
+    const q = (searchEl?.value || '').trim().toLowerCase();
+    const region = regionEl?.value || '';
+    const category = categoryEl?.value || '';
+    const duration = durationEl?.value || '';
+    const difficulty = difficultyEl?.value || '';
+    const sortBy = sortEl?.value || 'featured';
+
+    let visibleCount = 0;
+
+    cards.forEach((card) => {
+      const matchQ = !q || (card.dataset.search || '').includes(q);
+      const matchRegion = !region || card.dataset.region === region;
+      const matchCat = !category || card.dataset.category === category;
+      const matchDur = !duration || card.dataset.duration === duration;
+      const matchDiff = !difficulty || card.dataset.difficulty === difficulty;
+      const show = matchQ && matchRegion && matchCat && matchDur && matchDiff;
+      card.hidden = !show;
+      if (show) visibleCount += 1;
+    });
+
+    if (grid) {
+      const sorted = [...cards].sort((a, b) => {
+        if (sortBy === 'price-asc') {
+          return Number(a.dataset.price || 9999) - Number(b.dataset.price || 9999);
+        }
+        if (sortBy === 'duration-asc') {
+          return Number(a.dataset.hours || 0) - Number(b.dataset.hours || 0);
+        }
+        if (sortBy === 'duration-desc') {
+          return Number(b.dataset.hours || 0) - Number(a.dataset.hours || 0);
+        }
+        return 0;
+      });
+      if (sortBy !== 'featured') {
+        sorted.forEach((c) => grid.appendChild(c));
+      }
+    }
+
+    const hasActiveFilter = Boolean(q || region || category || duration || difficulty);
+    if (resetBtn) resetBtn.hidden = !hasActiveFilter;
+    if (emptyState) emptyState.hidden = visibleCount > 0;
+    if (countEl) {
+      countEl.innerHTML = `Wyświetlono <strong>${visibleCount}</strong> z ${cards.length} wycieczek`;
+    }
+  };
+
+  const resetAll = () => {
+    if (searchEl) searchEl.value = '';
+    if (regionEl) regionEl.value = '';
+    if (categoryEl) categoryEl.value = '';
+    if (durationEl) durationEl.value = '';
+    if (difficultyEl) difficultyEl.value = '';
+    if (sortEl) sortEl.value = 'featured';
+    window.history.replaceState({}, '', window.location.pathname);
+    applyFilters();
+  };
+
+  [searchEl, regionEl, categoryEl, durationEl, difficultyEl, sortEl].forEach((el) => {
+    el?.addEventListener('input', applyFilters);
+    el?.addEventListener('change', applyFilters);
+  });
+
+  resetBtn?.addEventListener('click', resetAll);
+  emptyResetBtn?.addEventListener('click', resetAll);
+
+  applyFilters();
+</script>
+
+<style>
+  .page-banner {
+    background-color: var(--bg-surface);
+    border-bottom: 1px solid var(--border-subtle);
+    padding-block: clamp(2.25rem, 4.5vw, 3.75rem);
+  }
+
+  .breadcrumbs {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    font-size: 0.86rem;
+    color: var(--ink-600);
+    margin-bottom: 1rem;
+  }
+
+  .breadcrumbs a {
+    color: var(--ink-700);
+    text-decoration: none;
+    font-weight: 600;
+  }
+
+  .filter-bar {
+    display: grid;
+    gap: 0.9rem;
+    grid-template-columns: repeat(auto-fit, minmax(11.5rem, 1fr));
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    padding: 1.15rem;
+    box-shadow: var(--shadow-xs);
+    margin-bottom: 1.25rem;
+  }
+
+  .filter-status-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    margin-bottom: 1.35rem;
+  }
+
+  .filter-status-row p {
+    margin: 0;
+    font-size: 0.94rem;
+    color: var(--ink-700);
+  }
+
+  .empty-state {
+    background-color: var(--bg-surface);
+    border: 1px dashed var(--border-strong);
+    border-radius: var(--radius-xl);
+    padding: 3rem 1.5rem;
+    text-align: center;
+    margin-top: 1.5rem;
+  }
+</style>

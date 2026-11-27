@@ -1,0 +1,1472 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import TourCard from '../../../components/TourCard.astro';
+import ReviewsSection from '../../../components/ReviewsSection.astro';
+import JorunnersRouteTabs from '../../../components/JorunnersRouteTabs.astro';
+import GroupInquiryForm from '../../../components/GroupInquiryForm.astro';
+import { SITE, PICKUP_POINTS } from '../../../data/site';
+import { type Tour } from '../../../data/tours';
+import {
+  PL_SITE,
+  PL_DIFFICULTY_LABELS,
+  PL_PICKUP_POINTS,
+  getToursForLang,
+  getReviewsForLang,
+} from '../../../data/i18n-pl';
+import { withBase, absoluteUrl } from '../../../lib/urls';
+
+export function getStaticPaths() {
+  const plTours = getToursForLang('pl');
+  return plTours.map((tour) => ({
+    params: { slug: tour.slug },
+    props: { tour },
+  }));
+}
+
+interface Props {
+  tour: Tour;
+}
+
+const { tour } = Astro.props;
+const plTours = getToursForLang('pl');
+const relatedTours = plTours.filter((t) => t.slug !== tour.slug).slice(0, 3);
+const tourReviews = getReviewsForLang('pl').filter((r) => r.tourSlug === tour.slug);
+const hasSafetyCancellationReview = tourReviews.some((r) => r.category === 'safety-cancellation');
+
+const tourJsonLd = {
+  '@type': 'TouristTrip',
+  name: tour.title,
+  description: tour.seoDescription,
+  touristType: ['Miłośnicy natury', 'Piechurzy', 'Podróżni kulturowi', 'Małe grupy'],
+  image: absoluteUrl(tour.heroImage, Astro.site),
+  url: absoluteUrl(`/pl/tours/${tour.slug}/`, Astro.site),
+  provider: {
+    '@type': 'TravelAgency',
+    name: SITE.brandName,
+    telephone: SITE.phoneRaw,
+  },
+  ...(tour.startingPriceEur !== null
+    ? {
+        offers: {
+          '@type': 'Offer',
+          priceCurrency: 'EUR',
+          price: String(tour.startingPriceEur),
+          availability: 'https://schema.org/InStock',
+          url: absoluteUrl(`/pl/tours/${tour.slug}/`, Astro.site),
+        },
+      }
+    : {}),
+};
+
+const breadcrumbJsonLd = {
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Start', item: absoluteUrl('/pl/', Astro.site) },
+    { '@type': 'ListItem', position: 2, name: 'Wycieczki', item: absoluteUrl('/pl/tours/', Astro.site) },
+    {
+      '@type': 'ListItem',
+      position: 3,
+      name: tour.shortTitle,
+      item: absoluteUrl(`/pl/tours/${tour.slug}/`, Astro.site),
+    },
+  ],
+};
+
+const faqJsonLd = tour.faqs.length
+  ? [
+      {
+        '@type': 'FAQPage',
+        mainEntity: tour.faqs.map((f) => ({
+          '@type': 'Question',
+          name: f.question,
+          acceptedAnswer: { '@type': 'Answer', text: f.answer },
+        })),
+      },
+    ]
+  : [];
+
+const videoJsonLd = (tour.videos || []).map((v) => ({
+  '@type': 'VideoObject',
+  name: v.title,
+  description: v.caption,
+  thumbnailUrl: `https://i.ytimg.com/vi/${v.youtubeId}/maxresdefault.jpg`,
+  ...(v.uploadDate ? { uploadDate: v.uploadDate } : {}),
+  embedUrl: `https://www.youtube-nocookie.com/embed/${v.youtubeId}`,
+  contentUrl: `https://www.youtube.com/watch?v=${v.youtubeId}`,
+}));
+---
+
+<BaseLayout
+  title={`${tour.title} | ${SITE.brandName}`}
+  description={tour.seoDescription}
+  canonicalPath={`/pl/tours/${tour.slug}/`}
+  alternateEnPath={`/tours/${tour.slug}/`}
+  alternateKaPath="/ka/"
+  alternatePlPath={`/pl/tours/${tour.slug}/`}
+  lang="pl"
+  ogImage={tour.heroImage}
+  keywords={tour.keywords}
+  jsonLd={[tourJsonLd, breadcrumbJsonLd, ...faqJsonLd, ...videoJsonLd]}
+>
+  <!-- Hero Media Header -->
+  <section class="tour-hero">
+    <div class="container">
+      <div class="tour-hero-top-nav">
+        <nav class="breadcrumbs" aria-label="Breadcrumb">
+          <a href={withBase('/pl/')}>Start</a>
+          <span aria-hidden="true">/</span>
+          <a href={withBase('/pl/tours/')}>Wycieczki</a>
+          <span aria-hidden="true">/</span>
+          <span aria-current="page">{tour.shortTitle}</span>
+        </nav>
+        <a class="btn btn-outline btn-sm" href={withBase('/pl/tours/')}>← Wróć do wszystkich wycieczek</a>
+      </div>
+
+      <div class="tour-hero-badges">
+        <span class="badge badge-forest">{tour.statusLabel}</span>
+        <span class="badge badge-sea">{tour.region}</span>
+        <span class="badge badge-coral">{PL_DIFFICULTY_LABELS[tour.difficulty] || tour.difficulty}</span>
+      </div>
+
+      <h1>{tour.title}</h1>
+      <p class="tour-hero-lead">{tour.summary}</p>
+
+      <div class="tour-hero-media">
+        <img
+          src={withBase(tour.heroImage)}
+          alt={tour.heroAlt}
+          fetchpriority="high"
+          width="1400"
+          height="900"
+          decoding="async"
+        />
+      </div>
+
+      {
+        tour.gallery.length > 1 && (
+          <div class="gallery-strip" role="region" aria-label="Galeria zdjęć z wycieczki">
+            {tour.gallery.map((item, idx) => (
+              <button
+                type="button"
+                class="gallery-thumb"
+                data-lightbox-src={withBase(item.src)}
+                data-lightbox-alt={item.alt}
+                aria-label={`Zobacz zdjęcie ${idx + 1}: ${item.alt}`}
+              >
+                <img
+                  src={withBase(item.src)}
+                  alt={item.alt}
+                  width="480"
+                  height="320"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </button>
+            ))}
+          </div>
+        )
+      }
+    </div>
+  </section>
+
+  <!-- Main Two-Column Content + Sticky Booking Sidebar -->
+  <section class="section-tight">
+    <div class="container tour-layout">
+      <div class="tour-main">
+        <!-- Quick Facts Grid -->
+        <dl class="facts-bar">
+          <div>
+            <dt>Czas trwania</dt>
+            <dd>{tour.duration}</dd>
+          </div>
+          <div>
+            <dt>Trudność</dt>
+            <dd>{PL_DIFFICULTY_LABELS[tour.difficulty] || tour.difficulty}</dd>
+          </div>
+          <div>
+            <dt>Wielkość grupy</dt>
+            <dd>{tour.groupSize}</dd>
+          </div>
+          <div>
+            <dt>Minimalny wiek</dt>
+            <dd>{tour.minAge}</dd>
+          </div>
+          <div>
+            <dt>Języki</dt>
+            <dd>Angielski / Gruziński</dd>
+          </div>
+          <div>
+            <dt>Anulowanie</dt>
+            <dd>Bezpłatne 24h</dd>
+          </div>
+          {
+            tour.meals && (
+              <div>
+                <dt>Wyżywienie</dt>
+                <dd>{tour.meals}</dd>
+              </div>
+            )
+          }
+          {
+            tour.season && (
+              <div>
+                <dt>Sezon</dt>
+                <dd>{tour.season}</dd>
+              </div>
+            )
+          }
+        </dl>
+
+        {tour.hasRouteOptions && <JorunnersRouteTabs />}
+
+        {
+          tour.videos && tour.videos.length > 0 && (
+            <section class="detail-block tour-video-block" aria-labelledby="tour-video-heading">
+              <div class="video-head">
+                <h2 id="tour-video-heading">Zobacz zapowiedź szlaku</h2>
+                <a
+                  class="video-channel-link"
+                  href={SITE.youtubeUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Więcej na YouTube ↗
+                </a>
+              </div>
+
+              <div class="video-stack">
+                {tour.videos.map((v) => (
+                  <figure class="video-card">
+                    <div
+                      class="video-facade"
+                      data-youtube-id={v.youtubeId}
+                      data-video-title={v.title}
+                    >
+                      <button
+                        type="button"
+                        class="video-facade-trigger"
+                        aria-label={`Odtwórz wideo: ${v.title}`}
+                      >
+                        <img
+                          src={`https://i.ytimg.com/vi/${v.youtubeId}/maxresdefault.jpg`}
+                          alt={v.title}
+                          width="1280"
+                          height="720"
+                          loading="lazy"
+                          decoding="async"
+                        />
+                        <span class="video-facade-scrim" aria-hidden="true" />
+                        <span class="video-facade-overlay">
+                          <span class="video-play-btn" aria-hidden="true">
+                            <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor">
+                              <path d="M8 5.14v14l11-7-11-7Z" />
+                            </svg>
+                          </span>
+                          <span class="video-play-meta">
+                            <span class="video-play-label">Odtwórz wideo ze szlaku</span>
+                            {v.durationLabel && (
+                              <span class="video-duration-pill">{v.durationLabel}</span>
+                            )}
+                          </span>
+                        </span>
+                      </button>
+                      <noscript>
+                        <iframe
+                          src={`https://www.youtube-nocookie.com/embed/${v.youtubeId}?rel=0`}
+                          title={v.title}
+                          width="1280"
+                          height="720"
+                          loading="lazy"
+                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                          referrerpolicy="strict-origin-when-cross-origin"
+                          allowfullscreen
+                        />
+                      </noscript>
+                    </div>
+                    <figcaption class="video-caption">
+                      <span>{v.caption}</span>
+                      <a
+                        href={`https://www.youtube.com/watch?v=${v.youtubeId}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        Obejrzyj na YouTube ↗
+                      </a>
+                    </figcaption>
+                  </figure>
+                ))}
+              </div>
+            </section>
+          )
+        }
+
+        <!-- Highlights -->
+        <section class="detail-block">
+          <h2>Dlaczego podróżni wybierają tę trasę</h2>
+          <ul class="highlight-list">
+            {tour.highlights.map((h) => <li>{h}</li>)}
+          </ul>
+        </section>
+
+        <!-- Step-by-step Itinerary -->
+        <section class="detail-block">
+          <h2>Program krok po kroku</h2>
+          <ol class="itinerary-steps">
+            {
+              tour.itinerary.map((step) => (
+                <li>
+                  <div class="step-time">{step.timeOrDuration}</div>
+                  <div class="step-body">
+                    <h3>{step.title}</h3>
+                    <p>{step.detail}</p>
+                    {step.ticketNote && <span class="badge badge-sea">{step.ticketNote}</span>}
+                  </div>
+                </li>
+              ))
+            }
+          </ol>
+        </section>
+
+        <!-- Included / Excluded -->
+        <section class="detail-block">
+          <h2>Co jest wliczone, a co dodatkowo</h2>
+          <div class="inc-exc-grid">
+            <div class="inc-box">
+              <h3>Wliczone w cenę</h3>
+              <ul>
+                {tour.included.map((item) => <li>{item}</li>)}
+              </ul>
+            </div>
+            <div class="exc-box">
+              <h3>Nie wliczone</h3>
+              <ul>
+                {tour.excluded.map((item) => <li>{item}</li>)}
+              </ul>
+            </div>
+          </div>
+
+          {
+            tour.optionalExtras && tour.optionalExtras.length > 0 && (
+              <div class="optional-extras-box">
+                <div class="optional-extras-head">
+                  <h3>Opcjonalne dodatki (na życzenie)</h3>
+                  <span class="badge badge-sea">Tylko na życzenie gościa</span>
+                </div>
+                <p class="optional-extras-intro">
+                  Żadna z tych atrakcji nie jest obowiązkowa — jeśli chcesz dodać którąś podczas dnia w Mtirali, poinformuj przewodnika lub zaznacz ją w panelu rezerwacji.
+                </p>
+                <div class="optional-extras-grid">
+                  {tour.optionalExtras.map((extra) => (
+                    <div class="optional-extra-item">
+                      <div class="optional-extra-title">
+                        <strong>{extra.label}</strong>
+                        <span class="badge badge-forest">Opcjonalnie</span>
+                      </div>
+                      <p>{extra.detail}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )
+          }
+        </section>
+
+        <!-- Weather & Packing -->
+        <section class="detail-block weather-packing-grid">
+          <div class="info-callout">
+            <h3>Aktywny plan pogodowy</h3>
+            <p>{tour.weatherPlan}</p>
+            <p style="margin-bottom: 0; font-size: 0.9rem;">
+              <strong>Bezpieczeństwo przede wszystkim:</strong> Gdy gwałtowne burze czynią szlaki niebezpiecznymi, uczciwie odwołujemy wyjazd i zwracamy 100% wpłaty —{' '}
+              <a href={hasSafetyCancellationReview ? '#tour-reviews' : withBase('/pl/#reviews')}>
+                {hasSafetyCancellationReview ? 'przeczytaj opinie gości poniżej →' : 'zobacz zweryfikowane opinie →'}
+              </a>
+            </p>
+          </div>
+          <div class="info-callout">
+            <h3>Co warto zabrać</h3>
+            <ul>
+              {tour.packingList.map((item) => <li>{item}</li>)}
+            </ul>
+          </div>
+        </section>
+
+        <!-- Pickup Locations -->
+        {
+          tour.regionSlug !== 'kazbegi-svaneti' && tour.regionSlug !== 'bakuriani-borjomi' && (
+            <section class="detail-block">
+              <h2>Punkty zbiórki i powrotu w Batumi ({SITE.defaultStartTime})</h2>
+              <div class="mini-pickup-grid">
+                {PICKUP_POINTS.map((p) => {
+                  const plP = PL_PICKUP_POINTS[p.id];
+                  return (
+                    <div class="mini-pickup">
+                      <strong>{plP ? plP.name : p.name}</strong>
+                      <span>{plP ? plP.address : p.address}</span>
+                      <a href={p.mapsUrl} target="_blank" rel="noopener noreferrer">
+                        Pinezka na mapie ↗
+                      </a>
+                    </div>
+                  );
+                })}
+              </div>
+            </section>
+          )
+        }
+
+        {
+          tour.isGroupProgram && <GroupInquiryForm selectedSlug={tour.slug} />
+        }
+
+        <!-- Verified Tour Reviews -->
+        {
+          tourReviews.length > 0 && (
+            <ReviewsSection
+              sectionId="tour-reviews"
+              reviews={tourReviews}
+              variant="inline"
+              heading="Zweryfikowane opinie gości"
+              intro="Prawdziwe relacje podróżnych, którzy przeszli tę trasę lub skorzystali z naszej polityki zwrotów przy złej pogodzie."
+              showTourLink={false}
+              lang="pl"
+            />
+          )
+        }
+
+        <!-- Tour FAQs -->
+        {
+          tour.faqs.length > 0 && (
+            <section class="detail-block">
+              <h2>Pytania o wycieczkę</h2>
+              <div class="accordion">
+                {tour.faqs.map((f) => (
+                  <details>
+                    <summary>{f.question}</summary>
+                    <div class="accordion-panel">
+                      <p>{f.answer}</p>
+                    </div>
+                  </details>
+                ))}
+              </div>
+            </section>
+          )
+        }
+      </div>
+
+      <!-- Sticky Interactive Booking Sidebar -->
+      <aside class="tour-sidebar" aria-label="Kalkulator cen i rezerwacja">
+        <div class="booking-card" id="tour-booking-widget">
+          <span class="eyebrow" style="margin-bottom: 0.35rem;">{tour.pricingNote}</span>
+
+          {
+            tour.pricingTiers.length > 0 ? (
+              <>
+                <div class="sidebar-price-head">
+                  <strong id="sb-price-display" class="sidebar-price-main">
+                    €{tour.startingPriceEur}
+                  </strong>
+                  <span id="sb-price-caption" class="sidebar-price-sub">
+                    od / dorosłego (stawka grupowa)
+                  </span>
+                </div>
+
+                <div class="currency-pills" style="margin-bottom: 1rem;" role="group" aria-label="Waluta">
+                  <button type="button" class="sb-curr-btn active" data-currency="EUR" aria-pressed="true">EUR €</button>
+                  <button type="button" class="sb-curr-btn" data-currency="USD" aria-pressed="false">USD $</button>
+                  <button type="button" class="sb-curr-btn" data-currency="GEL" aria-pressed="false">GEL ₾</button>
+                </div>
+
+                <div class="form-grid">
+                  <div class="form-grid form-grid-2">
+                    <div class="field">
+                      <label for="sb-adults">Dorośli</label>
+                      <input id="sb-adults" type="number" min="1" max="16" value="2" />
+                    </div>
+                    <div class="field">
+                      <label for="sb-children">Dzieci (0–17)</label>
+                      <input id="sb-children" type="number" min="0" max="8" value="0" />
+                    </div>
+                  </div>
+
+                  <div class="field">
+                    <label for="sb-date">Preferowana data</label>
+                    <input id="sb-date" type="date" />
+                  </div>
+
+                  {tour.regionSlug !== 'kazbegi-svaneti' && (
+                    <div class="field">
+                      <label for="sb-pickup">Odbiór w Batumi</label>
+                      <select id="sb-pickup">
+                        {PICKUP_POINTS.map((p) => {
+                          const plP = PL_PICKUP_POINTS[p.id];
+                          return <option value={plP ? plP.name : p.name}>{plP ? plP.name : p.name}</option>;
+                        })}
+                        <option value="Własny hotel w centrum Batumi">Własny hotel w centrum Batumi</option>
+                      </select>
+                    </div>
+                  )}
+
+                  {tour.optionalExtras && tour.optionalExtras.length > 0 && (
+                    <fieldset class="opt-addons-fieldset">
+                      <legend>Opcjonalne dodatki (na życzenie)</legend>
+                      <div class="opt-addons-grid">
+                        {tour.optionalExtras.map((extra) => (
+                          <label class="opt-addon-pill">
+                            <input type="checkbox" class="sb-addon-check" value={extra.label} />
+                            <span>{extra.shortLabel}</span>
+                          </label>
+                        ))}
+                      </div>
+                    </fieldset>
+                  )}
+                </div>
+
+                <div class="sb-summary-box">
+                  <div>
+                    <span>Stawka za dorosłego</span>
+                    <strong id="sb-adult-rate">€{tour.pricingTiers[1]?.adultEur || tour.pricingTiers[0].adultEur}</strong>
+                  </div>
+                  <div>
+                    <span>Stawka za dziecko (75%)</span>
+                    <strong id="sb-child-rate">€{tour.pricingTiers[1]?.childEur || tour.pricingTiers[0].childEur}</strong>
+                  </div>
+                  <div class="sb-total-row">
+                    <span>Szacowana suma</span>
+                    <strong id="sb-total-rate">
+                      €{(tour.pricingTiers[1]?.adultEur || tour.pricingTiers[0].adultEur) * 2}
+                    </strong>
+                  </div>
+                </div>
+
+                <div class="tier-table-wrap">
+                  <p class="tier-table-title">Cennik grupowy (baza EUR)</p>
+                  <table class="tier-table">
+                    <thead>
+                      <tr>
+                        <th>Grupa</th>
+                        <th>Dorosły</th>
+                        <th>Dziecko</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {tour.pricingTiers.map((tier) => (
+                        <tr>
+                          <td>{tier.label}</td>
+                          <td>€{tier.adultEur}</td>
+                          <td>€{tier.childEur}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </>
+            ) : (
+              <div class="sb-summary-box" style="margin-top: 0.75rem;">
+                <p style="margin: 0; font-size: 0.94rem;">
+                  {tour.isGroupProgram
+                    ? `${tour.duration} · ${tour.meals || 'Pełne wyżywienie'} · Indywidualna logistyka z Tbilisi. Użyj formularza poniżej, aby uzyskać wycenę grupową.`
+                    : 'Letnie wyprawy na Kazbek (czerwiec–wrzesień) wyceniane są indywidualnie na podstawie terminu, proporcji przewodnik-alpinista, noclegów w Betlemi Hut i sprzętu.'}
+                </p>
+              </div>
+            )
+          }
+
+          <div class="sb-cta-stack">
+            {
+              tour.isGroupProgram && (
+                <a class="btn btn-forest" href="#group-inquiry">
+                  Otwórz formularz grupowy ↓
+                </a>
+              )
+            }
+            <a
+              id="sb-wa-book"
+              class="btn btn-coral"
+              href={`${SITE.whatsappUrl}?text=${encodeURIComponent(`Dzień dobry Minimalism Tours Georgia! Interesuje mnie wycieczka „${tour.title}”.`)}`}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Rezerwuj / Zapytaj na WhatsApp
+            </a>
+
+            {
+              tour.gygUrl && (
+                <a
+                  class="btn btn-sea"
+                  href={tour.gygUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Rezerwuj od razu na GetYourGuide ↗
+                </a>
+              )
+            }
+
+            {
+              tour.tripadvisorUrl && (
+                <a
+                  class="btn btn-outline"
+                  href={tour.tripadvisorUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Zobacz opinie na Tripadvisor ↗
+                </a>
+              )
+            }
+
+            <a
+              id="sb-tg-book"
+              class="btn btn-outline"
+              href={`${SITE.telegramUrl}?text=${encodeURIComponent(`Dzień dobry Minimalism Tours Georgia! Interesuje mnie wycieczka „${tour.title}”.`)}`}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Napisz na Telegram
+            </a>
+          </div>
+
+          <p class="sb-trust-foot">
+            ✓ {PL_SITE.cancellationPolicy} · Bezpośrednia rezerwacja w {SITE.brandName}
+            <br />
+            <a href={withBase('/pl/guest-registration/')}>Rejestracja gościa i formularz medyczny przed wyjazdem →</a>
+          </p>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <!-- Related Tours -->
+  <section class="section section-surface">
+    <div class="container">
+      <div class="section-header">
+        <div>
+          <span class="eyebrow">Odkrywaj dalej</span>
+          <h2>Więcej przygód z Batumi</h2>
+        </div>
+        <a class="btn btn-outline btn-sm" href={withBase('/pl/tours/')}>Wszystkie wycieczki</a>
+      </div>
+      <div class="tours-grid">
+        {relatedTours.map((rt) => <TourCard tour={rt} lang="pl" />)}
+      </div>
+    </div>
+  </section>
+
+  <!-- Photo Gallery Lightbox Modal (<dialog closedby="any">) -->
+  <dialog id="gallery-lightbox" class="lightbox-dialog" closedby="any" aria-labelledby="lightbox-caption">
+    <div class="dialog-head">
+      <h2 id="lightbox-caption">Zdjęcie z wycieczki</h2>
+      <button
+        type="button"
+        class="dialog-close"
+        command="close"
+        commandfor="gallery-lightbox"
+        aria-label="Zamknij podgląd zdjęcia"
+      >
+        ✕
+      </button>
+    </div>
+    <div class="dialog-body">
+      <img
+        id="lightbox-img"
+        src={withBase(tour.heroImage)}
+        alt={tour.heroAlt}
+        fetchpriority="low"
+      />
+    </div>
+  </dialog>
+
+  <script
+    id="tour-detail-payload"
+    type="application/json"
+    set:html={JSON.stringify({
+      title: tour.title,
+      shortTitle: tour.shortTitle,
+      pricingTiers: tour.pricingTiers,
+      currencyRates: SITE.currencyRates,
+      whatsappUrl: SITE.whatsappUrl,
+      telegramUrl: SITE.telegramUrl,
+    })}
+  />
+
+  <script>
+    const lightbox = document.getElementById('gallery-lightbox') as HTMLDialogElement | null;
+    const lightboxImg = document.getElementById('lightbox-img') as HTMLImageElement | null;
+    const lightboxCaption = document.getElementById('lightbox-caption');
+
+    document.querySelectorAll<HTMLButtonElement>('.gallery-thumb').forEach((thumb) => {
+      thumb.addEventListener('click', () => {
+        const src = thumb.dataset.lightboxSrc;
+        const alt = thumb.dataset.lightboxAlt || 'Zdjęcie z wycieczki';
+        if (lightbox && lightboxImg && src) {
+          lightboxImg.src = src;
+          lightboxImg.alt = alt;
+          if (lightboxCaption) lightboxCaption.textContent = alt;
+          lightbox.showModal();
+        }
+      });
+    });
+
+    document.querySelectorAll<HTMLButtonElement>('.video-facade-trigger').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const facade = btn.closest<HTMLElement>('.video-facade');
+        const youtubeId = facade?.dataset.youtubeId;
+        if (!facade || !youtubeId) return;
+        const videoTitle = facade.dataset.videoTitle || 'Zapowiedź wideo wycieczki';
+        const iframe = document.createElement('iframe');
+        iframe.src = `https://www.youtube-nocookie.com/embed/${encodeURIComponent(youtubeId)}?autoplay=1&rel=0`;
+        iframe.title = videoTitle;
+        iframe.width = '1280';
+        iframe.height = '720';
+        iframe.allow =
+          'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
+        iframe.referrerPolicy = 'strict-origin-when-cross-origin';
+        iframe.allowFullscreen = true;
+        facade.replaceChildren(iframe);
+      });
+    });
+
+    const payloadNode = document.getElementById('tour-detail-payload');
+    if (payloadNode?.textContent) {
+      const data = JSON.parse(payloadNode.textContent);
+      const adultsInput = document.getElementById('sb-adults') as HTMLInputElement | null;
+      const childInput = document.getElementById('sb-children') as HTMLInputElement | null;
+      const dateInput = document.getElementById('sb-date') as HTMLInputElement | null;
+      const pickupInput = document.getElementById('sb-pickup') as HTMLSelectElement | null;
+
+      const priceDisplay = document.getElementById('sb-price-display');
+      const adultRateEl = document.getElementById('sb-adult-rate');
+      const childRateEl = document.getElementById('sb-child-rate');
+      const totalRateEl = document.getElementById('sb-total-rate');
+      const waBtn = document.getElementById('sb-wa-book') as HTMLAnchorElement | null;
+      const tgBtn = document.getElementById('sb-tg-book') as HTMLAnchorElement | null;
+      const currBtns = document.querySelectorAll<HTMLButtonElement>('.sb-curr-btn');
+      const addonChecks = document.querySelectorAll<HTMLInputElement>('.sb-addon-check');
+
+      let currency: 'EUR' | 'USD' | 'GEL' = 'EUR';
+
+      const fmt = (eur: number) => {
+        const cfg = data.currencyRates[currency] || data.currencyRates.EUR;
+        return `${cfg.symbol}${Math.round(eur * cfg.rate)}`;
+      };
+
+      const updateSidebar = () => {
+        if (!data.pricingTiers.length) return;
+        const maxPax = data.pricingTiers[data.pricingTiers.length - 1]?.maxPax || 16;
+        const adults = Math.max(1, Math.min(maxPax, Number(adultsInput?.value || 2)));
+        const children = Math.max(0, Math.min(8, Number(childInput?.value || 0)));
+        const totalPax = Math.min(maxPax, adults + children);
+
+        const tier =
+          data.pricingTiers.find((t: any) => totalPax >= t.minPax && totalPax <= t.maxPax) ||
+          data.pricingTiers[data.pricingTiers.length - 1];
+
+        const totalEur = adults * tier.adultEur + children * tier.childEur;
+        const minAdultEur = data.pricingTiers[data.pricingTiers.length - 1].adultEur;
+
+        if (priceDisplay) priceDisplay.textContent = fmt(minAdultEur);
+        if (adultRateEl) adultRateEl.textContent = fmt(tier.adultEur);
+        if (childRateEl) childRateEl.textContent = fmt(tier.childEur);
+        if (totalRateEl) totalRateEl.textContent = fmt(totalEur);
+
+        const dateStr = dateInput?.value || 'Elastyczna data';
+        const pickupStr = pickupInput?.value || 'Do ustalenia';
+        const selectedAddons = Array.from(addonChecks)
+          .filter((cb) => cb.checked)
+          .map((cb) => cb.value);
+
+        const msg = [
+          `Dzień dobry Minimalism Tours Georgia! (PL)`,
+          `Wycieczka: ${data.title}`,
+          `Goście: ${adults} dorosłych, ${children} dzieci`,
+          `Preferowana data: ${dateStr}`,
+          `Odbiór: ${pickupStr}`,
+          selectedAddons.length ? `Opcjonalne dodatki: ${selectedAddons.join(', ')}` : '',
+          `Szacowana suma grupy: €${totalEur} (${fmt(totalEur)})`,
+        ]
+          .filter(Boolean)
+          .join('\n');
+
+        if (waBtn) waBtn.href = `${data.whatsappUrl}?text=${encodeURIComponent(msg)}`;
+        if (tgBtn) tgBtn.href = `${data.telegramUrl}?text=${encodeURIComponent(msg)}`;
+      };
+
+      currBtns.forEach((btn) => {
+        btn.addEventListener('click', () => {
+          currency = (btn.dataset.currency as 'EUR' | 'USD' | 'GEL') || 'EUR';
+          currBtns.forEach((b) => {
+            const active = b === btn;
+            b.classList.toggle('active', active);
+            b.setAttribute('aria-pressed', String(active));
+          });
+          updateSidebar();
+        });
+      });
+
+      [adultsInput, childInput, dateInput, pickupInput, ...Array.from(addonChecks)].forEach((el) => {
+        el?.addEventListener('input', updateSidebar);
+        el?.addEventListener('change', updateSidebar);
+      });
+
+      updateSidebar();
+    }
+  </script>
+</BaseLayout>
+
+<style>
+  .tour-hero {
+    background-color: var(--bg-surface);
+    border-bottom: 1px solid var(--border-subtle);
+    padding-block: 2.25rem 3rem;
+  }
+
+  .tour-hero-top-nav {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+  }
+
+  .breadcrumbs {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.45rem;
+    font-size: 0.85rem;
+    color: var(--ink-600);
+  }
+
+  .breadcrumbs a {
+    color: var(--ink-700);
+    text-decoration: none;
+    font-weight: 600;
+  }
+
+  .tour-hero-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 0.85rem;
+  }
+
+  .tour-hero-lead {
+    max-width: 52rem;
+    font-size: 1.08rem;
+    color: var(--ink-700);
+    margin-bottom: 1.5rem;
+  }
+
+  .tour-hero-media {
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    border: 1px solid var(--border-subtle);
+    box-shadow: var(--shadow-md);
+  }
+
+  .tour-hero-media img {
+    width: 100%;
+    max-height: 31rem;
+    object-fit: cover;
+  }
+
+  .gallery-strip {
+    display: flex;
+    gap: 0.75rem;
+    overflow-x: auto;
+    padding-top: 0.9rem;
+  }
+
+  .gallery-thumb {
+    flex: 0 0 auto;
+    width: 9.5rem;
+    height: 6.2rem;
+    padding: 0;
+    border: 2px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    cursor: pointer;
+    background: var(--bg-subtle);
+    transition: border-color 0.16s ease, transform 0.16s ease;
+  }
+
+  .gallery-thumb:hover {
+    border-color: var(--coral-600);
+    transform: translateY(-2px);
+  }
+
+  .gallery-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .tour-layout {
+    display: grid;
+    gap: 2.5rem;
+    align-items: start;
+  }
+
+  @media (min-width: 60rem) {
+    .tour-layout {
+      grid-template-columns: 1.35fr 0.88fr;
+    }
+  }
+
+  .facts-bar {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(9.5rem, 1fr));
+    gap: 1rem;
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    padding: 1.25rem;
+    margin: 0 0 2.25rem;
+  }
+
+  .facts-bar dt {
+    font-size: 0.74rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--ink-600);
+  }
+
+  .facts-bar dd {
+    margin: 0.15rem 0 0;
+    font-weight: 700;
+    color: var(--ink-900);
+  }
+
+  .detail-block {
+    margin-bottom: 2.5rem;
+  }
+
+  .detail-block h2 {
+    font-size: 1.6rem;
+    margin-bottom: 1rem;
+  }
+
+  .video-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+  }
+
+  .video-head h2 {
+    margin-bottom: 0;
+  }
+
+  .video-channel-link {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--forest-800);
+    text-decoration: none;
+  }
+
+  .video-channel-link:hover {
+    color: var(--coral-600);
+    text-decoration: underline;
+  }
+
+  .video-stack {
+    display: grid;
+    gap: 1.25rem;
+  }
+
+  .video-card {
+    margin: 0;
+  }
+
+  .video-facade {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    border: 1px solid var(--border-subtle);
+    box-shadow: var(--shadow-md);
+    background-color: #101915;
+  }
+
+  .video-facade iframe {
+    width: 100%;
+    height: 100%;
+    border: 0;
+    display: block;
+  }
+
+  .video-facade-trigger {
+    position: relative;
+    display: block;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+    text-align: left;
+  }
+
+  .video-facade-trigger img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.35s ease;
+  }
+
+  .video-facade-trigger:hover img {
+    transform: scale(1.03);
+  }
+
+  .video-facade-scrim {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to top,
+      rgba(16, 25, 21, 0.72) 0%,
+      rgba(16, 25, 21, 0.22) 55%,
+      rgba(16, 25, 21, 0.12) 100%
+    );
+  }
+
+  .video-facade-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    padding: 1rem;
+  }
+
+  .video-play-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 4rem;
+    height: 4rem;
+    border-radius: 50%;
+    background-color: var(--coral-600);
+    color: #ffffff;
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.38);
+    transition: background-color 0.18s ease, transform 0.18s ease;
+  }
+
+  .video-facade-trigger:hover .video-play-btn {
+    background-color: var(--forest-800);
+    transform: scale(1.07);
+  }
+
+  .video-play-meta {
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+  }
+
+  .video-play-label {
+    font-size: 0.92rem;
+    font-weight: 700;
+    color: #ffffff;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.55);
+  }
+
+  .video-duration-pill {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    padding: 0.2rem 0.6rem;
+    border-radius: var(--radius-pill);
+    background-color: rgba(255, 255, 255, 0.18);
+    color: #ffffff;
+    backdrop-filter: blur(6px);
+  }
+
+  .video-caption {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem 1rem;
+    margin-top: 0.65rem;
+    font-size: 0.88rem;
+    color: var(--ink-600);
+  }
+
+  .video-caption a {
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  .highlight-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 0.65rem;
+  }
+
+  .highlight-list li {
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    padding: 0.85rem 1.05rem;
+    font-weight: 500;
+    color: var(--ink-900);
+  }
+
+  .highlight-list li::before {
+    content: '✦';
+    color: var(--coral-600);
+    margin-inline-end: 0.6rem;
+  }
+
+  .itinerary-steps {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 1rem;
+  }
+
+  .itinerary-steps li {
+    display: grid;
+    gap: 0.5rem 1.25rem;
+    padding: 1.15rem;
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-left: 4px solid var(--forest-700);
+    border-radius: var(--radius-md);
+  }
+
+  @media (min-width: 38rem) {
+    .itinerary-steps li {
+      grid-template-columns: 7.5rem 1fr;
+    }
+  }
+
+  .step-time {
+    font-size: 0.84rem;
+    font-weight: 700;
+    color: var(--forest-800);
+  }
+
+  .step-body h3 {
+    font-size: 1.12rem;
+    margin-bottom: 0.35rem;
+  }
+
+  .step-body p {
+    margin-bottom: 0.5rem;
+    font-size: 0.94rem;
+  }
+
+  .inc-exc-grid,
+  .weather-packing-grid {
+    display: grid;
+    gap: 1.15rem;
+    grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+  }
+
+  .inc-box,
+  .exc-box,
+  .info-callout {
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    padding: 1.25rem;
+  }
+
+  .inc-box {
+    border-top: 3px solid var(--forest-700);
+  }
+
+  .exc-box {
+    border-top: 3px solid var(--coral-500);
+  }
+
+  .inc-box ul,
+  .exc-box ul,
+  .info-callout ul {
+    margin: 0.5rem 0 0;
+    padding-inline-start: 1.2rem;
+    display: grid;
+    gap: 0.4rem;
+    font-size: 0.93rem;
+    color: var(--ink-700);
+  }
+
+  .mini-pickup-grid {
+    display: grid;
+    gap: 0.85rem;
+    grid-template-columns: repeat(auto-fit, minmax(12.5rem, 1fr));
+  }
+
+  .mini-pickup {
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    padding: 0.95rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    font-size: 0.86rem;
+  }
+
+  .mini-pickup span {
+    color: var(--ink-600);
+  }
+
+  /* Sticky Sidebar */
+  .tour-sidebar {
+    position: relative;
+  }
+
+  @media (min-width: 60rem) {
+    .tour-sidebar {
+      position: sticky;
+      top: 5.75rem;
+    }
+  }
+
+  .booking-card {
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-xl);
+    padding: 1.5rem;
+    box-shadow: var(--shadow-md);
+  }
+
+  .sidebar-price-head {
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+    margin-bottom: 0.85rem;
+  }
+
+  .sidebar-price-main {
+    font-family: var(--font-display);
+    font-size: 2.25rem;
+    color: var(--forest-800);
+  }
+
+  .sidebar-price-sub {
+    font-size: 0.88rem;
+    color: var(--ink-600);
+  }
+
+  .currency-pills {
+    display: inline-flex;
+    border: 1.5px solid var(--border-strong);
+    border-radius: var(--radius-pill);
+    padding: 0.18rem;
+    background: var(--bg-page);
+  }
+
+  .sb-curr-btn {
+    border: none;
+    background: transparent;
+    padding: 0.3rem 0.7rem;
+    border-radius: var(--radius-pill);
+    font-family: var(--font-sans);
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--ink-700);
+    cursor: pointer;
+  }
+
+  .sb-curr-btn.active {
+    background-color: var(--forest-800);
+    color: #ffffff;
+  }
+
+  .sb-summary-box {
+    margin-top: 1.15rem;
+    background-color: var(--forest-100);
+    border-radius: var(--radius-md);
+    padding: 0.95rem 1.05rem;
+    display: grid;
+    gap: 0.45rem;
+  }
+
+  .sb-summary-box > div {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.9rem;
+    color: var(--ink-700);
+  }
+
+  .sb-total-row {
+    padding-top: 0.45rem;
+    border-top: 1px solid rgba(27, 67, 50, 0.18);
+    font-size: 1.05rem !important;
+    color: var(--forest-900) !important;
+  }
+
+  .tier-table-wrap {
+    margin-top: 1.1rem;
+  }
+
+  .tier-table-title {
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--ink-600);
+    margin-bottom: 0.35rem;
+  }
+
+  .tier-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.84rem;
+  }
+
+  .tier-table th,
+  .tier-table td {
+    text-align: left;
+    padding: 0.35rem 0.45rem;
+    border-bottom: 1px solid var(--border-subtle);
+  }
+
+  .tier-table th {
+    color: var(--ink-600);
+    font-weight: 700;
+  }
+
+  .sb-cta-stack {
+    display: grid;
+    gap: 0.6rem;
+    margin-top: 1.25rem;
+  }
+
+  .sb-trust-foot {
+    margin: 0.9rem 0 0;
+    font-size: 0.8rem;
+    color: var(--ink-600);
+    text-align: center;
+    line-height: 1.55;
+  }
+
+  .sb-trust-foot a {
+    display: inline-block;
+    margin-top: 0.35rem;
+    font-weight: 700;
+  }
+
+  .optional-extras-box {
+    margin-top: 1.15rem;
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-top: 3px solid var(--sea-600);
+    border-radius: var(--radius-lg);
+    padding: 1.25rem;
+  }
+
+  .optional-extras-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    margin-bottom: 0.4rem;
+  }
+
+  .optional-extras-head h3 {
+    margin: 0;
+  }
+
+  .optional-extras-intro {
+    font-size: 0.92rem;
+    color: var(--ink-600);
+    margin-bottom: 0.9rem;
+  }
+
+  .optional-extras-grid {
+    display: grid;
+    gap: 0.75rem;
+    grid-template-columns: repeat(auto-fit, minmax(13.5rem, 1fr));
+  }
+
+  .optional-extra-item {
+    background-color: var(--bg-page);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    padding: 0.85rem 0.95rem;
+  }
+
+  .optional-extra-title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    margin-bottom: 0.3rem;
+  }
+
+  .optional-extra-title strong {
+    font-size: 0.95rem;
+    color: var(--ink-900);
+  }
+
+  .optional-extra-item p {
+    margin: 0;
+    font-size: 0.86rem;
+    color: var(--ink-600);
+  }
+
+  .opt-addons-fieldset {
+    border: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .opt-addons-fieldset legend {
+    font-weight: 600;
+    font-size: 0.92rem;
+    color: var(--ink-900);
+    margin-bottom: 0.4rem;
+    padding: 0;
+  }
+
+  .opt-addons-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+  }
+
+  .opt-addon-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    min-height: 2.35rem;
+    padding: 0.35rem 0.72rem;
+    border-radius: var(--radius-pill);
+    border: 1.5px solid var(--border-strong);
+    background-color: var(--bg-page);
+    color: var(--ink-900);
+    font-size: 0.84rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: border-color 0.16s ease, background-color 0.16s ease, color 0.16s ease;
+  }
+
+  .opt-addon-pill input {
+    width: auto;
+    margin: 0;
+    padding: 0;
+    accent-color: var(--forest-800);
+  }
+
+  .opt-addon-pill:has(> :checked) {
+    border-color: var(--forest-800);
+    background-color: var(--forest-100);
+    color: var(--forest-900);
+  }
+</style>

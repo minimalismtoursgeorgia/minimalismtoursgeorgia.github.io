@@ -2,6 +2,8 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import TourCard from '../../components/TourCard.astro';
 import ReviewsSection from '../../components/ReviewsSection.astro';
+import JorunnersRouteTabs from '../../components/JorunnersRouteTabs.astro';
+import GroupInquiryForm from '../../components/GroupInquiryForm.astro';
 import { SITE, PICKUP_POINTS } from '../../data/site';
 import { TOURS, type Tour } from '../../data/tours';
 import { getReviewsByTourSlug } from '../../data/reviews';
@@ -90,6 +92,8 @@ const videoJsonLd = (tour.videos || []).map((v) => ({
   title={`${tour.title} | ${SITE.brandName}`}
   description={tour.seoDescription}
   canonicalPath={`/tours/${tour.slug}/`}
+  alternateEnPath={`/tours/${tour.slug}/`}
+  alternatePlPath={`/pl/tours/${tour.slug}/`}
   ogImage={tour.heroImage}
   keywords={tour.keywords}
   jsonLd={[tourJsonLd, breadcrumbJsonLd, ...faqJsonLd, ...videoJsonLd]}
@@ -97,13 +101,16 @@ const videoJsonLd = (tour.videos || []).map((v) => ({
   <!-- Hero Media Header -->
   <section class="tour-hero">
     <div class="container">
-      <nav class="breadcrumbs" aria-label="Breadcrumb">
-        <a href={withBase('/')}>Home</a>
-        <span aria-hidden="true">/</span>
-        <a href={withBase('/tours/')}>Tours</a>
-        <span aria-hidden="true">/</span>
-        <span aria-current="page">{tour.shortTitle}</span>
-      </nav>
+      <div class="tour-hero-top-nav">
+        <nav class="breadcrumbs" aria-label="Breadcrumb">
+          <a href={withBase('/')}>Home</a>
+          <span aria-hidden="true">/</span>
+          <a href={withBase('/tours/')}>Tours</a>
+          <span aria-hidden="true">/</span>
+          <span aria-current="page">{tour.shortTitle}</span>
+        </nav>
+        <a class="btn btn-outline btn-sm" href={withBase('/tours/')}>← Back to All Tours</a>
+      </div>
 
       <div class="tour-hero-badges">
         <span class="badge badge-forest">{tour.statusLabel}</span>
@@ -182,7 +189,25 @@ const videoJsonLd = (tour.videos || []).map((v) => ({
             <dt>Cancellation</dt>
             <dd>24h Free Cancel</dd>
           </div>
+          {
+            tour.meals && (
+              <div>
+                <dt>Meals</dt>
+                <dd>{tour.meals}</dd>
+              </div>
+            )
+          }
+          {
+            tour.season && (
+              <div>
+                <dt>Season</dt>
+                <dd>{tour.season}</dd>
+              </div>
+            )
+          }
         </dl>
+
+        {tour.hasRouteOptions && <JorunnersRouteTabs />}
 
         {
           tour.videos && tour.videos.length > 0 && (
@@ -358,7 +383,7 @@ const videoJsonLd = (tour.videos || []).map((v) => ({
 
         <!-- Pickup Locations -->
         {
-          tour.regionSlug !== 'kazbegi-svaneti' && (
+          tour.regionSlug !== 'kazbegi-svaneti' && tour.regionSlug !== 'bakuriani-borjomi' && (
             <section class="detail-block">
               <h2>Batumi Pickup &amp; Return Locations ({SITE.defaultStartTime})</h2>
               <div class="mini-pickup-grid">
@@ -374,6 +399,10 @@ const videoJsonLd = (tour.videos || []).map((v) => ({
               </div>
             </section>
           )
+        }
+
+        {
+          tour.isGroupProgram && <GroupInquiryForm selectedSlug={tour.slug} />
         }
 
         <!-- Verified Tour Reviews -->
@@ -519,13 +548,22 @@ const videoJsonLd = (tour.videos || []).map((v) => ({
             ) : (
               <div class="sb-summary-box" style="margin-top: 0.75rem;">
                 <p style="margin: 0; font-size: 0.94rem;">
-                  Summer Mount Kazbek expeditions (June–September) are quoted individually based on dates, guide-to-climber ratio, Betlemi Hut beds, and gear rentals.
+                  {tour.isGroupProgram
+                    ? `${tour.duration} · ${tour.meals || 'Full Board'} · Tailored group logistics from Tbilisi. Use the inquiry form below for a custom group quote.`
+                    : 'Summer Mount Kazbek expeditions (June–September) are quoted individually based on dates, guide-to-climber ratio, Betlemi Hut beds, and gear rentals.'}
                 </p>
               </div>
             )
           }
 
           <div class="sb-cta-stack">
+            {
+              tour.isGroupProgram && (
+                <a class="btn btn-forest" href="#group-inquiry">
+                  Open Group Inquiry Form ↓
+                </a>
+              )
+            }
             <a
               id="sb-wa-book"
               class="btn btn-coral"
@@ -770,6 +808,15 @@ const videoJsonLd = (tour.videos || []).map((v) => ({
     padding-block: 2.25rem 3rem;
   }
 
+  .tour-hero-top-nav {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+  }
+
   .breadcrumbs {
     display: flex;
     flex-wrap: wrap;
@@ -777,7 +824,6 @@ const videoJsonLd = (tour.videos || []).map((v) => ({
     gap: 0.45rem;
     font-size: 0.85rem;
     color: var(--ink-600);
-    margin-bottom: 1rem;
   }
 
   .breadcrumbs a {

@@ -60,6 +60,7 @@ export const SITE = {
   country: 'Georgia',
   phoneDisplay: '+995 592 04 30 80',
   phoneRaw: '+995592043080',
+  email: 'minimalismtoursgeorgia@gmail.com',
   whatsappNumber: '995592043080',
   whatsappUrl: 'https://wa.me/995592043080',
   telegramUrl: 'https://t.me/MinimalismToursGeorgia',
