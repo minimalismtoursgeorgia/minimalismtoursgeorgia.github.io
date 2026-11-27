@@ -18,6 +18,12 @@ import {
   PL_BATUMI_FAQS,
   PL_BATUMI_NEWS_ITEMS,
 } from '../data/batumi-news-pl';
+import {
+  UK_BATUMI_CALENDAR,
+  UK_BATUMI_FACTS,
+  UK_BATUMI_FAQS,
+  UK_BATUMI_NEWS_ITEMS,
+} from '../data/batumi-news-uk';
 import { withBase } from '../lib/urls';
 import { localizePath, type Lang } from '../lib/i18n';
 
@@ -28,12 +34,13 @@ export interface Props {
 const { lang = 'en' } = Astro.props;
 const isKa = lang === 'ka';
 const isPl = lang === 'pl';
+const isUk = lang === 'uk';
 const homePath = withBase(localizePath('/', lang));
-const l = (field: { en: string; ka: string; pl?: string }) => field[lang] || field.en;
-const la = (field: { en: string[]; ka: string[]; pl?: string[] }) => field[lang] || field.en;
+const l = (field: { en: string; ka: string; pl?: string; uk?: string }) => field[lang] || field.en;
+const la = (field: { en: string[]; ka: string[]; pl?: string[]; uk?: string[] }) => field[lang] || field.en;
 
 const categoryFilters: { id: 'all' | BatumiNewsCategory; label: string; count: number }[] = [
-  { id: 'all', label: isKa ? 'ყველა' : isPl ? 'Wszystkie' : 'All Updates', count: BATUMI_NEWS_ITEMS.length },
+  { id: 'all', label: isKa ? 'ყველა' : isPl ? 'Wszystkie' : isUk ? 'Усі новини' : 'All Updates', count: BATUMI_NEWS_ITEMS.length },
   ...(['events', 'projects', 'travel-rules', 'seasonal'] as BatumiNewsCategory[]).map((cat) => ({
     id: cat,
     label: l(BATUMI_CATEGORY_LABELS[cat]),
@@ -42,7 +49,7 @@ const categoryFilters: { id: 'all' | BatumiNewsCategory; label: string; count: n
 ];
 
 const statusOptions: { id: 'all' | BatumiNewsStatus; label: string }[] = [
-  { id: 'all', label: isKa ? 'ყველა სტატუსი' : isPl ? 'Dowolny termin' : 'Any Timeline' },
+  { id: 'all', label: isKa ? 'ყველა სტატუსი' : isPl ? 'Dowolny termin' : isUk ? 'Будь-який термін' : 'Any Timeline' },
   ...(['happening-soon', 'active-2026', 'planned-2027', 'annual-highlight'] as BatumiNewsStatus[]).map((st) => ({
     id: st,
     label: l(BATUMI_STATUS_LABELS[st]),
@@ -154,6 +161,59 @@ const copy = isKa
       expandAll: 'Rozwiń wszystko',
       collapseAll: 'Zwiń wszystko',
     }
+  : isUk
+  ? {
+      breadcrumbHome: 'Головна',
+      breadcrumbCurrent: 'Новини та події Батумі',
+      eyebrow: 'Повний локальний гід · 2026–2027',
+      h1: 'Новини Батумі, заплановані події та правила в’їзду',
+      heroDesc:
+        'Усе, що відбувається в Батумі та Аджарії, в одному місці: розклад Новорічного містечка, фестивалі, прибережні проєкти, обов’язкове страхування 2026, відкриття курорту Годердзі та ціни на квитки.',
+      verifiedLabel: 'Останнє оновлення:',
+      verifiedDate: BATUMI_NEWS_META.lastVerifiedUk,
+      jumpUpdates: 'Актуальні та заплановані',
+      jumpCalendar: 'Календар на 12 місяців',
+      jumpResources: 'Квитки та підтримка',
+      jumpFaq: 'Часті запитання',
+      snapshotHeading: 'Головні факти 2026–2027 стисло',
+      searchLandmarkLabel: 'Пошук і фільтрація новин та подій Батумі',
+      searchLabel: 'Пошук за ключовим словом',
+      searchPlaceholder: 'Площа Європи, Годердзі, страхування, джаз, Ботанічний...',
+      statusLabel: 'Період / Статус',
+      showingPrefix: 'Показано',
+      showingOf: 'із',
+      clearFilters: 'Скинути фільтри',
+      emptyTitle: 'Відповідних новин не знайдено',
+      emptyDesc:
+        'Спробуйте інше ключове слово або скиньте фільтри — чи напишіть нашому офісу в Батумі у WhatsApp.',
+      emptyReset: 'Показати всі',
+      emptyAsk: 'Запитати гіда у WhatsApp',
+      venueLabel: 'Локація',
+      mapsLinkLabel: 'Мапа ↗',
+      admissionLabel: 'Вхід / Вартість',
+      detailsSummary: 'Повний опис, дати та порада гіда',
+      guideTipLabel: 'Порада місцевого гіда',
+      askAboutTopic: 'Запитати у WhatsApp ↗',
+      relatedTourPrefix: 'Поєднати з туром:',
+      calendarEyebrow: 'Із січня по грудень',
+      calendarHeading: 'Цілорічний календар подій Батумі та Аджарії',
+      calendarIntro:
+        'Незалежно від місяця вашої поїздки до Батумі, перегляньте головні фестивалі, гірські сезони та найкращі тури.',
+      pairLabel: 'Рекомендований тур:',
+      resourcesEyebrow: 'Офіційні квитки та підтримка на місці',
+      resourcesHeading: 'Де купувати квитки та як планувати день у Батумі',
+      resourcesIntro:
+        'Економте час: дізнайтеся, де продаються офіційні квитки, та звертайтеся до нашої команди в Батумі за актуальною інформацією.',
+      conciergeTitle: 'Minimalism Tours Georgia — Прямий консьєрж у Батумі',
+      conciergeDesc:
+        'Потрібно перевірити, чи працює канатна дорога Арго у вітряну погоду, дізнатися час концертів на Площі Європи або замовити 4x4 у Годердзі чи Мтіралу? Пишіть нам напряму.',
+      conciergeWa: 'Написати у WhatsApp',
+      conciergeTg: 'Написати у Telegram',
+      faqEyebrow: 'Швидкі відповіді',
+      faqHeading: 'FAQ: Події Батумі та правила для туристів',
+      expandAll: 'Розгорнути все',
+      collapseAll: 'Згорнути все',
+    }
   : {
       breadcrumbHome: 'Home',
       breadcrumbCurrent: 'Batumi News & Events',
@@ -249,6 +309,27 @@ const ticketingPlatforms = isKa
         url: 'https://mta.ski',
       },
     ]
+  : isUk
+  ? [
+      {
+        name: 'TKT.ge та Biletebi.ge',
+        role: 'Концерти, STAR Circus, Театр та новорічні події',
+        detail: 'Головні офіційні онлайн-каси Грузії: Драматичний театр Батумі, Музичний центр, STAR Circus Georgia, Teatro та стендап.',
+        url: 'https://tkt.ge',
+      },
+      {
+        name: 'GoBatumi.com',
+        role: 'Офіційний портал Департаменту туризму Аджарії',
+        detail: 'Офіційні міські анонси свят Батумоба, Літнього фестивалю, Гандагани та регіональних фольклорних свят.',
+        url: 'https://gobatumi.com',
+      },
+      {
+        name: 'MTA.ski',
+        role: 'Актуальний статус витягів і трас у Годердзі',
+        detail: 'Щоденна інформація про роботу гондол, сніговий покрив та скі-паси на сезон 2026–2027.',
+        url: 'https://mta.ski',
+      },
+    ]
   : [
       {
         name: 'TKT.ge & Biletebi.ge',
@@ -282,6 +363,18 @@ const factsList = isPl
           }
         : f;
     })
+  : isUk
+  ? BATUMI_ESSENTIAL_FACTS.map((f) => {
+      const ov = UK_BATUMI_FACTS[f.id];
+      return ov
+        ? {
+            ...f,
+            kicker: { ...f.kicker, uk: ov.kicker },
+            headline: { ...f.headline, uk: ov.headline },
+            detail: { ...f.detail, uk: ov.detail },
+          }
+        : f;
+    })
   : BATUMI_ESSENTIAL_FACTS;
 
 const newsList = isPl
@@ -302,6 +395,24 @@ const newsList = isPl
           }
         : item;
     })
+  : isUk
+  ? BATUMI_NEWS_ITEMS.map((item) => {
+      const ov = UK_BATUMI_NEWS_ITEMS[item.slug];
+      return ov
+        ? {
+            ...item,
+            dateRange: { ...item.dateRange, uk: ov.dateRange },
+            title: { ...item.title, uk: ov.title },
+            summary: { ...item.summary, uk: ov.summary },
+            keyDetails: { ...item.keyDetails, uk: ov.keyDetails },
+            venue: { ...item.venue, uk: ov.venue },
+            admission: { ...item.admission, uk: ov.admission },
+            localTip: { ...item.localTip, uk: ov.localTip },
+            whatsappTopic: { ...item.whatsappTopic, uk: ov.whatsappTopic },
+            imageAlt: item.imageAlt && ov.imageAlt ? { ...item.imageAlt, uk: ov.imageAlt } : item.imageAlt,
+          }
+        : item;
+    })
   : BATUMI_NEWS_ITEMS;
 
 const calendarList = isPl
@@ -317,6 +428,19 @@ const calendarList = isPl
           }
         : block;
     })
+  : isUk
+  ? BATUMI_ANNUAL_CALENDAR.map((block) => {
+      const ov = UK_BATUMI_CALENDAR[block.id];
+      return ov
+        ? {
+            ...block,
+            months: { ...block.months, uk: ov.months },
+            title: { ...block.title, uk: ov.title },
+            highlights: { ...block.highlights, uk: ov.highlights },
+            pairWithTourLabel: { ...block.pairWithTourLabel, uk: ov.pairWithTourLabel },
+          }
+        : block;
+    })
   : BATUMI_ANNUAL_CALENDAR;
 
 const faqList = isPl
@@ -326,6 +450,16 @@ const faqList = isPl
         ? {
             question: { ...faq.question, pl: ov.question },
             answer: { ...faq.answer, pl: ov.answer },
+          }
+        : faq;
+    })
+  : isUk
+  ? BATUMI_NEWS_FAQS.map((faq, idx) => {
+      const ov = UK_BATUMI_FAQS[idx];
+      return ov
+        ? {
+            question: { ...faq.question, uk: ov.question },
+            answer: { ...faq.answer, uk: ov.answer },
           }
         : faq;
     })

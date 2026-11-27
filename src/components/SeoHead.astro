@@ -8,10 +8,11 @@ export interface Props {
   canonicalPath?: string;
   ogImage?: string;
   ogType?: 'website' | 'article';
-  lang?: 'en' | 'ka' | 'pl';
+  lang?: 'en' | 'ka' | 'pl' | 'uk';
   alternateEnPath?: string;
   alternateKaPath?: string;
   alternatePlPath?: string;
+  alternateUkPath?: string;
   keywords?: string[];
   jsonLd?: Record<string, unknown>[];
 }
@@ -26,6 +27,7 @@ const {
   alternateEnPath,
   alternateKaPath,
   alternatePlPath,
+  alternateUkPath,
   keywords = lang === 'pl'
     ? [
         'Minimalism Tours Georgia',
@@ -34,6 +36,15 @@ const {
         'Wąwóz Machakhela wycieczka',
         'polskojęzyczny przewodnik Batumi Adżaria',
         'DMC Gruzja B2B',
+      ]
+    : lang === 'uk'
+    ? [
+        'Minimalism Tours Georgia',
+        'екскурсії з Батумі',
+        'Національний парк Мтірала трекінг',
+        'Ущелина Мачахела екскурсія',
+        'гірські походи Аджарія Грузія',
+        'DMC Грузія B2B',
       ]
     : [
         'Minimalism Tours Georgia',
@@ -127,7 +138,12 @@ const schemaGraph = {
   )
 }
 {
-  (alternateEnPath || alternateKaPath || alternatePlPath) && (
+  alternateUkPath && (
+    <link rel="alternate" hreflang="uk" href={absoluteUrl(alternateUkPath, Astro.site)} />
+  )
+}
+{
+  (alternateEnPath || alternateKaPath || alternatePlPath || alternateUkPath) && (
     <link
       rel="alternate"
       hreflang="x-default"
@@ -136,7 +152,7 @@ const schemaGraph = {
   )
 }
 
-<meta property="og:locale" content={lang === 'ka' ? 'ka_GE' : lang === 'pl' ? 'pl_PL' : 'en_US'} />
+<meta property="og:locale" content={lang === 'ka' ? 'ka_GE' : lang === 'pl' ? 'pl_PL' : lang === 'uk' ? 'uk_UA' : 'en_US'} />
 <meta property="og:type" content={ogType} />
 <meta property="og:site_name" content={SITE.brandName} />
 <meta property="og:title" content={title} />

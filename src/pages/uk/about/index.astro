@@ -1,0 +1,296 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import { SITE } from '../../../data/site';
+import {
+  UK_SITE,
+  UK_CERTIFICATIONS,
+  UK_VEHICLES,
+  UK_CONTENT_PILLARS,
+} from '../../../data/i18n-uk';
+import { withBase, absoluteUrl } from '../../../lib/urls';
+
+const breadcrumbJsonLd = {
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Головна', item: absoluteUrl('/uk/', Astro.site) },
+    { '@type': 'ListItem', position: 2, name: 'Про нас', item: absoluteUrl('/uk/about/', Astro.site) },
+  ],
+};
+---
+
+<BaseLayout
+  title={`Про ${SITE.brandName} | Туроператор у Батумі та DMC Аджарії`}
+  description="Minimalism Tours Georgia — ліцензований туроператор із Батумі з понад 10-річним досвідом роботи за стандартами GMGA/FMGA, UNESCO Heritage та Першої допомоги Червоного Хреста."
+  canonicalPath="/uk/about/"
+  alternateEnPath="/about/"
+  alternateKaPath="/ka/"
+  alternatePlPath="/pl/about/"
+  alternateUkPath="/uk/about/"
+  lang="uk"
+  jsonLd={[breadcrumbJsonLd]}
+>
+  <section class="page-banner">
+    <div class="container">
+      <nav class="breadcrumbs" aria-label="Breadcrumb">
+        <a href={withBase('/uk/')}>Головна</a>
+        <span aria-hidden="true">/</span>
+        <span aria-current="page">Про нас</span>
+      </nav>
+      <span class="eyebrow">Ліцензований локальний туроператор і DMC · Батумі</span>
+      <h1>Про Minimalism Tours Georgia</h1>
+      <p style="max-width: 46rem; font-size: 1.05rem;">
+        «{UK_SITE.motto}» — неквапливі природні, культурні та B2B-екскурсії Аджарією і Грузією з сертифікованими гідами та прозорою логістикою.
+      </p>
+    </div>
+  </section>
+
+  <!-- Company Operations & Philosophy -->
+  <section class="section">
+    <div class="container founder-grid">
+      <div class="founder-photo">
+        <img
+          src={withBase('/images/mtirala-canopy.webp')}
+          alt="Помірно-вологий колхідський ліс UNESCO у Національному парку Мтірала біля Батумі"
+          fetchpriority="high"
+          width="1200"
+          height="800"
+          decoding="async"
+        />
+      </div>
+
+      <div>
+        <span class="eyebrow">Туроператор із Батумі та DMC Аджарії</span>
+        <h2>Minimalism Tours Georgia · {SITE.experienceYears}+ років досвіду в Грузії</h2>
+        <p>
+          Базуючись у Батумі на узбережжі Чорного моря, Minimalism Tours Georgia організовує камерні, приватні та групові B2B-програми для мандрівників і партнерів, які цінують глибину й локальну якість замість поспішних автобусних зупинок. Від лісів Колхіди UNESCO у Мтіралі та Мачахелі до високогірних експедицій у Казбегі й Сванетії — наша команда дбає про безпеку, екологічність і комфортний темп.
+        </p>
+        <p>
+          Кожен маршрут містить чесну оцінку складності, активний погодний план, точні точки збору та повну прозорість цін — без несподіваних доплат біля кас парків.
+        </p>
+
+        <div style="display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1.5rem;">
+          <a class="btn btn-coral" href={withBase('/uk/tours/')}>Переглянути тури</a>
+          <a class="btn btn-forest" href={withBase('/uk/partners/')}>B2B та партнерство</a>
+          <a class="btn btn-outline" href={SITE.youtubeUrl} target="_blank" rel="noopener noreferrer">
+            Відео маршрутів на YouTube ↗
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Verified Certifications -->
+  <section id="certifications" class="section section-surface">
+    <div class="container">
+      <div class="section-header">
+        <div>
+          <span class="eyebrow">Підготовка та безпека гостей</span>
+          <h2>Підтверджені сертифікати гідів</h2>
+        </div>
+        <p>Офіційні кваліфікації у сфері екологічної інтерпретації, гірського трекінгу та першої допомоги.</p>
+      </div>
+
+      <div class="cert-grid">
+        {
+          UK_CERTIFICATIONS.map((c) => (
+            <article class="cert-card reveal-on-scroll">
+              <span class="badge badge-forest">{c.issuer}</span>
+              <h3>{c.title}</h3>
+              <p>{c.scope}</p>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- Vehicles & Onboard Comfort -->
+  <section id="fleet" class="section">
+    <div class="container">
+      <div class="section-header">
+        <div>
+          <span class="eyebrow">Гірський та прибережний транспорт</span>
+          <h2>Автопарк під розмір групи та рельєф</h2>
+        </div>
+        <p>Комфортні авто з кондиціонером і Wi-Fi для гірських підйомів та приморських маршрутів.</p>
+      </div>
+
+      <div class="vehicle-grid">
+        {
+          UK_VEHICLES.map((v) => (
+            <article class="vehicle-card reveal-on-scroll">
+              <span class="badge badge-sea">{v.capacity}</span>
+              <h3>{v.name}</h3>
+              <p>{v.idealFor}</p>
+              <ul>
+                {v.amenities.map((a) => <li>{a}</li>)}
+              </ul>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- Brand Pillars + B2B Partnerships -->
+  <section id="standards" class="section section-forest">
+    <div class="container">
+      <div class="section-header">
+        <div>
+          <span class="eyebrow">Як ми працюємо</span>
+          <h2>Чотири стандарти роботи та B2B-запити</h2>
+        </div>
+      </div>
+
+      <div class="about-pillars">
+        {
+          UK_CONTENT_PILLARS.map((p) => (
+            <div class="about-pillar">
+              <h3>{p.name}</h3>
+              <p>{p.summary}</p>
+            </div>
+          ))
+        }
+      </div>
+
+      <div class="b2b-box">
+        <div>
+          <h3>Готелі, хостели та туристичні партнери</h3>
+          <p style="margin-bottom: 0;">
+            Потрібні надійні групові або приватні виїзди з Батумі для ваших гостей? Звертайтеся до нас за актуальною B2B-пропозицією, сезонною доступністю та прозорими умовами співпраці.
+          </p>
+        </div>
+        <a class="btn btn-coral" href={withBase('/uk/partners/#b2b-inquiry')}>Запросити B2B-умови</a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .page-banner {
+    background-color: var(--bg-surface);
+    border-bottom: 1px solid var(--border-subtle);
+    padding-block: clamp(2.25rem, 4.5vw, 3.75rem);
+  }
+
+  .breadcrumbs {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    font-size: 0.86rem;
+    color: var(--ink-600);
+    margin-bottom: 1rem;
+  }
+
+  .breadcrumbs a {
+    color: var(--ink-700);
+    text-decoration: none;
+    font-weight: 600;
+  }
+
+  .founder-grid {
+    display: grid;
+    gap: 2.5rem;
+    align-items: center;
+  }
+
+  @media (min-width: 54rem) {
+    .founder-grid {
+      grid-template-columns: minmax(17rem, 23rem) 1fr;
+    }
+  }
+
+  .founder-photo {
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    border: 1px solid var(--border-subtle);
+    box-shadow: var(--shadow-md);
+  }
+
+  .founder-photo img {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    object-position: center;
+  }
+
+  .cert-grid,
+  .vehicle-grid,
+  .about-pillars {
+    display: grid;
+    gap: 1.25rem;
+    grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+  }
+
+  .cert-card,
+  .vehicle-card {
+    background-color: var(--bg-page);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    padding: 1.4rem;
+  }
+
+  .vehicle-card {
+    background-color: var(--bg-surface);
+  }
+
+  .cert-card h3,
+  .vehicle-card h3 {
+    margin-top: 0.85rem;
+    margin-bottom: 0.5rem;
+    font-size: 1.18rem;
+  }
+
+  .cert-card p {
+    margin-bottom: 0;
+    font-size: 0.93rem;
+  }
+
+  .vehicle-card ul {
+    margin: 0.85rem 0 0;
+    padding-inline-start: 1.15rem;
+    font-size: 0.9rem;
+    color: var(--ink-700);
+    display: grid;
+    gap: 0.3rem;
+  }
+
+  .about-pillar {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    border-radius: var(--radius-md);
+    padding: 1.2rem;
+  }
+
+  .about-pillar h3 {
+    color: #f4b69f;
+    font-size: 1.12rem;
+    margin-bottom: 0.45rem;
+  }
+
+  .about-pillar p {
+    margin: 0;
+    font-size: 0.92rem;
+  }
+
+  .b2b-box {
+    margin-top: 2rem;
+    padding: 1.65rem;
+    border-radius: var(--radius-xl);
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.25rem;
+  }
+
+  .b2b-box h3 {
+    margin-bottom: 0.4rem;
+  }
+
+  .b2b-box > div {
+    max-width: 44rem;
+  }
+</style>

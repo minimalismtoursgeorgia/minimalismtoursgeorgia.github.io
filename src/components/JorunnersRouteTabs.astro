@@ -7,16 +7,19 @@ export interface Props {
 
 const { lang = 'en' } = Astro.props;
 const isPl = lang === 'pl';
+const isUk = lang === 'uk';
 ---
 
 <section class="detail-block route-options-section" aria-labelledby="route-options-heading">
   <div class="route-options-head">
     <div>
-      <span class="badge badge-forest">{isPl ? 'Porównaj 2 sprawdzone trasy' : 'Compare 2 Curated Routes'}</span>
-      <h2 id="route-options-heading">{isPl ? 'Wybierz opcję trasy Jorunners' : 'Choose Your Jorunners Route Option'}</h2>
+      <span class="badge badge-forest">{isPl ? 'Porównaj 2 sprawdzone trasy' : isUk ? 'Порівняйте 2 перевірені маршрути' : 'Compare 2 Curated Routes'}</span>
+      <h2 id="route-options-heading">{isPl ? 'Wybierz opcję trasy Jorunners' : isUk ? 'Оберіть варіант маршруту Jorunners' : 'Choose Your Jorunners Route Option'}</h2>
       <p class="route-options-lead">
         {isPl
           ? 'Obie opcje oferują ~50 km łatwych, widokowych tras górskich przez 8 dni / 7 nocy z pełnym wyżywieniem (3 posiłki dziennie) i noclegami w schroniskach. Przełącz zakładki poniżej, aby porównać teren, transfery i logistykę.'
+          : isUk
+          ? 'Обидва варіанти пропонують ~50 км легких видових гірських маршрутів упродовж 8 днів / 7 ночей із повним пансіоном (3-разовим харчуванням) та проживанням у гірських гостьових будинках. Перемикайте вкладки нижче для порівняння.'
           : 'Both options deliver ~50 km of easy, scenic mountain trails across 8 Days / 7 Nights with Full Board (3 meals/day) and mountain lodge stays. Switch tabs below to compare terrain, transfers, and logistics.'}
       </p>
     </div>
@@ -27,7 +30,7 @@ const isPl = lang === 'pl';
       class="route-tablist"
       role="tablist"
       {...({ focusgroup: 'tablist nomemory' } as any)}
-      aria-label={isPl ? 'Opcje trasy Jorunners' : 'Jorunners route options'}
+      aria-label={isPl ? 'Opcje trasy Jorunners' : isUk ? 'Варіанти маршруту Jorunners' : 'Jorunners route options'}
     >
       <button
         type="button"
@@ -35,11 +38,11 @@ const isPl = lang === 'pl';
         id="tab-option-a"
         class="route-tab"
         aria-selected="true"
-        data-route-value={isPl ? 'Opcja A (Rekomendowana): Baza w Kazbegi / Stepancminda' : 'Option A (Recommended): Kazbegi / Stepantsminda Valley Basecamp'}
+        data-route-value={isPl ? 'Opcja A (Rekomendowana): Baza w Kazbegi / Stepancminda' : isUk ? 'Варіант A (Рекомендований): База в Казбегі / Степанцмінда' : 'Option A (Recommended): Kazbegi / Stepantsminda Valley Basecamp'}
         {...({ focusgroupstart: '' } as any)}
       >
-        <span class="route-tab-kicker">{isPl ? 'Rekomendowana · Łatwy teren' : 'Recommended · Easy Terrain'}</span>
-        <span class="route-tab-title">{isPl ? 'Opcja A: Baza w Stepancmindzie' : 'Option A: Stepantsminda Basecamp'}</span>
+        <span class="route-tab-kicker">{isPl ? 'Rekomendowana · Łatwy teren' : isUk ? 'Рекомендований · Легкий рельєф' : 'Recommended · Easy Terrain'}</span>
+        <span class="route-tab-title">{isPl ? 'Opcja A: Baza w Stepancmindzie' : isUk ? 'Варіант A: База в Степанцмінді' : 'Option A: Stepantsminda Basecamp'}</span>
       </button>
 
       <button
@@ -48,10 +51,10 @@ const isPl = lang === 'pl';
         id="tab-option-b"
         class="route-tab"
         aria-selected="false"
-        data-route-value={isPl ? 'Opcja B: Swanetia (Mestia do Uszguli) od schroniska do schroniska' : 'Option B: Svaneti (Mestia to Ushguli) Point-to-Point Lodges'}
+        data-route-value={isPl ? 'Opcja B: Swanetia (Mestia do Uszguli) od schroniska do schroniska' : isUk ? 'Варіант B: Сванетія (Местія до Ушгулі) від притулку до притулку' : 'Option B: Svaneti (Mestia to Ushguli) Point-to-Point Lodges'}
       >
-        <span class="route-tab-kicker">{isPl ? 'Tylko Czerwiec–Wrzesień · Klasyczny trek' : 'June–September Only · Classic Trek'}</span>
-        <span class="route-tab-title">{isPl ? 'Opcja B: Mestia do Uszguli' : 'Option B: Mestia to Ushguli'}</span>
+        <span class="route-tab-kicker">{isPl ? 'Tylko Czerwiec–Wrzesień · Klasyczny trek' : isUk ? 'Лише Червень–Вересень · Класичний трек' : 'June–September Only · Classic Trek'}</span>
+        <span class="route-tab-title">{isPl ? 'Opcja B: Mestia do Uszguli' : isUk ? 'Варіант B: Местія до Ушгулі' : 'Option B: Mestia to Ushguli'}</span>
       </button>
     </div>
 
@@ -67,50 +70,56 @@ const isPl = lang === 'pl';
         <div class="route-panel-card">
           <div class="route-panel-header">
             <div>
-              <span class="badge badge-forest">{isPl ? 'Rekomendowana · Baza w dolinie i trasy dzienne' : 'Recommended · Valley Basecamp & Day Trails'}</span>
-              <h3>{isPl ? 'Opcja A: Baza w Kazbegi / Stepancmindzie' : 'Option A: Kazbegi / Stepantsminda Valley Basecamp'}</h3>
+              <span class="badge badge-forest">{isPl ? 'Rekomendowana · Baza w dolinie i trasy dzienne' : isUk ? 'Рекомендований · База в долині та денні виходи' : 'Recommended · Valley Basecamp & Day Trails'}</span>
+              <h3>{isPl ? 'Opcja A: Baza w Kazbegi / Stepancmindzie' : isUk ? 'Варіант A: База в Казбегі / Степанцмінді' : 'Option A: Kazbegi / Stepantsminda Valley Basecamp'}</h3>
             </div>
-            <span class="badge badge-sea">{isPl ? '~3 godz. z Tbilisi' : '~3h from Tbilisi'}</span>
+            <span class="badge badge-sea">{isPl ? '~3 godz. z Tbilisi' : isUk ? '~3 год із Тбілісі' : '~3h from Tbilisi'}</span>
           </div>
 
           <p class="route-panel-intro">
             {isPl
               ? 'Idealna dla grup biegowych i aktywnych szukających łatwego terenu, krótkich transferów i braku codziennego pakowania walizek. Komfortowe pensjonaty górskie i codzienne wyjścia po 8–12 km (łącznie ~50 km).'
+              : isUk
+              ? 'Ідеально для бігових та активних груп, які хочуть легкого рельєфу, коротких переїздів і без щоденного збирання валіз. Комфортні гостьові будинки та денні виходи по 8–12 км (разом ~50 км).'
               : 'Ideal for running & active groups wanting easy terrain, short transfers, and zero daily packing or unpacking. Stay anchored in comfortable mountain lodges while completing 8–12 km daily outings totaling ~50 km.'}
           </p>
 
           <dl class="route-specs-grid">
             <div>
-              <dt>{isPl ? 'Baza i noclegi' : 'Base & Stay'}</dt>
-              <dd>{isPl ? 'Stepancminda (6 nocy w pensjonatach górskich + 1 noc w Tbilisi)' : 'Stepantsminda (6 nights in mountain lodges + 1 night in Tbilisi)'}</dd>
+              <dt>{isPl ? 'Baza i noclegi' : isUk ? 'База та проживання' : 'Base & Stay'}</dt>
+              <dd>{isPl ? 'Stepancminda (6 nocy w pensjonatach górskich + 1 noc w Tbilisi)' : isUk ? 'Степанцмінда (6 ночей у гірських будинках + 1 ніч у Тбілісі)' : 'Stepantsminda (6 nights in mountain lodges + 1 night in Tbilisi)'}</dd>
             </div>
             <div>
-              <dt>{isPl ? 'Dystans dzienny' : 'Daily Distance'}</dt>
-              <dd>{isPl ? '8–12 km dziennie (łącznie ~50 km w ciągu tygodnia)' : '8–12 km daily outings totaling ~50 km across the week'}</dd>
+              <dt>{isPl ? 'Dystans dzienny' : isUk ? 'Денна дистанція' : 'Daily Distance'}</dt>
+              <dd>{isPl ? '8–12 km dziennie (łącznie ~50 km w ciągu tygodnia)' : isUk ? '8–12 км щодня (разом ~50 км за тиждень)' : '8–12 km daily outings totaling ~50 km across the week'}</dd>
             </div>
             <div>
-              <dt>{isPl ? 'Czas transferu' : 'Transfer Time'}</dt>
-              <dd>{isPl ? '~3 godziny na północ z Tbilisi prywatnym busem' : '~3 hours north of Tbilisi by private group vehicle'}</dd>
+              <dt>{isPl ? 'Czas transferu' : isUk ? 'Час трансферу' : 'Transfer Time'}</dt>
+              <dd>{isPl ? '~3 godziny na północ z Tbilisi prywatnym busem' : isUk ? '~3 години на північ із Тбілісі приватним транспортом' : '~3 hours north of Tbilisi by private group vehicle'}</dd>
             </div>
             <div>
-              <dt>{isPl ? 'Logistyka' : 'Logistics'}</dt>
-              <dd>{isPl ? 'Jedna baza — bez codziennego pakowania bagażu' : 'Single basecamp — no daily packing/unpacking'}</dd>
+              <dt>{isPl ? 'Logistyka' : isUk ? 'Логістика' : 'Logistics'}</dt>
+              <dd>{isPl ? 'Jedna baza — bez codziennego pakowania bagażu' : isUk ? 'Одна база — без щоденного пакування багажу' : 'Single basecamp — no daily packing/unpacking'}</dd>
             </div>
           </dl>
 
           <div class="route-highlights-box">
-            <h4>{isPl ? 'Główne trasy w programie' : 'Signature Day Trails Included'}</h4>
+            <h4>{isPl ? 'Główne trasy w programie' : isUk ? 'Основні маршрути програми' : 'Signature Day Trails Included'}</h4>
             <ul>
               <li>
-                <strong>{isPl ? 'Dolina Truso (15–20 km w obie strony, elastycznie):' : 'Truso Valley (15–20 km round-trip, customizable):'}</strong>{' '}
+                <strong>{isPl ? 'Dolina Truso (15–20 km w obie strony, elastycznie):' : isUk ? 'Долина Трусо (15–20 км туди й назад, гнучко):' : 'Truso Valley (15–20 km round-trip, customizable):'}</strong>{' '}
                 {isPl
                   ? 'Szeroka, łagodna droga szutrowa wzdłuż trawertynowych źródeł mineralnych, opuszczonych kamiennych wiosek i panoram doliny.'
+                  : isUk
+                  ? 'Широка полога ґрунтова дорога повз травертинові мінеральні джерела, старовинні кам’яні села та панорами ущелини.'
                   : 'Wide, mostly flat gravel valley road past travertine mineral springs, abandoned stone villages, and sweeping river valley panoramas.'}
               </li>
               <li>
-                <strong>{isPl ? 'Wysokogórska Dolina Juta (8–12 km tam i z powrotem):' : 'Juta High-Mountain Valley (8–12 km out-and-back):'}</strong>{' '}
+                <strong>{isPl ? 'Wysokogórska Dolina Juta (8–12 km tam i z powrotem):' : isUk ? 'Високогірна долина Джута (8–12 км туди й назад):' : 'Juta High-Mountain Valley (8–12 km out-and-back):'}</strong>{' '}
                 {isPl
                   ? 'Łatwo-umiarkowany szlak alpejski z możliwością zawrócenia w dowolnym momencie i opcjonalnym noclegiem w schronisku.'
+                  : isUk
+                  ? 'Легко-помірна альпійська стежка з можливістю розвернутися в будь-який момент та опціональною ночівлею в притулку.'
                   : 'Easy-to-moderate alpine valley trail with flexible turn-back points and an optional mountain lodge overnight.'}
               </li>
             </ul>
@@ -120,9 +129,9 @@ const isPl = lang === 'pl';
             <a
               href="#group-inquiry"
               class="btn btn-coral btn-sm select-route-cta"
-              data-select-route={isPl ? 'Opcja A (Rekomendowana): Baza w Kazbegi / Stepancminda' : 'Option A (Recommended): Kazbegi / Stepantsminda Valley Basecamp'}
+              data-select-route={isPl ? 'Opcja A (Rekomendowana): Baza w Kazbegi / Stepancminda' : isUk ? 'Варіант A (Рекомендований): База в Казбегі / Степанцмінда' : 'Option A (Recommended): Kazbegi / Stepantsminda Valley Basecamp'}
             >
-              {isPl ? 'Zapytaj o Opcję A →' : 'Inquire About Option A →'}
+              {isPl ? 'Zapytaj o Opcję A →' : isUk ? 'Запитати про Варіант A →' : 'Inquire About Option A →'}
             </a>
           </div>
         </div>
@@ -139,50 +148,56 @@ const isPl = lang === 'pl';
         <div class="route-panel-card">
           <div class="route-panel-header">
             <div>
-              <span class="badge badge-coral">{isPl ? 'Tylko lato / wczesna jesień · Czerwiec–Wrzesień' : 'Summer / Early Autumn Only · June–September'}</span>
-              <h3>{isPl ? 'Opcja B: Mestia do Uszguli (od pensjonatu do pensjonatu)' : 'Option B: Mestia to Ushguli Point-to-Point Mountain Lodges'}</h3>
+              <span class="badge badge-coral">{isPl ? 'Tylko lato / wczesna jesień · Czerwiec–Wrzesień' : isUk ? 'Лише літо / рання осінь · Червень–Вересень' : 'Summer / Early Autumn Only · June–September'}</span>
+              <h3>{isPl ? 'Opcja B: Mestia do Uszguli (od pensjonatu do pensjonatu)' : isUk ? 'Варіант B: Местія до Ушгулі (від села до села)' : 'Option B: Mestia to Ushguli Point-to-Point Mountain Lodges'}</h3>
             </div>
-            <span class="badge badge-sea">{isPl ? 'Transport bagażu 4x4' : '4x4 Luggage Support'}</span>
+            <span class="badge badge-sea">{isPl ? 'Transport bagażu 4x4' : isUk ? 'Перевезення багажу 4x4' : '4x4 Luggage Support'}</span>
           </div>
 
           <p class="route-panel-intro">
             {isPl
               ? 'Klasyczna ~50-kilometrowa trasa od wioski do wioski przez Górną Swanetię z noclegami w rodzinnych pensjonatach, pełnym wyżywieniem i pełnym wsparciem aut 4x4.'
+              : isUk
+              ? 'Класичний ~50-кілометровий маршрут від села до села Верхньою Сванетією з ночівлею в сімейних гостьових будинках, повним пансіоном і супроводом авто 4x4.'
               : 'A classic village-to-village ~50 km tailored route through Upper Svaneti, staying in traditional family-run mountain lodges with full-board local dining and full 4x4 support.'}
           </p>
 
           <dl class="route-specs-grid">
             <div>
-              <dt>{isPl ? 'Sezonowość' : 'Seasonality'}</dt>
-              <dd>{isPl ? 'Tylko lato / wczesna jesień (czerwiec–wrzesień)' : 'Summer / Early Autumn only (June–September)'}</dd>
+              <dt>{isPl ? 'Sezonowość' : isUk ? 'Сезонність' : 'Seasonality'}</dt>
+              <dd>{isPl ? 'Tylko lato / wczesna jesień (czerwiec–wrzesień)' : isUk ? 'Лише літо / рання осінь (червень–вересень)' : 'Summer / Early Autumn only (June–September)'}</dd>
             </div>
             <div>
-              <dt>{isPl ? 'Trasa i dystans' : 'Route & Distance'}</dt>
-              <dd>{isPl ? 'Mestia do Uszguli (~50 km trasy punkt-punkt)' : 'Mestia to Ushguli (~50 km tailored point-to-point route)'}</dd>
+              <dt>{isPl ? 'Trasa i dystans' : isUk ? 'Маршрут і дистанція' : 'Route & Distance'}</dt>
+              <dd>{isPl ? 'Mestia do Uszguli (~50 km trasy punkt-punkt)' : isUk ? 'Местія до Ушгулі (~50 км точковий маршрут)' : 'Mestia to Ushguli (~50 km tailored point-to-point route)'}</dd>
             </div>
             <div>
-              <dt>{isPl ? 'Czas transferu' : 'Transfer Time'}</dt>
-              <dd>{isPl ? '~8–9 godzin z Tbilisi (lub lot krajowy, jeśli dostępny)' : '~8–9 hour road transfer from Tbilisi (or domestic flight when available)'}</dd>
+              <dt>{isPl ? 'Czas transferu' : isUk ? 'Час трансферу' : 'Transfer Time'}</dt>
+              <dd>{isPl ? '~8–9 godzin z Tbilisi (lub lot krajowy, jeśli dostępny)' : isUk ? '~8–9 годин із Тбілісі (або внутрішній переліт за наявності)' : '~8–9 hour road transfer from Tbilisi (or domestic flight when available)'}</dd>
             </div>
             <div>
-              <dt>{isPl ? 'Wsparcie' : 'Support'}</dt>
-              <dd>{isPl ? 'Transport bagażu 4x4 + opcjonalne podwiezienie na najstromszym podejściu' : '4x4 luggage support + optional vehicle skips on the steepest pass to keep effort easy-to-moderate'}</dd>
+              <dt>{isPl ? 'Wsparcie' : isUk ? 'Підтримка' : 'Support'}</dt>
+              <dd>{isPl ? 'Transport bagażu 4x4 + opcjonalne podwiezienie na najstromszym podejściu' : isUk ? 'Багаж 4x4 + опціональний трансфер на найкрутішому підйомі' : '4x4 luggage support + optional vehicle skips on the steepest pass to keep effort easy-to-moderate'}</dd>
             </div>
           </dl>
 
           <div class="route-highlights-box">
-            <h4>{isPl ? 'Charakter trasy i finał' : 'Route Experience & Finish'}</h4>
+            <h4>{isPl ? 'Charakter trasy i finał' : isUk ? 'Особливості та фініш' : 'Route Experience & Finish'}</h4>
             <ul>
               <li>
-                <strong>{isPl ? 'Rodzinne pensjonaty górskie:' : 'Family-Run Mountain Lodges:'}</strong>{' '}
+                <strong>{isPl ? 'Rodzinne pensjonaty górskie:' : isUk ? 'Сімейні гірські будинки:' : 'Family-Run Mountain Lodges:'}</strong>{' '}
                 {isPl
                   ? 'Gościnność od wioski do wioski z sycącymi posiłkami kuchni swańskiej każdego wieczoru.'
+                  : isUk
+                  ? 'Гостинність у селах та ситна сванська кухня щовечора.'
                   : 'Village-to-village hospitality with hearty Full Board Svanetian dining each evening.'}
               </li>
               <li>
-                <strong>{isPl ? 'Finał w Uszguli:' : 'Ushguli Finish:'}</strong>{' '}
+                <strong>{isPl ? 'Finał w Uszguli:' : isUk ? 'Фініш в Ушгулі:' : 'Ushguli Finish:'}</strong>{' '}
                 {isPl
                   ? 'Dotarcie wśród wpisanych na listę UNESCO średniowiecznych kamiennych wież obronnych i lodowców Kaukazu.'
+                  : isUk
+                  ? 'Фініш серед середньовічних кам’яних сванських веж зі списку UNESCO та льодовиків Кавказу.'
                   : 'Arrive among UNESCO-listed medieval stone defensive towers and glacier-backed Caucasus valleys.'}
               </li>
             </ul>
@@ -192,9 +207,9 @@ const isPl = lang === 'pl';
             <a
               href="#group-inquiry"
               class="btn btn-coral btn-sm select-route-cta"
-              data-select-route={isPl ? 'Opcja B: Swanetia (Mestia do Uszguli) od schroniska do schroniska' : 'Option B: Svaneti (Mestia to Ushguli) Point-to-Point Lodges'}
+              data-select-route={isPl ? 'Opcja B: Swanetia (Mestia do Uszguli) od schroniska do schroniska' : isUk ? 'Варіант B: Сванетія (Местія до Ушгулі) від притулку до притулку' : 'Option B: Svaneti (Mestia to Ushguli) Point-to-Point Lodges'}
             >
-              {isPl ? 'Zapytaj o Opcję B →' : 'Inquire About Option B →'}
+              {isPl ? 'Zapytaj o Opcję B →' : isUk ? 'Запитати про Варіант B →' : 'Inquire About Option B →'}
             </a>
           </div>
         </div>
@@ -204,36 +219,36 @@ const isPl = lang === 'pl';
 
   <!-- Quick Side-by-Side Comparison Table -->
   <div class="route-compare-wrap">
-    <h3 class="route-compare-title">{isPl ? 'Szybkie porównanie obu opcji' : 'Quick Side-by-Side Comparison'}</h3>
+    <h3 class="route-compare-title">{isPl ? 'Szybkie porównanie obu opcji' : isUk ? 'Швидке порівняння варіантів' : 'Quick Side-by-Side Comparison'}</h3>
     <div class="route-table-scroll">
       <table class="route-compare-table">
         <thead>
           <tr>
-            <th>{isPl ? 'Cecha' : 'Feature'}</th>
-            <th>{isPl ? 'Opcja A: Stepancminda (Rekomendowana)' : 'Option A: Stepantsminda (Recommended)'}</th>
-            <th>{isPl ? 'Opcja B: Mestia do Uszguli' : 'Option B: Mestia to Ushguli'}</th>
+            <th>{isPl ? 'Cecha' : isUk ? 'Характеристика' : 'Feature'}</th>
+            <th>{isPl ? 'Opcja A: Stepancminda (Rekomendowana)' : isUk ? 'Варіант A: Степанцмінда (Рекомендований)' : 'Option A: Stepantsminda (Recommended)'}</th>
+            <th>{isPl ? 'Opcja B: Mestia do Uszguli' : isUk ? 'Варіант B: Местія до Ушгулі' : 'Option B: Mestia to Ushguli'}</th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td><strong>{isPl ? 'Format' : 'Format'}</strong></td>
-            <td>{isPl ? 'Baza w dolinie + wyjścia dzienne (bez codziennego pakowania)' : 'Valley basecamp + day trails (no daily packing)'}</td>
-            <td>{isPl ? 'Klasyczna trasa od wioski do wioski z noclegami' : 'Classic point-to-point village mountain lodges'}</td>
+            <td><strong>{isPl ? 'Format' : isUk ? 'Формат' : 'Format'}</strong></td>
+            <td>{isPl ? 'Baza w dolinie + wyjścia dzienne (bez codziennego pakowania)' : isUk ? 'База в долині + денні виходи (без щоденного пакування)' : 'Valley basecamp + day trails (no daily packing)'}</td>
+            <td>{isPl ? 'Klasyczna trasa od wioski do wioski z noclegami' : isUk ? 'Класичний маршрут від села до села з ночівлею' : 'Classic point-to-point village mountain lodges'}</td>
           </tr>
           <tr>
-            <td><strong>{isPl ? 'Transfer z Tbilisi' : 'Transfer from Tbilisi'}</strong></td>
-            <td>{isPl ? '~3 godziny jazdy na północ' : '~3 hours north by road'}</td>
-            <td>{isPl ? '~8–9 godzin jazdy (lub lot krajowy)' : '~8–9 hours by road (or domestic flight if available)'}</td>
+            <td><strong>{isPl ? 'Transfer z Tbilisi' : isUk ? 'Трансфер із Тбілісі' : 'Transfer from Tbilisi'}</strong></td>
+            <td>{isPl ? '~3 godziny jazdy na północ' : isUk ? '~3 години на північ дорогою' : '~3 hours north by road'}</td>
+            <td>{isPl ? '~8–9 godzin jazdy (lub lot krajowy)' : isUk ? '~8–9 годин дорогою (або авіа за наявності)' : '~8–9 hours by road (or domestic flight if available)'}</td>
           </tr>
           <tr>
-            <td><strong>{isPl ? 'Sezon' : 'Season'}</strong></td>
-            <td>{isPl ? 'Od wiosny do jesieni' : 'Spring through Autumn'}</td>
-            <td>{isPl ? 'Tylko lato / wczesna jesień (czerwiec–wrzesień)' : 'Summer / Early Autumn only (June–September)'}</td>
+            <td><strong>{isPl ? 'Sezon' : isUk ? 'Сезон' : 'Season'}</strong></td>
+            <td>{isPl ? 'Od wiosny do jesieni' : isUk ? 'З весни до осені' : 'Spring through Autumn'}</td>
+            <td>{isPl ? 'Tylko lato / wczesna jesień (czerwiec–wrzesień)' : isUk ? 'Лише літо / рання осінь (червень–вересень)' : 'Summer / Early Autumn only (June–September)'}</td>
           </tr>
           <tr>
-            <td><strong>{isPl ? 'Wysiłek i wsparcie' : 'Effort & Support'}</strong></td>
-            <td>{isPl ? 'Łatwa droga szutrowa (Truso) i elastyczny powrót (Juta)' : 'Easy flat gravel (Truso) & flexible turn-back (Juta)'}</td>
-            <td>{isPl ? 'Łatwy–umiarkowany ze wsparciem 4x4 na bagaż i strome odcinki' : 'Easy-to-moderate with 4x4 luggage & steep-pass vehicle skips'}</td>
+            <td><strong>{isPl ? 'Wysiłek i wsparcie' : isUk ? 'Навантаження та підтримка' : 'Effort & Support'}</strong></td>
+            <td>{isPl ? 'Łatwa droga szutrowa (Truso) i elastyczny powrót (Juta)' : isUk ? 'Легка ґрунтова дорога (Трусо) та гнучкий розворот (Джута)' : 'Easy flat gravel (Truso) & flexible turn-back (Juta)'}</td>
+            <td>{isPl ? 'Łatwy–umiarkowany ze wsparciem 4x4 na bagaż i strome odcinki' : isUk ? 'Легкий–помірний із супроводом 4x4 для багажу' : 'Easy-to-moderate with 4x4 luggage & steep-pass vehicle skips'}</td>
           </tr>
         </tbody>
       </table>

@@ -1,0 +1,66 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import BatumiNewsHub from '../../../components/BatumiNewsHub.astro';
+import { SITE } from '../../../data/site';
+import { BATUMI_NEWS_FAQS, BATUMI_NEWS_ITEMS } from '../../../data/batumi-news';
+import { UK_BATUMI_FAQS, UK_BATUMI_NEWS_ITEMS } from '../../../data/batumi-news-uk';
+import { absoluteUrl } from '../../../lib/urls';
+
+const breadcrumbJsonLd = {
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Головна', item: absoluteUrl('/uk/', Astro.site) },
+    {
+      '@type': 'ListItem',
+      position: 2,
+      name: 'Новини та події Батумі',
+      item: absoluteUrl('/uk/batumi-news/', Astro.site),
+    },
+  ],
+};
+
+const itemListJsonLd = {
+  '@type': 'ItemList',
+  name: 'Новини Батумі, заплановані події та правила в’їзду (2026–2027)',
+  numberOfItems: BATUMI_NEWS_ITEMS.length,
+  itemListElement: BATUMI_NEWS_ITEMS.map((item, idx) => ({
+    '@type': 'ListItem',
+    position: idx + 1,
+    name: UK_BATUMI_NEWS_ITEMS[item.slug]?.title || item.title.en,
+    url: `${absoluteUrl('/uk/batumi-news/', Astro.site)}#${item.slug}`,
+  })),
+};
+
+const faqJsonLd = {
+  '@type': 'FAQPage',
+  mainEntity: BATUMI_NEWS_FAQS.map((faq, idx) => ({
+    '@type': 'Question',
+    name: UK_BATUMI_FAQS[idx]?.question || faq.question.en,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: UK_BATUMI_FAQS[idx]?.answer || faq.answer.en,
+    },
+  })),
+};
+---
+
+<BaseLayout
+  title={`Новини Батумі, події та календар 2026–2027 | ${SITE.brandName}`}
+  description="Повний гід по Батумі та Аджарії: Новорічне містечко на Площі Європи, зимовий сезон Годердзі, обов’язкове туристичне страхування 2026, фестивалі та ціни на квитки."
+  canonicalPath="/uk/batumi-news/"
+  alternateEnPath="/batumi-news/"
+  alternateKaPath="/ka/batumi-news/"
+  alternatePlPath="/pl/batumi-news/"
+  alternateUkPath="/uk/batumi-news/"
+  lang="uk"
+  keywords={[
+    'новини Батумі 2026 2027',
+    'події в Батумі',
+    'обов’язкове страхування Грузія 2026',
+    'Годердзі відкриття 2026',
+    'Minimalism Tours Georgia',
+  ]}
+  jsonLd={[breadcrumbJsonLd, itemListJsonLd, faqJsonLd]}
+>
+  <BatumiNewsHub lang="uk" />
+</BaseLayout>

@@ -6,6 +6,7 @@ export interface LocalizedText {
   en: string;
   ka: string;
   pl?: string;
+  uk?: string;
 }
 
 export interface BatumiNewsItem {
@@ -22,6 +23,7 @@ export interface BatumiNewsItem {
     en: string[];
     ka: string[];
     pl?: string[];
+    uk?: string[];
   };
   venue: LocalizedText;
   mapsUrl?: string;
@@ -50,6 +52,7 @@ export interface BatumiSeasonCalendarBlock {
     en: string[];
     ka: string[];
     pl?: string[];
+    uk?: string[];
   };
   pairWithTourSlug: string;
   pairWithTourLabel: LocalizedText;
@@ -65,34 +68,39 @@ export const BATUMI_NEWS_META = {
   lastVerifiedEn: 'November 24, 2026',
   lastVerifiedKa: '24 ნოემბერი, 2026',
   lastVerifiedPl: '24 listopada 2026',
+  lastVerifiedUk: '24 листопада 2026',
 } as const;
 
 export const BATUMI_CATEGORY_LABELS: Record<
   BatumiNewsCategory,
-  { en: string; ka: string; pl: string; badgeClass: string }
+  { en: string; ka: string; pl: string; uk: string; badgeClass: string }
 > = {
   events: {
     en: 'Events & Festivals',
     ka: 'ღონისძიებები და ფესტივალები',
     pl: 'Wydarzenia i festiwale',
+    uk: 'Події та фестивалі',
     badgeClass: 'badge-coral',
   },
   projects: {
     en: 'City & Coast Projects',
     ka: 'ქალაქის და სანაპიროს პროექტები',
     pl: 'Projekty miejskie i wybrzeże',
+    uk: 'Міські та прибережні проєкти',
     badgeClass: 'badge-sea',
   },
   'travel-rules': {
     en: 'Travel Rules & Transport',
     ka: 'მგზავრობის წესები და ტრანსპორტი',
     pl: 'Zasady wjazdu i transport',
+    uk: 'Правила в’їзду та транспорт',
     badgeClass: 'badge-forest',
   },
   seasonal: {
     en: 'Attractions & Season',
     ka: 'სეზონი და ლოკაციები',
     pl: 'Atrakcje i sezony',
+    uk: 'Локації та сезони',
     badgeClass: 'badge-sea',
   },
 };
@@ -102,21 +110,25 @@ export const BATUMI_STATUS_LABELS: Record<BatumiNewsStatus, LocalizedText> = {
     en: 'Happening Soon',
     ka: 'უახლოესი',
     pl: 'Wkrótce',
+    uk: 'Незабаром',
   },
   'active-2026': {
     en: 'Active in 2026',
     ka: 'მოქმედი 2026',
     pl: 'Aktywne 2026',
+    uk: 'Діє у 2026',
   },
   'planned-2027': {
     en: 'Planned 2027',
     ka: 'დაგეგმილი 2027',
     pl: 'Planowane 2027',
+    uk: 'Заплановано 2027',
   },
   'annual-highlight': {
     en: 'Annual Highlight',
     ka: 'ყოველწლიური',
     pl: 'Coroczne',
+    uk: 'Щорічна подія',
   },
 };
 

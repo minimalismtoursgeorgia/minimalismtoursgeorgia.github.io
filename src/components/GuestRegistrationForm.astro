@@ -11,6 +11,7 @@ export interface Props {
 const { lang = 'en' } = Astro.props;
 const isKa = lang === 'ka';
 const isPl = lang === 'pl';
+const isUk = lang === 'uk';
 
 const copy = isKa
   ? {
@@ -157,6 +158,79 @@ const copy = isKa
       statusOpenedWa: 'Otwarto WhatsApp z wypełnionym formularzem.',
       statusOpenedTg: 'Otwarto Telegram z wypełnionym formularzem.',
       printNote: 'Minimalism Tours Georgia · Rejestracja gościa i formularz medyczny · ŚCIŚLE POUFNE',
+    }
+  : isUk
+  ? {
+      badge: 'СУВОРО КОНФІДЕНЦІЙНО · STRICTLY CONFIDENTIAL',
+      heading: 'Реєстрація гостя та екстрена медична форма',
+      intro:
+        'Заповніть перед виїздом. Усі дані залишаються виключно у вашому браузері (нічого не зберігається на сервері) — ви можете зберегти форму як PDF, роздрукувати або надіслати напряму через WhatsApp чи Telegram.',
+      tripLegend: '1. Деталі туру та опціональні активності',
+      tripNameLabel: 'Назва туру',
+      tripDateLabel: 'Дата туру',
+      customTourOption: 'Індивідуальний приватний маршрут Грузією',
+      addonsLegend: 'Опціональні активності в Мтіралі (лише за бажанням)',
+      addonsHint: 'Жодна з них не є обов’язковою — позначайте тільки якщо хочете додати:',
+      addons: [
+        { value: 'Zipline', label: 'Зіплайн (Zipline)' },
+        { value: 'ATV Quad Ride', label: 'Поїздка на квадроциклі ATV' },
+        { value: 'Local Mountain Honey Tasting', label: 'Дегустація місцевого гірського меду' },
+        { value: 'Georgian Lunch', label: 'Грузинський обід' },
+      ],
+      personalLegend: '2. Особисті дані гостя',
+      fullNameLabel: 'Ім’я та прізвище',
+      fullNameHint: 'Як зазначено у закордонному паспорті або ID-картці',
+      fullNameError: 'Введіть повне ім’я та прізвище (мін. 2 символи).',
+      dobLabel: 'Дата народження',
+      dobError: 'Оберіть дату народження.',
+      addressLabel: 'Домашня адреса',
+      addressHint: 'Вулиця, місто, поштовий індекс та країна',
+      addressError: 'Введіть вашу домашню адресу.',
+      mobileLabel: 'Мобільний телефон (із кодом країни)',
+      mobileHint: 'Вкажіть міжнародний код країни (напр. +380, +995, +48)',
+      mobileError: 'Вкажіть дійсний номер мобільного телефону.',
+      medicalLegend: '3. Медична інформація та екстрений контакт',
+      doctorLabel: 'Ім’я лікаря та клініка (необов’язково)',
+      medicalLabel: 'Стан здоров’я, ліки та алергії (їжа, медикаменти, укуси тощо)',
+      medicalHint: 'Напишіть «Немає» (None), якщо не маєте хвороб, ліків чи алергій.',
+      medicalError: 'Заповніть медичне поле (або напишіть «Немає»).',
+      kinNameLabel: 'Контактна особа на екстрений випадок (Ім’я та прізвище)',
+      kinNameError: 'Вкажіть ім’я контактної особи.',
+      kinPhoneLabel: 'Телефон екстреного контакту',
+      kinPhoneError: 'Вкажіть номер телефону екстреного контакту.',
+      insuranceLegend: '4. Деталі туристичного страхування',
+      insCompLabel: 'Назва страхової компанії',
+      insCompError: 'Вкажіть назву страхової компанії.',
+      insPolicyLabel: 'Номер страхового поліса',
+      insPolicyError: 'Вкажіть номер страхового поліса.',
+      insPhoneLabel: 'Цілодобовий екстрений телефон страхової (24/7)',
+      insPhoneError: 'Вкажіть телефон екстреної допомоги страхової.',
+      heliLegend: 'Чи покриває ваш поліс евакуацію гелікоптером?',
+      heliOptions: [
+        { value: 'Yes', label: 'Так (Yes)' },
+        { value: 'No', label: 'Ні (No)' },
+        { value: 'Not sure', label: 'Не впевнений / не впевнена' },
+      ],
+      heliError: 'Оберіть статус покриття евакуації гелікоптером.',
+      declLegend: '5. Підтвердження та підпис',
+      agreePrefix: 'Підтверджую достовірність даних і погоджуюся з ',
+      agreeLinkText: 'Умовами безпеки, погоди та операційної діяльності Minimalism Tours Georgia',
+      agreeSuffix: '. Друкована копія також доступна під час туру.',
+      agreeError: 'Позначте згоду перед продовженням.',
+      signedLabel: 'Підпис (введіть повне ім’я)',
+      signedError: 'Введіть повне ім’я як підпис.',
+      signedDateLabel: 'Дата',
+      signedDateError: 'Вкажіть сьогоднішню дату підпису.',
+      btnPrint: 'Зберегти як PDF / Друк',
+      btnWa: 'Надіслати у WhatsApp',
+      btnTg: 'Надіслати у Telegram',
+      btnCopy: 'Копіювати форму',
+      btnReset: 'Очистити',
+      statusInvalid: 'Заповніть виділені обов’язкові поля.',
+      statusCopied: 'Заповнені дані реєстрації скопійовано в буфер обміну.',
+      statusOpenedWa: 'Відкрито WhatsApp із заповненою формою.',
+      statusOpenedTg: 'Відкрито Telegram із заповненою формою.',
+      printNote: 'Minimalism Tours Georgia · Реєстрація гостя та медична форма · СУВОРО КОНФІДЕНЦІЙНО',
     }
   : {
       badge: 'STRICTLY CONFIDENTIAL',

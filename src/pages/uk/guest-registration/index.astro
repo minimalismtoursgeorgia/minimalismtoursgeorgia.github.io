@@ -1,0 +1,86 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import GuestRegistrationForm from '../../../components/GuestRegistrationForm.astro';
+import { SITE } from '../../../data/site';
+import { withBase, absoluteUrl } from '../../../lib/urls';
+
+const breadcrumbJsonLd = {
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Головна', item: absoluteUrl('/uk/', Astro.site) },
+    {
+      '@type': 'ListItem',
+      position: 2,
+      name: 'Реєстрація гостя та медична форма',
+      item: absoluteUrl('/uk/guest-registration/', Astro.site),
+    },
+  ],
+};
+---
+
+<BaseLayout
+  title={`Реєстрація гостя та медична форма | ${SITE.brandName}`}
+  description="Конфіденційна передпохідна реєстрація, екстрений контакт, дані страхування та медична форма безпеки для учасників турів Minimalism Tours Georgia."
+  canonicalPath="/uk/guest-registration/"
+  alternateEnPath="/guest-registration/"
+  alternateKaPath="/ka/guest-registration/"
+  alternatePlPath="/pl/guest-registration/"
+  alternateUkPath="/uk/guest-registration/"
+  lang="uk"
+  jsonLd={[breadcrumbJsonLd]}
+>
+  <section class="page-hero">
+    <div class="container">
+      <nav class="breadcrumbs" aria-label="Breadcrumb">
+        <a href={withBase('/uk/')}>Головна</a>
+        <span aria-hidden="true">/</span>
+        <span aria-current="page">Реєстрація гостя та медична форма</span>
+      </nav>
+      <span class="eyebrow">Безпека та передпохідна реєстрація</span>
+      <h1>Реєстрація гостя та екстрена медична форма</h1>
+      <p>
+        Стандартна форма польової безпеки для походів у Мтіралі, Мачахелі та на Великому Кавказі ({SITE.brandName}).
+      </p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container" style="max-width: 58rem;">
+      <GuestRegistrationForm lang="uk" />
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .page-hero {
+    background-color: var(--bg-surface);
+    border-bottom: 1px solid var(--border-subtle);
+    padding-block: clamp(2.25rem, 4.5vw, 3.5rem);
+  }
+
+  .breadcrumbs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+    font-size: 0.85rem;
+    color: var(--ink-500);
+    margin-bottom: 0.9rem;
+  }
+
+  .breadcrumbs a {
+    color: var(--forest-800);
+    text-decoration: none;
+    font-weight: 600;
+  }
+
+  .page-hero h1 {
+    margin: 0.55rem 0 0.7rem;
+    max-width: 24ch;
+  }
+
+  .page-hero p {
+    margin: 0;
+    max-width: 62ch;
+    color: var(--ink-700);
+  }
+</style>
